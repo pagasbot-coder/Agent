@@ -11,12 +11,12 @@
 
 ## Как пользоваться (Cursor 3)
 
-| Роль | Чат в Agents Window | Правило |
-|------|---------------------|---------|
-| PM | «Role: PM» | `@role-pm` |
-| Developer | «Role: Developer» | `@role-developer` |
-| UI/UX | «Role: UI/UX» | `@role-ui-ux` |
-| QA | «Role: QA» | `@role-qa` |
+| Роль | Subagent | Чат в Agents Window | Правило |
+|------|----------|---------------------|---------|
+| PM | `muster-pm` | «Role: PM» | `@role-pm` |
+| Developer | `muster-developer` | «Role: Developer» | `@role-developer` |
+| UI/UX | `muster-ui-ux` | «Role: UI/UX» | `@role-ui-ux` |
+| QA | `muster-qa` | «Role: QA» | `@role-qa` |
 
 Контекст из `knowledge-base/` подключайте через **@** (например `@knowledge-base/product-brief.md`).
 
