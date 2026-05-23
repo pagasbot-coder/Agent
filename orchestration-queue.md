@@ -5,7 +5,7 @@
 
 **Проект:** _my-product_  
 **Архитектор (Human):** _ваше имя_  
-**Последнее обновление:** 2026-05-23
+**Последнее обновление:** 2026-05-23 (T-001 DONE)
 
 ---
 
@@ -41,10 +41,10 @@
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
 |----|--------|------|--------|-----------|-------------|-------------------|-----------|
-| T-001 | Инициализировать Next.js + Tailwind + shadcn | Developer | READY | P0 | — | `@docs/tech-stack.md` | |
+| T-001 | Инициализировать Next.js + Tailwind + shadcn | Developer | DONE | P0 | — | `@docs/tech-stack.md` | Next.js 16 + Tailwind v4 + shadcn; `npm run build`/`lint` OK |
 | T-002 | Заполнить product-brief и acceptance criteria | PM | BACKLOG | P0 | — | `@knowledge-base/product-brief.md` | |
-| T-003 | Базовая дизайн-система (цвета, типографика, layout) | UI/UX | BACKLOG | P1 | T-001 | `@knowledge-base/design-tokens.md` | |
-| T-004 | Чеклист QA для scaffold | QA | BACKLOG | P2 | T-001 | `@knowledge-base/qa-checklist.md` | |
+| T-003 | Базовая дизайн-система (цвета, типографика, layout) | UI/UX | READY | P1 | T-001 | `@knowledge-base/design-tokens.md` | |
+| T-004 | Чеклист QA для scaffold | QA | READY | P2 | T-001 | `@knowledge-base/qa-checklist.md` | |
 
 ---
 
@@ -66,11 +66,11 @@
 ### T-001 — Scaffold Next.js
 
 **Acceptance criteria:**
-- [ ] `npm run dev` поднимает приложение
-- [ ] Tailwind + shadcn/ui подключены
-- [ ] Структура `app/`, `components/`, `lib/` создана
+- [x] `npm run dev` поднимает приложение
+- [x] Tailwind + shadcn/ui подключены
+- [x] Структура `app/`, `components/`, `lib/` создана
 
-**Notes:** —
+**Notes:** `components.json`, `components/ui/button.tsx`, `lib/utils.ts`; home page uses shadcn Button. Verified: `npm run build`, `npm run lint`.
 
 ---
 
@@ -86,6 +86,7 @@
 | Дата | Кто | Событие |
 |------|-----|---------|
 | 2026-05-23 | System | Создана структура Muster |
+| 2026-05-23 | Developer | T-001 DONE: Next.js 16 + Tailwind v4 + shadcn/ui scaffold |
 
 ---
 
