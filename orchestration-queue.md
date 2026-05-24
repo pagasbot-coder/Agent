@@ -3,9 +3,9 @@
 > **Источник истины для задач.** PM добавляет задачи; роли берут `READY` → `IN_PROGRESS` → `DONE`.  
 > Перед любой работой агент **читает этот файл**; после завершения — **обновляет статус и краткий итог**.
 
-**Проект:** _my-product_  
-**Архитектор (Human):** _ваше имя_  
-**Последнее обновление:** 2026-05-25 (T-007 DONE)
+**Проект:** Banya-Digital ERP  
+**Архитектор (Human):** Pavel  
+**Последнее обновление:** 2026-05-25 (T-009…T-012 DONE)
 
 ---
 
@@ -44,8 +44,13 @@
 | T-001 | Инициализировать Next.js + Tailwind + shadcn | Developer | DONE | P0 | — | `@docs/tech-stack.md` | Next.js 16 + Tailwind v4 + shadcn; `npm run build`/`lint` OK |
 | T-002 | Заполнить product-brief и acceptance criteria | PM | BACKLOG | P0 | — | `@knowledge-base/product-brief.md` | |
 | T-003 | Базовая дизайн-система (цвета, типографика, layout) | UI/UX | READY | P1 | T-001 | `@knowledge-base/design-tokens.md` | |
-| T-007 | Dashboard KPI по залам/выручке/марже + RU + d1a брендинг | UI/UX | DONE | P0 | T-001 | `@knowledge-base/design-tokens.md` | Cardo+Inter, hall/revenue/margin UI, seed week/month, `feat(ui): Russian dashboard…` |
+| T-007 | Dashboard KPI по залам/выручке/марже + RU + d1a брендинг | UI/UX | DONE | P0 | T-001 | `@knowledge-base/design-tokens.md` | Cardo+Inter, hall/revenue/margin UI, seed week/month |
 | T-004 | Чеклист QA для scaffold | QA | READY | P2 | T-001 | `@knowledge-base/qa-checklist.md` | |
+| T-009 | Finance: unit economics по залам за сегодня | Developer | DONE | P0 | T-006 | `modules/finance/` | `/finance` из Prisma: revenue, COGS, margin; RU + Table |
+| T-010 | CRM: гости + брони на сегодня | Developer | DONE | P0 | T-006 | `modules/crm/` | `/crm` guests + today bookings |
+| T-011 | Operations: тайминги spa + kitchen SLA | Developer | DONE | P0 | T-006 | `modules/operations/` | `/operations` timings, kitchen status, link to dashboard checklists |
+| T-012 | Docs: management + technical overview | Developer | DONE | P1 | T-009…011 | `docs/*.md` | Обновлены overview + roadmap + GITHUB-DEPLOY |
+| T-013 | GitHub push + Vercel deploy | Developer | BLOCKED | P0 | T-012 | `docs/GITHUB-DEPLOY.md` | gh/vercel CLI недоступны в агент-среде; инструкции готовы |
 
 ---
 
@@ -55,30 +60,40 @@
 | T-XXX | Краткое название | PM/Developer/UI/UX/QA | READY | P1 | T-YYY | `@knowledge-base/...` | |
 ```
 
-**Поля для PM при постановке:**
-- **Acceptance criteria** (ниже в секции задачи или в `knowledge-base/`)
-- **Out of scope** — что не делать
-- **Definition of Done**
-
 ---
 
 ## Детали задач
 
-### T-001 — Scaffold Next.js
+### T-009 — Finance module
 
 **Acceptance criteria:**
-- [x] `npm run dev` поднимает приложение
-- [x] Tailwind + shadcn/ui подключены
-- [x] Структура `app/`, `components/`, `lib/` создана
+- [x] `/finance` — реальные данные за сегодня по залам
+- [x] Выручка, COGS, маржа %; итоговая строка
+- [x] RU UI, Card + Table, d1a стиль
 
-**Notes:** `components.json`, `components/ui/button.tsx`, `lib/utils.ts`; home page uses shadcn Button. Verified: `npm run build`, `npm run lint`.
-
----
-
-### T-002 — Product brief
+### T-010 — CRM module
 
 **Acceptance criteria:**
-- [ ] Заполнены: проблема, аудитория, MVP-фичи, метрики успеха
+- [x] Список гостей из БД
+- [x] Брони на сегодня с временем, залом, статусом RU
+
+### T-011 — Operations module
+
+**Acceptance criteria:**
+- [x] ProgramTiming + KitchenSlot на сегодня
+- [x] Статус CONFICT/SLA виден
+- [x] Ссылка на чеклисты (сводка)
+
+### T-012 — Docs polish
+
+**Acceptance criteria:**
+- [x] `management-overview.md` — что построено
+- [x] `technical-overview.md` — модули finance/crm/operations
+- [x] `roadmap.md` Phase 2–3 частично закрыты
+
+### T-013 — Deploy (BLOCKED)
+
+**Notes:** Установить `gh`, `vercel` CLI; `git remote add` + push; Vercel `DATABASE_URL`. См. `docs/GITHUB-DEPLOY.md`.
 
 ---
 
@@ -88,7 +103,8 @@
 |------|-----|---------|
 | 2026-05-23 | System | Создана структура Muster |
 | 2026-05-23 | Developer | T-001 DONE: Next.js 16 + Tailwind v4 + shadcn/ui scaffold |
-| 2026-05-25 | UI/UX | T-007 DONE: dashboard KPI по залам/периодам/марже, RU UI, d1a Cardo+Inter |
+| 2026-05-25 | UI/UX | T-007 DONE: dashboard KPI |
+| 2026-05-25 | Developer | T-009…T-012 DONE: finance/crm/operations modules + docs; T-013 BLOCKED (CLI) |
 
 ---
 
