@@ -20,6 +20,7 @@
 | Developer | `muster-developer` | «Role: Developer» | `@role-developer` |
 | UI/UX | `muster-ui-ux` | «Role: UI/UX» | `@role-ui-ux` |
 | QA | `muster-qa` | «Role: QA» | `@role-qa` |
+| Growth / CMO | `muster-growth-marketer` | «Role: CMO» / «Role: Growth» / «Роль: Директор по маркетингу» / «Growth Marketer» | `@role-growth-marketer` |
 
 Контекст из `knowledge-base/` подключайте через **@** (например `@knowledge-base/product-brief.md`).
 

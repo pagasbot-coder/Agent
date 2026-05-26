@@ -1,0 +1,9 @@
+# Muster (legacy pointer)
+
+This project is orchestrated via **Muster**. Prefer `.cursor/rules/` (Cursor 3).
+
+1. Read `orchestration-queue.md` before any task; update status when done.
+2. Shared memory: `knowledge-base/`
+3. Roles: invoke `@role-pm`, `@role-developer`, `@role-ui-ux`, `@role-qa`, or `@role-growth-marketer` in Agent chat.
+
+Full rules: `.cursor/rules/muster-orchestration.mdc` and `vibecoder-master.mdc`.

@@ -3,7 +3,7 @@
 ## Current phase — Muster setup
 
 - [x] Muster structure: `orchestration-queue.md`, `knowledge-base/`, role rules
-- [x] Custom subagents in `.cursor/agents/` (muster-pm, muster-developer, muster-ui-ux, muster-qa)
+- [x] Custom subagents in `.cursor/agents/` (muster-pm, muster-developer, muster-ui-ux, muster-qa, muster-growth-marketer)
 - [x] T-001: Next.js + Tailwind + shadcn scaffold
 - [ ] T-002: Product brief (PM)
 - [ ] T-003: Design tokens (UI/UX) — **READY**
@@ -21,6 +21,7 @@ _See live status in `orchestration-queue.md`._
 | Developer | `muster-developer` | `@role-developer` |
 | UI/UX | `muster-ui-ux` | `@role-ui-ux` |
 | QA | `muster-qa` | `@role-qa` |
+| Growth / CMO | `muster-growth-marketer` | `@role-growth-marketer` |
 
 ## Backlog
 

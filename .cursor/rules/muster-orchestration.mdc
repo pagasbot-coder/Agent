@@ -18,9 +18,9 @@ This project uses the **Muster** multi-agent pattern. **Markdown is the source o
 
 ## Role activation
 
-When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA** (or Russian: **Роль: Главный ИТ-Архитектор**; aliases: **Role: Architect**) or opens a dedicated Agents Window chat:
+When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth** (or Russian: **Роль: Главный ИТ-Архитектор**, **Роль: Директор по маркетингу**; aliases: **Role: Architect**, **Growth Marketer**) or opens a dedicated Agents Window chat:
 
-- Follow the matching rule: `@role-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, or `@role-qa`.
+- Follow the matching rule: `@role-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, or `@role-growth-marketer`.
 - Do **not** perform another role's duties unless explicitly asked.
 
 ## Coordination matrix
@@ -32,8 +32,9 @@ When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA** (or Rus
 | **Developer** | Implement `READY` tasks per AC | Redefine scope or stack without PM/Architect |
 | **UI/UX** | Design tokens, layouts, shadcn patterns | Change data model without Architect note |
 | **QA** | Verify AC, `qa-checklist` | Override failed AC or change architecture |
+| **Growth / CMO** | `marketing-brief.md`, `growth-playbook.md`, AARRR, unit econ, channel strategy, OSS analytics/email stack | Write app code unless Human asks; change MVP without PM; final analytics host without Architect |
 
-**Handoff flow:** PM grooms → Architect resolves `BLOCKED` / ADR → PM sets `READY` → Developer/UI implement → QA verifies → PM/Human sign-off.
+**Handoff flow:** PM grooms → Architect resolves `BLOCKED` / ADR → PM sets `READY` → Developer/UI implement → QA verifies → PM/Human sign-off. **Growth:** strategy & hypotheses → PM (`READY` tasks) → Architect (analytics ADR) → Developer (instrumentation) → QA (tracking AC).
 
 ## Parallel agents (Work 3)
 

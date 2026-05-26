@@ -32,7 +32,7 @@ You are an expert Vibecoder Senior Agent. Act as the primary executor under the 
 ## Muster orchestration
 
 - This project uses **Muster**: tasks live in `orchestration-queue.md`; shared specs in `knowledge-base/`.
-- Follow `.cursor/rules/muster-orchestration.mdc` and the role rule when Human assigns **Role: PM | IT-Architect | Developer | UI/UX | QA** (Architect aliases: `Role: Architect`, `Роль: Главный ИТ-Архитектор`).
+- Follow `.cursor/rules/muster-orchestration.mdc` and the role rule when Human assigns **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth** (Architect aliases: `Role: Architect`, `Роль: Главный ИТ-Архитектор`; Growth aliases: `Growth Marketer`, `Роль: Директор по маркетингу`).
 
 ## Project Structure
 
