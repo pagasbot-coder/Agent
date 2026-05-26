@@ -3,9 +3,11 @@
 > **Источник истины для задач.** PM добавляет задачи; роли берут `READY` → `IN_PROGRESS` → `DONE`.  
 > Перед любой работой агент **читает этот файл**; после завершения — **обновляет статус и краткий итог**.
 
-**Проект:** Banya-Digital ERP  
+**Проект:** Muster monorepo + Banya-Digital ERP  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-25 (T-009…T-012 DONE)
+**Последнее обновление:** 2026-05-26 (PM: усилен role-pm; app backlog в `banya-digital/`)
+
+> **Очередь приложения (канон):** [`banya-digital/orchestration-queue.md`](banya-digital/orchestration-queue.md) — Phase 3 задачи **T-009…T-014** (auth, CRM CRUD, finance input, inventory, checklists, pilot reglement).
 
 ---
 
@@ -50,7 +52,7 @@
 | T-010 | CRM: гости + брони на сегодня | Developer | DONE | P0 | T-006 | `modules/crm/` | `/crm` guests + today bookings |
 | T-011 | Operations: тайминги spa + kitchen SLA | Developer | DONE | P0 | T-006 | `modules/operations/` | `/operations` timings, kitchen status, link to dashboard checklists |
 | T-012 | Docs: management + technical overview | Developer | DONE | P1 | T-009…011 | `docs/*.md` | Обновлены overview + roadmap + GITHUB-DEPLOY |
-| T-013 | GitHub push + Vercel deploy | Developer | BLOCKED | P0 | T-012 | `docs/GITHUB-DEPLOY.md` | gh/vercel CLI недоступны в агент-среде; инструкции готовы |
+| T-013 | GitHub push + Vercel deploy | Developer | BLOCKED | P0 | T-012 | `docs/GITHUB-DEPLOY.md` | commit ba47cdc; build OK; блокер: `gh auth login` + `vercel login` (репо на GitHub не создан) |
 
 ---
 
@@ -105,6 +107,23 @@
 | 2026-05-23 | Developer | T-001 DONE: Next.js 16 + Tailwind v4 + shadcn/ui scaffold |
 | 2026-05-25 | UI/UX | T-007 DONE: dashboard KPI |
 | 2026-05-25 | Developer | T-009…T-012 DONE: finance/crm/operations modules + docs; T-013 BLOCKED (CLI) |
+| 2026-05-25 | Developer | Hotfix: BUSINESS_TIMEZONE=Europe/Moscow; db:seed на Neon; push master |
+| 2026-05-26 | PM | Усилен `@role-pm` + `muster-pm`; Phase 3 T-009…T-014 в `banya-digital/orchestration-queue.md` |
+
+---
+
+## Phase 3 — Banya-Digital (зеркало статусов)
+
+См. детали и AC в **`banya-digital/orchestration-queue.md`**.
+
+| ID | Задача | Роль | Статус |
+|----|--------|------|--------|
+| T-009 | Auth | Developer | BACKLOG |
+| T-010 | CRM CRUD | Developer | READY |
+| T-011 | Finance input | Developer | READY |
+| T-012 | Inventory FIFO UI | Developer | READY |
+| T-013 | Operations checklists | Developer | READY |
+| T-014 | Pilot reglement | PM | READY |
 
 ---
 
