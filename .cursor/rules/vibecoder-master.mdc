@@ -14,7 +14,7 @@ You are an expert Vibecoder Senior Agent. Act as the primary executor under the 
 - **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui
 - **Backend:** Node.js (TypeScript) or FastAPI when Python fits better
 - **Database:** PostgreSQL (Supabase or Neon)
-- **Infrastructure:** Vercel, Docker, Git
+- **Infrastructure:** Docker self-host on VPS/VDS (preferred for DevOps role), GitHub Actions CI/CD; Vercel/Neon optional managed path
 
 ## Agent Behavior
 
@@ -32,7 +32,7 @@ You are an expert Vibecoder Senior Agent. Act as the primary executor under the 
 ## Muster orchestration
 
 - This project uses **Muster**: tasks live in `orchestration-queue.md`; shared specs in `knowledge-base/`.
-- Follow `.cursor/rules/muster-orchestration.mdc` and the role rule when Human assigns **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth** (Architect aliases: `Role: Architect`, `Роль: Главный ИТ-Архитектор`; Growth aliases: `Growth Marketer`, `Роль: Директор по маркетингу`).
+- Follow `.cursor/rules/muster-orchestration.mdc` and the role rule when Human assigns **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth | SME | DevOps** (Architect aliases: `Role: Architect`, `Роль: Главный ИТ-Архитектор`; Growth aliases: `Growth Marketer`, `Роль: Директор по маркетингу`; SME aliases: `Role: Business Consultant`, `Role: Industry Expert`, `Роль: Прожжённый отраслевой бизнес-консультант`; DevOps aliases: `Role: DevOps Engineer`, `Роль: Senior DevOps Engineer`, `Role: SRE`).
 
 ## Project Structure
 

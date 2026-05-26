@@ -5,7 +5,7 @@
 
 **Проект:** Muster monorepo + Banya-Digital ERP  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-26 (PM: усилен role-pm; app backlog в `banya-digital/`)
+**Последнее обновление:** 2026-05-26 (DevOps: role-devops + devops-runbook-template; SME + app backlog в `banya-digital/`)
 
 > **Очередь приложения (канон):** [`banya-digital/orchestration-queue.md`](banya-digital/orchestration-queue.md) — Phase 3 задачи **T-009…T-014** (auth, CRM CRUD, finance input, inventory, checklists, pilot reglement).
 
@@ -21,6 +21,8 @@
 | UI/UX | `muster-ui-ux` | «Role: UI/UX» | `@role-ui-ux` |
 | QA | `muster-qa` | «Role: QA» | `@role-qa` |
 | Growth / CMO | `muster-growth-marketer` | «Role: CMO» / «Role: Growth» / «Роль: Директор по маркетингу» / «Growth Marketer» | `@role-growth-marketer` |
+| DevOps / SRE | `muster-devops` | «Role: DevOps» / «Role: DevOps Engineer» / «Роль: Senior DevOps Engineer» / «Role: SRE» | `@role-devops` |
+| SME | `muster-sme` | «Role: SME» / «Role: Business Consultant» / «Роль: Прожжённый отраслевой бизнес-консультант» / «Role: Industry Expert» | `@role-sme` |
 
 Контекст из `knowledge-base/` подключайте через **@** (например `@knowledge-base/product-brief.md`).
 
@@ -111,6 +113,8 @@
 | 2026-05-25 | Developer | T-009…T-012 DONE: finance/crm/operations modules + docs; T-013 BLOCKED (CLI) |
 | 2026-05-25 | Developer | Hotfix: BUSINESS_TIMEZONE=Europe/Moscow; db:seed на Neon; push master |
 | 2026-05-26 | PM | Усилен `@role-pm` + `muster-pm`; Phase 3 T-009…T-014 в `banya-digital/orchestration-queue.md` |
+| 2026-05-26 | SME | Добавлен `@role-sme` + `muster-sme`; discovery pipeline SME → CMO/Architect → PM |
+| 2026-05-26 | DevOps | Добавлен `@role-devops` + `muster-devops`; runbook template; deploy handoff Architect → DevOps → Developer → QA |
 
 ---
 

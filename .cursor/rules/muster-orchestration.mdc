@@ -18,9 +18,9 @@ This project uses the **Muster** multi-agent pattern. **Markdown is the source o
 
 ## Role activation
 
-When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth** (or Russian: **Роль: Главный ИТ-Архитектор**, **Роль: Директор по маркетингу**; aliases: **Role: Architect**, **Growth Marketer**) or opens a dedicated Agents Window chat:
+When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth | SME | DevOps** (or Russian: **Роль: Главный ИТ-Архитектор**, **Роль: Директор по маркетингу**, **Роль: Прожжённый отраслевой бизнес-консультант**, **Роль: Senior DevOps Engineer**; aliases: **Role: Architect**, **Growth Marketer**, **Role: Business Consultant**, **Role: Industry Expert**, **Role: DevOps Engineer**, **Role: SRE**) or opens a dedicated Agents Window chat:
 
-- Follow the matching rule: `@role-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, or `@role-growth-marketer`.
+- Follow the matching rule: `@role-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, `@role-growth-marketer`, `@role-sme`, or `@role-devops`.
 - Do **not** perform another role's duties unless explicitly asked.
 
 ## Coordination matrix
@@ -33,8 +33,12 @@ When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | G
 | **UI/UX** | Design tokens, layouts, shadcn patterns | Change data model without Architect note |
 | **QA** | Verify AC, `qa-checklist` | Override failed AC or change architecture |
 | **Growth / CMO** | `marketing-brief.md`, `growth-playbook.md`, AARRR, unit econ, channel strategy, OSS analytics/email stack | Write app code unless Human asks; change MVP without PM; final analytics host without Architect |
+| **SME** | `industry-brief.md`, `operational-processes.md`, day-in-life, hidden pains, daily KPIs, critique PM/CMO hypotheses | Write app code unless Human asks; write backlog/AC (→ PM); choose stack (→ Architect) |
+| **DevOps / SRE** | Dockerfile, docker-compose, CI/CD (GitHub Actions), VPS self-host (Coolify/Dokku/Easypanel), SSL, firewall, DB backup scripts, OSS monitoring, `devops-runbook.md` | Write app business logic; choose app stack without Architect ADR; proprietary PaaS by default |
 
-**Handoff flow:** PM grooms → Architect resolves `BLOCKED` / ADR → PM sets `READY` → Developer/UI implement → QA verifies → PM/Human sign-off. **Growth:** strategy & hypotheses → PM (`READY` tasks) → Architect (analytics ADR) → Developer (instrumentation) → QA (tracking AC).
+**Discovery pipeline:** **SME** (operational truth) → **CMO + Architect** (parallel ok) → **PM** (backlog, AC) → Developer/UI implement → QA verifies → PM/Human sign-off.
+
+**Implementation handoff:** PM grooms → Architect resolves `BLOCKED` / ADR → PM sets `READY` → Developer/UI implement → QA verifies. **Growth:** strategy & hypotheses → PM (`READY` tasks) → Architect (analytics ADR) → Developer (instrumentation) → QA (tracking AC). **Deploy:** Architect ADR (deploy path) → PM `READY` → **DevOps** (compose, CI, SSL, backups) → Developer (env, health) → QA (smoke deploy). **SME critiques** PM/CMO features disconnected from field reality before and during grooming.
 
 ## Parallel agents (Work 3)
 
