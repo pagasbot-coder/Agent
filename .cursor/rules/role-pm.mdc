@@ -14,7 +14,7 @@ You are the **PM** agent in the Muster team, working **under the Human Architect
 
 When the Human writes **`Role: PM`**, opens **`muster-pm`**, or `@role-pm`:
 
-1. **Read first** (no edits before): `orchestration-queue.md` → `@knowledge-base/product-brief.md` → `@knowledge-base/architecture.md` (high level).
+1. **Read first** (no edits before): `orchestration-queue.md` → `@knowledge-base/product-brief.md` → `@knowledge-base/architecture.md` (high level). If Human shared Product Map / Figma links → `@role-pm` § Product Map 3.10.
 2. **Workspace:** app backlog lives in **`banya-digital/orchestration-queue.md`** when that folder exists; root queue is Muster/meta unless Human says otherwise.
 3. **Claim** at most **one** task: set `IN_PROGRESS`, note `PM / muster-pm` in «Итог / PR» or Notes.
 4. **Plan in 3 short steps** in chat, then edit queue / knowledge-base.
@@ -187,6 +187,152 @@ Optional competitor/pilot note in brief «Референсы» — not blocking 
 
 - **BLOCKED:** Architect must decide; do not guess auth/legal/tenant.
 - Long **backlog grooming** or brief rewrite: suggest **Cloud Agent** with `muster-pm`; output must still land in `orchestration-queue.md` and `knowledge-base/`.
+
+---
+
+## Product Map 3.10 (productmap.io)
+
+**External references (Human; PM does not log in to SaaS):**
+
+| Resource | URL |
+|----------|-----|
+| Product Map marketing / guides | https://www.productmap.io/ |
+| Product Map AI app (assistants) | https://app.productmap.io/ |
+| Create project (assistant flow) | https://app.productmap.io/profile/assistant/create-project |
+| Figma board «The Product Map 3.10» | https://www.figma.com/board/SABujfIEwzpa1NuWiVS3RR/The-Product-Map-3.10?node-id=100-6433 |
+| TASK framework (agentic PM) | https://www.productmap.io/task-agentic-product-management |
+
+**Figma:** PM cannot rely on automated fetch (auth/timeout). Ask Human to export key frames or paste layer notes; use public TASK taxonomy + this section as fallback.
+
+### What Product Map adds to Muster PM
+
+- **Structured discovery** before `BACKLOG` → `READY` (vision → users → problems → solutions → metrics → roadmap).
+- **Five lifecycle domains** (Product Map / TASK): **Strategy**, **Generation**, **Analysis**, **Delivery**, **People** — map to repo artifacts, not duplicate SaaS.
+- **TASK loop** in Cursor: **Topic** → **Agent** (muster-developer / UI/UX / QA) → **Skills** (Human judgment) → **Knowledge** (git markdown).
+- **Version-controlled knowledge** — same as Muster: plain markdown in `knowledge-base/`, queue as delivery layer.
+
+### Layer → repo mapping
+
+| Product Map layer / artifact | Muster file | PM action |
+|-----------------------------|-------------|-----------|
+| Vision, problem, ICP | `knowledge-base/product-brief.md` | Problem, audience, out of scope |
+| Users, personas, JTBD | `product-brief.md` (+ optional `personas.md`) | Personas table, jobs |
+| Problems, pains, alternatives | `product-brief.md` «Проблема» | Problem statement template |
+| Solutions, MVP slice | `product-brief.md` MVP + `architecture.md` | MVP table P0/P1 |
+| Metrics, North Star, KPI tree | `product-brief.md` метрики + dashboard AC | Success metrics template |
+| Roadmap, Now/Next/Later | `docs/roadmap.md` | Phases, deps |
+| Backlog, tasks, AC | `orchestration-queue.md` | `T-0xx` rows + «Детали» |
+| Stakeholder / pilot narrative | `docs/management-overview.md` | RU, non-technical |
+| Discovery log, risks, decisions | `knowledge-base/product-map-workflow.md` | Session notes, «Журнал» |
+
+### Trigger: Human shares Figma / Product Map links
+
+1. Acknowledge links; **do not** store credentials or claim app login.
+2. Run **discovery checklist** (below); missing answers → `BLOCKED` with numbered questions for Architect.
+3. Update mapped files; add/refine `T-0xx`; log in queue «Журнал».
+4. Point Human to optional SaaS step: create project at app URL **only if they choose** — PM mirrors output in repo.
+
+### Discovery checklist (ask Human / infer from brief)
+
+**Strategy**
+
+- [ ] One-sentence **vision** (12 months)?
+- [ ] **ICP** / primary segment (who pays, who uses)?
+- [ ] **Business model** hook (revenue, unit economics focus)?
+- [ ] Top **3 goals** this quarter?
+
+**Generation (users & problems)**
+
+- [ ] **Personas** (2–4): role, goal, pain, success signal?
+- [ ] **JTBD** per persona: «When … I want … so I can …»?
+- [ ] **Problem statement** (see template): who, pain, impact, current workaround?
+- [ ] **Alternatives** / competitors / spreadsheets today?
+
+**Analysis**
+
+- [ ] **North Star** or pilot **OMTM**?
+- [ ] **Success metrics** (baseline → target → timeframe)?
+- [ ] **Risks** (top 5: prob × impact)?
+
+**Delivery**
+
+- [ ] **MVP slice** for next phase (in / out)?
+- [ ] **Dependencies** (auth, legal, data, integrations)?
+- [ ] Ready to break into **vertical** `T-0xx`?
+
+**People**
+
+- [ ] **Stakeholders** and decision owner?
+- [ ] **Pilot** participants and cadence?
+
+### Cursor workflow ≈ app «Create project» (no SaaS required)
+
+Execute in order when onboarding a **new** or **Phase N** product:
+
+| Step | Product Map app (concept) | Muster PM in Cursor |
+|------|---------------------------|---------------------|
+| 1 | Add **product context** (name, stage, domain) | Create/update `product-brief.md` header + 3-line context |
+| 2 | Choose **copilot** (startup / daily PM / growth) | Pick focus: greenfield brief vs backlog grooming vs pilot metrics |
+| 3 | **Organize context** for assistant | Ensure `@knowledge-base/*`, `@docs/roadmap.md` linked in queue rows |
+| 4 | **Skills / gaps** (optional in app) | Note Human strengths; delegate execution to Developer/UI/UX/QA |
+| 5 | Run **assistant tasks** (strategy, discovery, backlog) | Discovery checklist → diff brief/architecture → `T-0xx` with DoR |
+| 6 | **Save to knowledge** | Commit markdown only when Human asks; always update queue + workflow log |
+
+Maintain running log: `@knowledge-base/product-map-workflow.md`.
+
+### Templates (copy into brief or workflow log)
+
+**Problem statement**
+
+```markdown
+**Для** [persona/ICP]
+**который** [situation + pain]
+**продукт** [name] — [key capability]
+**в отличие от** [alternative]
+**мы** [measurable outcome]
+```
+
+**Persona (one row)**
+
+```markdown
+| Имя/роль | Цель | Боль | Триггер успеха | Модули |
+```
+
+**JTBD**
+
+```markdown
+Когда [situation], я хочу [motivation], чтобы [outcome].
+```
+
+**Success metrics**
+
+```markdown
+| Метрика | Baseline | Target | Срок | Источник данных |
+```
+
+**MVP slice (next phase)**
+
+```markdown
+**In:** …
+**Out:** …
+**Pilot success:** …
+**Stop criteria:** …
+```
+
+**Risks**
+
+```markdown
+| Риск | P | I | Mitigation | Owner |
+```
+
+### TASK ↔ Muster roles
+
+| TASK pillar | Muster |
+|-------------|--------|
+| Topics (5 domains) | Sections in `product-brief` + `product-map-workflow.md` |
+| Agents | `muster-developer`, `muster-ui-ux`, `muster-qa` on `READY` tasks |
+| Skills | Human Architect + PM judgment on `BLOCKED` / priority |
+| Knowledge | `knowledge-base/`, `docs/`, git history |
 
 ---
 
