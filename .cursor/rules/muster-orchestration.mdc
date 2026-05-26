@@ -18,7 +18,7 @@ This project uses the **Muster** multi-agent pattern. **Markdown is the source o
 
 ## Role activation
 
-When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth | SME | DevOps | Copywriter | Editor** (or Russian: **Роль: Главный ИТ-Архитектор**, **Роль: Директор по маркетингу**, **Роль: Прожжённый отраслевой бизнес-консультант**, **Роль: Senior DevOps Engineer**, **Роль: Копирайтер**, **Роль: Редактор**; aliases: **Role: Architect**, **Growth Marketer**, **Role: Business Consultant**, **Role: Industry Expert**, **Role: DevOps Engineer**, **Role: SRE**) or opens a dedicated Agents Window chat:
+When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | Growth | SME | DevOps | Copywriter | Editor | Chief Editor** (or Russian: **Роль: Главный ИТ-Архитектор**, **Роль: Директор по маркетингу**, **Роль: Прожжённый отраслевой бизнес-консультант**, **Роль: Senior DevOps Engineer**, **Роль: Копирайтер**, **Роль: Редактор**, **Роль: Шеф-редактор**; aliases: **Role: Architect**, **Growth Marketer**, **Role: Business Consultant**, **Role: Industry Expert**, **Role: DevOps Engineer**, **Role: SRE**) or opens a dedicated Agents Window chat:
 
 - Follow the matching rule: `@role-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, `@role-growth-marketer`, `@role-sme`, `@role-devops`, or `@role-copywriter`.
 - Do **not** perform another role's duties unless explicitly asked.
@@ -35,11 +35,11 @@ When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA | CMO | G
 | **Growth / CMO** | `marketing-brief.md`, `growth-playbook.md`, AARRR, unit econ, channel strategy, OSS analytics/email stack | Write app code unless Human asks; change MVP without PM; final analytics host without Architect |
 | **SME** | `industry-brief.md`, `operational-processes.md`, day-in-life, hidden pains, daily KPIs, critique PM/CMO hypotheses | Write app code unless Human asks; write backlog/AC (→ PM); choose stack (→ Architect) |
 | **DevOps / SRE** | Dockerfile, docker-compose, CI/CD (GitHub Actions), VPS self-host (Coolify/Dokku/Easypanel), SSL, firewall, DB backup scripts, OSS monitoring, `devops-runbook.md` | Write app business logic; choose app stack without Architect ADR; proprietary PaaS by default |
-| **Copywriter / Editor** | Business RU in `knowledge-base/`, management memos, team reports, UI microcopy (when asked); glossary SPA/banya; PDF-ready prose | Change technical facts, AC, queue priority, or Architect ADR; implement code; write backlog |
+| **Chief Editor / Copywriter** | Шеф-редактор, UX-писатель, техдокументатор: crystal-clear RU in `knowledge-base/`, TL;DR, H2/H3 hierarchy; modes «Для команды» / «Для инвестора» / «Для UI»; preserve `T-0xx`, LTV/CAC, OSS; PDF-ready prose | Change technical facts, AC, queue priority, or Architect ADR; implement code; write backlog |
 
 **Discovery pipeline:** **SME** (operational truth) → **CMO + Architect** (parallel ok) → **PM** (backlog, AC) → Developer/UI implement → QA verifies → PM/Human sign-off.
 
-**Editorial pipeline:** SME/PM draft → **Copywriter** (language, typography) → PDF export / management sign-off.
+**Editorial pipeline:** SME/PM draft → **Chief Editor** (language, structure, TL;DR, output mode) → PDF export / management sign-off.
 
 **Implementation handoff:** PM grooms → Architect resolves `BLOCKED` / ADR → PM sets `READY` → Developer/UI implement → QA verifies. **Growth:** strategy & hypotheses → PM (`READY` tasks) → Architect (analytics ADR) → Developer (instrumentation) → QA (tracking AC). **Deploy:** Architect ADR (deploy path) → PM `READY` → **DevOps** (compose, CI, SSL, backups) → Developer (env, health) → QA (smoke deploy). **SME critiques** PM/CMO features disconnected from field reality before and during grooming.
 
