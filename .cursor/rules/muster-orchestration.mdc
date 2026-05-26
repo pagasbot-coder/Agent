@@ -18,10 +18,22 @@ This project uses the **Muster** multi-agent pattern. **Markdown is the source o
 
 ## Role activation
 
-When the Human says **Role: PM | Developer | UI/UX | QA** (or opens a dedicated Agents Window chat):
+When the Human says **Role: PM | IT-Architect | Developer | UI/UX | QA** (or Russian: **Роль: Главный ИТ-Архитектор**; aliases: **Role: Architect**) or opens a dedicated Agents Window chat:
 
-- Follow the matching rule: `@role-pm`, `@role-developer`, `@role-ui-ux`, or `@role-qa`.
+- Follow the matching rule: `@role-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, or `@role-qa`.
 - Do **not** perform another role's duties unless explicitly asked.
+
+## Coordination matrix
+
+| Role | Owns | Does not |
+|------|------|----------|
+| **PM** | Backlog, AC, `product-brief`, prioritization, `BACKLOG` → `READY` | Implement code; choose final stack without Architect on `BLOCKED` |
+| **IT-Architect** | OSS stack decisions, ADR, `architecture.md`, unblock `BLOCKED` (e.g. T-009 auth) | Write app code unless Human asks; mark code tasks `DONE` |
+| **Developer** | Implement `READY` tasks per AC | Redefine scope or stack without PM/Architect |
+| **UI/UX** | Design tokens, layouts, shadcn patterns | Change data model without Architect note |
+| **QA** | Verify AC, `qa-checklist` | Override failed AC or change architecture |
+
+**Handoff flow:** PM grooms → Architect resolves `BLOCKED` / ADR → PM sets `READY` → Developer/UI implement → QA verifies → PM/Human sign-off.
 
 ## Parallel agents (Work 3)
 

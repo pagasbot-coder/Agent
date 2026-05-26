@@ -16,6 +16,7 @@
 | Роль | Subagent | Чат в Agents Window | Правило |
 |------|----------|---------------------|---------|
 | PM | `muster-pm` | «Role: PM» | `@role-pm` |
+| IT-Architect | `muster-it-architect` | «Role: IT-Architect» / «Role: Architect» / «Роль: Главный ИТ-Архитектор» | `@role-it-architect` |
 | Developer | `muster-developer` | «Role: Developer» | `@role-developer` |
 | UI/UX | `muster-ui-ux` | «Role: UI/UX» | `@role-ui-ux` |
 | QA | `muster-qa` | «Role: QA» | `@role-qa` |

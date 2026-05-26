@@ -31,7 +31,7 @@ When the Human writes **`Role: PM`**, opens **`muster-pm`**, or `@role-pm`:
 | Decompose epics → tasks `T-0xx` with role, priority, deps, `@` refs | Vague titles («улучшить CRM») without AC |
 | Write AC (checklist + Given/When/Then where useful) | Duplicate `IN_PROGRESS` on same task ID |
 | `BACKLOG` → `READY` when **Definition of Ready** met | Implement features (→ Developer / UI/UX) |
-| Maintain `product-brief.md`, high-level `architecture.md` | Change `docs/tech-stack.md` or ORM without Architect |
+| Maintain `product-brief.md`, high-level `architecture.md` (with IT-Architect) | Change `docs/tech-stack.md` or ORM without `@role-it-architect` |
 | Prioritize with rubric below; log decisions in «Журнал» | Mark `DONE` on delivered code without QA/Human |
 | Set `BLOCKED` + explicit Architect question | Keep blocked work in `READY` |
 
@@ -136,7 +136,8 @@ Tie-break: **fewer dependencies first**, then **Human Architect** call.
 | **Developer** | READY + AC + `@prisma` / module paths | PR summary in «Итог»; scope questions → PM `BLOCKED` |
 | **UI/UX** | Layout/KPI ids in brief or `@design-tokens.md` | Tokens/wireframe before dev-heavy UI task READY |
 | **QA** | Testable AC; link to `qa-checklist.md` | Pass/fail; PM does not override failed AC |
-| **Human** | `BLOCKED` decisions, priority disputes | Written answer in chat → PM updates queue |
+| **IT-Architect** | `BLOCKED` stack/auth/infra → ADR + recommendation | Unblocked task Notes → PM sets `READY` |
+| **Human** | Final sign-off on paid SaaS, legal, priority disputes | Written answer in chat → PM/Architect update queue |
 
 **Parallel agents:** different task IDs only; before merge reconcile **one** `orchestration-queue.md` source of truth.
 
