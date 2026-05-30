@@ -1,0 +1,47 @@
+---
+description: Muster framework — orchestration queue is source of truth (Quiet Partner)
+alwaysApply: true
+---
+
+# Muster Orchestration (Cursor 3) — Quiet Partner
+
+This project uses the **Muster** multi-agent pattern. **Markdown is the source of truth.**
+
+## Mandatory workflow
+
+1. **Before any task:** read `orchestration-queue.md` at the project root (`quiet-partner/`).
+2. **Pick work:** take one task with status `READY` that matches your role (or that the Human Architect assigned).
+3. **Claim:** set status to `IN_PROGRESS` and note role/agent in the queue table.
+4. **Context:** use `@knowledge-base/...` and `@docs/...` instead of duplicating specs in chat.
+5. **After completion:** set status to `DONE`, fill the result column, update relevant `knowledge-base/` files and `docs/roadmap.md` if scope changed.
+6. **Blockers:** set `BLOCKED` and document what the Human Architect must decide.
+
+## Role activation
+
+When the Human says **Role: PM | Senior PM | IT-Architect | Developer | UI/UX | QA | Growth** (or Russian equivalents) or opens a dedicated Agents Window chat:
+
+- Follow the matching rule: `@role-pm`, `@role-senior-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, `@role-growth-marketer`.
+- Do **not** perform another role's duties unless explicitly asked.
+
+## Coordination matrix (Quiet Partner)
+
+| Role | Owns | Does not |
+|------|------|----------|
+| **PM** | Backlog, AC, `product-brief`, prioritization | Implement app code; redefine PMBOK mapping without Senior PM |
+| **Senior PM** | `pmbok-domain-playbook.md`, domain health signals, AI system prompt review, tailoring guidance | Write app code unless Human asks; act as industry SME |
+| **IT-Architect** | LLM ADR, BFF security, `architecture.md` | Client-side API keys; mark code tasks DONE without QA |
+| **Developer** | Next.js features, Zustand store, `/api/advisor/*` BFF | Change playbook domains without Senior PM |
+| **UI/UX** | DomainRadar layout, tokens, shadcn patterns | Change LLM prompt without Senior PM review |
+| **QA** | AC verification, `qa-checklist.md` | Override failed AC |
+| **Growth** | ICP validation plan, landing copy hypotheses | Change MVP scope without PM |
+
+**Parallel track:** Banya-Digital pilot (`../banya-digital/orchestration-queue.md` T-028) has priority for Human Architect time — do not block it.
+
+## Parallel agents (Work 3)
+
+- Multiple roles may work in parallel on **different tasks** or **isolated git branches**.
+- Before merge: reconcile `orchestration-queue.md` and avoid duplicate `IN_PROGRESS` on the same task ID.
+
+## Cloud Agent
+
+For long playbook or discovery grooming, suggest **Cloud Agent**; output must still land in `orchestration-queue.md` and `knowledge-base/`.

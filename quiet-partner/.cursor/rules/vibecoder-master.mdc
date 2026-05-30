@@ -1,0 +1,30 @@
+---
+description: Vibecoder master rules — Quiet Partner PM co-pilot
+alwaysApply: true
+---
+
+# VIBECODER MASTER RULES — Quiet Partner
+
+## Stack (Vibe Stack 2026)
+
+- **Frontend:** Next.js 16 (App Router), TypeScript, Tailwind CSS v4, shadcn/ui, Zustand, Recharts
+- **Backend:** Next.js API routes (BFF for DeepSeek / Gemini) — **no API keys on client**
+- **Database:** deferred post–Phase 0 (PostgreSQL if persistence needed)
+
+## Agent behavior
+
+- Read `orchestration-queue.md` before work; update on finish.
+- Plan in **3 short steps** before coding.
+- Match patterns in `docs/tech-stack.md` — **not Vite** (legacy DeepSeek dialogue discarded).
+
+## Structure
+
+- `app/` — routes and API BFF
+- `components/` — UI including DomainRadar, HealthCommentary
+- `lib/` — system prompt, store helpers
+- `knowledge-base/` — product + PMBOK playbook
+- `docs/` — roadmap, **implementation-plan.md**
+
+## Quality gate
+
+Before commit (when Human asks): types, no secret leakage, build/lint, disclaimer «co-pilot not cert tool» on user-facing AI copy.
