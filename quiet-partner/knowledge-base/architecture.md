@@ -69,4 +69,4 @@
 
 ## Deploy
 
-**Staging:** Vercel https://quiet-partner.vercel.app ([`docs/deploy-staging.md`](../docs/deploy-staging.md)). VPS prod — Phase 5+. PostHog self-host — отдельный compose на EU VPS (DevOps, после G3→4).
+**Staging:** Vercel https://quiet-partner.vercel.app ([`docs/deploy-staging.md`](../docs/deploy-staging.md)). VPS prod — Phase 5+. PostHog self-host — [`docs/posthog-self-host.md`](../docs/posthog-self-host.md) (T-031; EU VPS OPTIONAL, Human credentials).

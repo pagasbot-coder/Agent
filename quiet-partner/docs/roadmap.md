@@ -1,7 +1,7 @@
 # Roadmap — Тихий напарник
 
 **Обновлено:** 2026-05-30  
-**План:** [`implementation-plan.md`](./implementation-plan.md) · **ТЗ:** [`technical-specification.md`](./technical-specification.md)
+**План:** [`implementation-plan.md`](./implementation-plan.md) · **ТЗ:** [`technical-specification.md`](./technical-specification.md) · **Phase 5:** [`roadmap-phase5.md`](./roadmap-phase5.md) (**BLOCKED** до M0)
 
 ---
 
@@ -14,16 +14,17 @@
 - [x] DomainRadar + Zustand + BFF + HealthCommentary (T-005…T-007)
 - [x] Onboarding spec + глоссарий (T-008)
 
-## Сейчас
+## Сейчас (Human / gate)
 
-- [ ] 3–5 dogfood сессий (Human) — чеклист `knowledge-base/qa-checklist.md` (staging: https://quiet-partner.vercel.app)
-- [ ] Senior PM sign-off prompt regression
-- [ ] QA subset smoke на staging (после T-018 URL)
+- [ ] 3–5 dogfood сессий (Human OPTIONAL) — [`dogfood-log-template.md`](./dogfood-log-template.md)
+- [ ] M0 Go / Pause / Pivot sign-off — [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md)
+- [x] QA staging smoke — T-022, T-026 **PASS** (https://quiet-partner.vercel.app)
+- [x] Senior PM static prompt regression — T-016
 
 ## Сделано (Phase 3 beta prep)
 
 - [x] Staging deploy Vercel + runbook (T-018) — [`deploy-staging.md`](./deploy-staging.md)
-- [x] QA checklist + smoke report (T-010)
+- [x] QA checklist + smoke report (T-010, T-013)
 - [x] Feedback UI 👍/👎 + «Отметить действие» (T-011)
 - [x] Баннер первого визита → `/onboarding`
 
@@ -31,19 +32,22 @@
 
 - [x] Design tokens polish (T-021)
 - [x] Landing `/waitlist` + staging deploy (T-023…T-026)
-- [x] PostHog stub OFF (T-024)
+- [x] PostHog stub + wiring + consent OFF default (T-024, T-030)
+- [x] PostHog self-host runbook (T-031) — [`posthog-self-host.md`](./posthog-self-host.md)
 - [x] `GET /api/health` liveness (T-027)
 - [x] Dashboard ↔ waitlist nav + onboarding banner fix (T-028)
 - [x] API cost guardrails — rate limit ADR-001 + token budgets (T-029)
+- [x] Phase 5 roadmap doc — BLOCKED until M0 (T-032)
 
-## Далее (Phase 4)
+## Далее (после M0 Go — Human)
 
-- PostHog instrumentation after G3→4 consent
-- Phase 5 roadmap (auth, persistence) — PM doc, Human sign-off
+- Phase 5: auth, PostgreSQL, waitlist backend — см. [`roadmap-phase5.md`](./roadmap-phase5.md)
+- PostHog live on VPS + Vercel keys (Human OPTIONAL)
+- Live LLM prompt regression (Human + `.env.local`)
 
 ## Не сейчас
 
-- Auth / multi-tenant
+- Auth / multi-tenant app code (**BLOCKED** — Phase 5)
 - Jira integrations
-- PostgreSQL (Phase 5)
+- PostgreSQL implementation (**BLOCKED** — Phase 5)
 - PMI certification positioning

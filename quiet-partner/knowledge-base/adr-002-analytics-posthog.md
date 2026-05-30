@@ -29,6 +29,10 @@
 
 ## Последствия
 
-- DevOps: compose PostHog в Phase 4  
-- Growth: дашборд activation в PostHog  
+- DevOps: compose PostHog в Phase 4 — **DONE (T-031):** [`docs/posthog-self-host.md`](../docs/posthog-self-host.md), [`docker/posthog/docker-compose.yml`](../docker/posthog/docker-compose.yml)  
+- Growth: дашборд activation в PostHog (после Human VPS + Vercel keys)  
 - Отклонено: GA4 (privacy), full Segment (cost)
+
+## Phase 5
+
+Auth + per-user analytics budgets — [`docs/roadmap-phase5.md`](../docs/roadmap-phase5.md) (**BLOCKED** до M0).

@@ -62,7 +62,7 @@
 
 **Запрещено:** `NEXT_PUBLIC_DEEPSEEK_*`, `NEXT_PUBLIC_GEMINI_*` (ADR-001).
 
-**PostHog (Phase 4, ADR-002):** `POSTHOG_DISABLED=true` по умолчанию; `NEXT_PUBLIC_POSTHOG_*` — только после consent + self-host; не блокирует staging MVP.
+**PostHog (Phase 4, ADR-002):** `POSTHOG_DISABLED=true` по умолчанию; `NEXT_PUBLIC_POSTHOG_*` — только после consent + self-host; не блокирует staging MVP. Runbook: [`posthog-self-host.md`](./posthog-self-host.md) (T-031).
 
 ### Как добавить ключ без CLI
 

@@ -1,5 +1,6 @@
 /**
  * PostHog analytics — OFF by default (ADR-002).
+ * Self-host runbook: docs/posthog-self-host.md
  * Dynamic posthog-js import only when key present, not disabled, and user consented.
  */
 

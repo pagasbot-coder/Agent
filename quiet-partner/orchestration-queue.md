@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-30 (T-029 DONE — API cost guardrails)
+**Последнее обновление:** 2026-05-30 (T-031…T-032 DONE — PostHog runbook + Phase 5 roadmap)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -74,6 +74,8 @@
 | T-028 | Dashboard ↔ waitlist nav + onboarding banner hydration | Developer | DONE | P2 | T-023, T-009 | `@components/DashboardShell.tsx` `@docs/qa-report-phase3.md` | «Ранний доступ» → `/waitlist`; `usePersistHydrated` — no banner flash; build/lint PASS |
 | T-029 | API cost guardrails (Phase 4) | Developer | DONE | P1 | T-027, T-004 | `@knowledge-base/adr-001-llm-bff.md` `@lib/advisor/costGuardrails.ts` | `costGuardrails.ts`; ADR-001 15min rate limit; token budgets; health snapshot; build/lint PASS |
 | T-030 | PostHog event wiring + consent (ADR-002) | Developer | DONE | P1 | T-024, T-029 | `@knowledge-base/adr-002-analytics-posthog.md` `@lib/analytics/` | call sites wired; consent banner; dynamic posthog-js; OFF default; build/lint PASS |
+| T-031 | PostHog self-host compose + runbook (ADR-002) | Developer + DevOps | DONE | P1 | T-030 | `@docs/posthog-self-host.md` `docker/posthog/docker-compose.yml` | runbook RU; hobby script + local compose; no secrets in git; Human VPS OPTIONAL |
+| T-032 | Phase 5 roadmap doc (auth/DB/billing BLOCKED) | PM + Developer | DONE | P1 | T-015 | `@docs/roadmap-phase5.md` | scope draft BLOCKED until M0; P5-ADR placeholders; no Phase 5 app code |
 
 ---
 
@@ -533,6 +535,30 @@
 
 ---
 
+### T-031 — PostHog self-host compose + runbook
+
+**Acceptance criteria:**
+- [x] `docs/posthog-self-host.md`: VPS hobby script, local compose, Vercel env contract, events table
+- [x] `docker/posthog/docker-compose.yml` — reference stack; no committed secrets
+- [x] Link from `deploy-staging.md` and ADR-002
+- [x] Optional — не требует Human credentials для merge
+
+**Product Map phase:** Delivery (4) — Product Ops
+
+---
+
+### T-032 — Phase 5 roadmap (BLOCKED scope)
+
+**Acceptance criteria:**
+- [x] `docs/roadmap-phase5.md`: auth, PostgreSQL, billing, waitlist backend — **BLOCKED until M0**
+- [x] G4→5 gate criteria; P5-ADR placeholders; draft T-033+ без READY
+- [x] `docs/roadmap.md` cross-link; **no** auth/Postgres implementation
+- [x] pm-governance Human MUST #2 referenced
+
+**Product Map phase:** Planning — Phase 5 prep
+
+---
+
 ## Журнал (лог решений)
 
 | Дата | Кто | Событие |
@@ -568,6 +594,8 @@
 | 2026-05-30 | Developer | T-028 DONE: dashboard «Ранний доступ» → `/waitlist`; `usePersistHydrated` fixes onboarding banner race |
 | 2026-05-30 | Developer | T-029 DONE: `lib/advisor/costGuardrails.ts`; ADR-001 15min rate limit; token budgets; health snapshot; build/lint PASS |
 | 2026-05-30 | Developer | T-030 DONE: PostHog wiring + consent; call sites; sanitize; dynamic posthog-js; OFF default; build/lint PASS; redeploy staging |
+| 2026-05-30 | Developer + DevOps | T-031 DONE: `docs/posthog-self-host.md` + `docker/posthog/docker-compose.yml`; ADR-002 OSS optional |
+| 2026-05-30 | PM + Developer | T-032 DONE: `docs/roadmap-phase5.md` — Phase 5 BLOCKED until M0 + Human scope sign-off |
 
 ---
 

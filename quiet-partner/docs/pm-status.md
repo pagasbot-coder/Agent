@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-05-30 (T-030 DONE — PostHog wiring)  
+**Дата:** 2026-05-30 (T-031…T-032 DONE — PostHog runbook + Phase 5 doc)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-030 **DONE**. Staging redeploy с health + cost guardrails + analytics wiring (OFF default). **Следующий без Human:** PostHog self-host deploy (DevOps) или Phase 5 roadmap doc.
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-032 **DONE**. Phase 4 ~85%: PostHog runbook + Phase 5 doc (**BLOCKED** app impl). **Ждёт Human:** M0 sign-off; dogfood; Phase 5 scope approval.
 
 ---
 
@@ -33,7 +33,7 @@
 | **1** Foundation | 16.06–27.06.2026 (2 нед) | 0% | **~95%** | T-001, T-004, design tokens v1 (T-021) |
 | **2** Spike | 30.06–18.07.2026 (3 нед) | 0% | **~95%** | T-005…T-007, T-012, T-016 static DONE |
 | **3** Onboarding + beta | 21.07–08.08.2026 (3 нед) | 0% | **~75%** | T-008…T-013, T-018, T-022 DONE; dogfood **0/5** |
-| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~75%** | T-017 ADR-002; T-019 copy; **T-023…T-030 DONE**; PostHog self-host — BACKLOG |
+| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~85%** | T-017…T-031 DONE; Phase 5 doc T-032 BLOCKED impl; live PostHog VPS — Human OPTIONAL |
 
 ---
 
@@ -55,6 +55,8 @@
 |------|------|--------|----------|
 | T-023…T-029 | Developer | **DONE** | waitlist, health, nav, cost guardrails |
 | T-030 | Developer | **DONE** | PostHog wiring + consent; OFF default |
+| T-031 | DevOps + Developer | **DONE** | `posthog-self-host.md` + compose reference |
+| T-032 | PM + Developer | **DONE** | `roadmap-phase5.md` — BLOCKED until M0 |
 | T-014 | PM | IN_PROGRESS | Шаблон log; сессии **OPTIONAL — не блокирует спринт** |
 | Weekly pm-status | PM | Ongoing | След. review **06.06** |
 
@@ -98,3 +100,4 @@ Dogfood #1–5 — по [`dogfood-log-template.md`](./dogfood-log-template.md), 
 | 2026-05-30 | PM | v1.0 — первый PM status |
 | 2026-05-30 | PM | v1.5 — Human «идите дальше»; T-023…T-026 |
 | 2026-05-30 | PM | **v1.6** — T-027…T-030 DONE; Phase 4 ~75%; next: PostHog self-host / Phase 5 doc |
+| 2026-05-30 | Developer | **v1.7** — T-031…T-032 DONE; Phase 4 ~85%; Phase 5 app **BLOCKED** |
