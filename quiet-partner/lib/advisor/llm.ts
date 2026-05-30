@@ -28,9 +28,19 @@ function buildUserMessage(req: HealthCommentaryRequest): string {
       `Проект: ${meta.name ?? "—"}, фаза: ${meta.phase ?? "—"}.`
     : "Контекст проекта минимальный.";
 
+  const situationLineRu =
+    req.userSituation ?
+      `Ситуация от PM (сценарий ${req.navigatorScenarioId ?? "—"}): «${req.userSituation}».`
+    : null;
+  const situationLineEn =
+    req.userSituation ?
+      `PM situation (scenario ${req.navigatorScenarioId ?? "—"}): "${req.userSituation}".`
+    : null;
+
   if (locale === "en") {
     return [
       metaLine,
+      situationLineEn,
       `Delivery approach: ${req.deliveryApproach ?? "hybrid"}.`,
       "Domain scores:",
       ...lines,
@@ -44,6 +54,7 @@ function buildUserMessage(req: HealthCommentaryRequest): string {
 
   return [
     metaLine,
+    situationLineRu,
     `Подход к поставке: ${req.deliveryApproach ?? "hybrid"}.`,
     "Оценки доменов:",
     ...lines,
@@ -80,7 +91,10 @@ export async function generateHealthCommentary(
   const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
 
   if (!apiKey) {
-    const fallback = buildFallbackCommentary(req.domainScores);
+    const fallback = buildFallbackCommentary(
+      req.domainScores,
+      req.userSituation,
+    );
     return {
       ...fallback,
       commentary: `${fallback.commentary} (локальный режим — ключ DeepSeek не задан)`,
@@ -88,7 +102,10 @@ export async function generateHealthCommentary(
   }
 
   if (isTokenBudgetExceeded()) {
-    const fallback = buildFallbackCommentary(req.domainScores);
+    const fallback = buildFallbackCommentary(
+      req.domainScores,
+      req.userSituation,
+    );
     console.warn("[advisor] token budget exceeded — fallback");
     return {
       ...fallback,
@@ -129,7 +146,10 @@ export async function generateHealthCommentary(
 
     if (!res.ok) {
       console.error("[advisor] provider error", res.status);
-      const fallback = buildFallbackCommentary(req.domainScores);
+      const fallback = buildFallbackCommentary(
+        req.domainScores,
+        req.userSituation,
+      );
       return {
         ...fallback,
         commentary: `${fallback.commentary} (сервис LLM временно недоступен)`,
@@ -155,12 +175,13 @@ export async function generateHealthCommentary(
     return {
       commentary:
         parsed.commentary?.trim() ||
-        buildFallbackCommentary(req.domainScores).commentary,
+        buildFallbackCommentary(req.domainScores, req.userSituation)
+          .commentary,
       questions: parsed.questions?.filter(Boolean).slice(0, 3),
       disclaimer: DEFAULT_DISCLAIMER,
     };
   } catch (err) {
     console.error("[advisor] fetch failed", err);
-    return buildFallbackCommentary(req.domainScores);
+    return buildFallbackCommentary(req.domainScores, req.userSituation);
   }
 }

@@ -7,6 +7,7 @@ import { DomainGlossary } from "@/components/DomainGlossary";
 import { DomainRadar } from "@/components/DomainRadar";
 import { HealthCommentary } from "@/components/HealthCommentary";
 import { NavigatorScenariosPanel } from "@/components/NavigatorScenariosPanel";
+import { ProjectExportButton } from "@/components/ProjectExportButton";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DISCLAIMER } from "@/lib/domains";
 import { usePersistHydrated } from "@/lib/store/usePersistHydrated";
@@ -109,6 +110,16 @@ export function DashboardShell() {
           <DomainGlossary variant="compact" />
           <NavigatorScenariosPanel />
         </div>
+
+        <section
+          className="mt-8 rounded-xl border border-border/80 bg-card p-4 shadow-sm"
+          aria-label="Экспорт снимка проекта"
+        >
+          <h2 className="text-sm font-semibold">Поделиться снимком</h2>
+          <div className="mt-3">
+            <ProjectExportButton />
+          </div>
+        </section>
 
         <footer className="mt-10 rounded-lg border border-dashed bg-muted/30 px-4 py-3 text-center text-xs text-muted-foreground">
           Продукт не сертифицирован PMI и не оценивает соответствие PMBOK.

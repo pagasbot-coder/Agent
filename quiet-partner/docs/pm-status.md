@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-05-30 (T-037…T-039 sprint 3 — glossary, navigator, dogfood protocol)  
+**Дата:** 2026-05-30 (T-040…T-043 sprint 4 — Phase 3–4 impl closure)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-032 **DONE**. Phase 4 ~85%: PostHog runbook + Phase 5 doc (**BLOCKED** app impl). **Ждёт Human:** M0 sign-off; dogfood; Phase 5 scope approval.
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-001…T-043 **DONE** (Phase 3–4 impl). Phase 5 app **BLOCKED** до M0. **Ждёт Human (OPTIONAL gate):** dogfood, M0 sign-off, PostHog VPS.
 
 ---
 
@@ -33,7 +33,7 @@
 | **1** Foundation | 16.06–27.06.2026 (2 нед) | 0% | **~95%** | T-001, T-004, design tokens v1 (T-021) |
 | **2** Spike | 30.06–18.07.2026 (3 нед) | 0% | **~95%** | T-005…T-007, T-012, T-016 static DONE |
 | **3** Onboarding + beta | 21.07–08.08.2026 (3 нед) | 0% | **~75%** | T-008…T-013, T-018, T-022 DONE; dogfood **0/5** |
-| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~85%** | T-017…T-031 DONE; Phase 5 doc T-032 BLOCKED impl; live PostHog VPS — Human OPTIONAL |
+| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~95%** | T-017…T-043 DONE; Phase 5 doc BLOCKED impl; live PostHog VPS — Human OPTIONAL |
 
 ---
 
@@ -58,7 +58,7 @@
 | T-031 | DevOps + Developer | **DONE** | `posthog-self-host.md` + compose reference |
 | T-032 | PM + Developer | **DONE** | `roadmap-phase5.md` — BLOCKED until M0 |
 | T-014 | PM | **DONE** | Protocol + log + links; сессии **OPTIONAL** |
-| T-037…T-039 | Developer | **DONE** | Glossary, navigator panel, dogfood protocol |
+| T-037…T-043 | Developer + QA | **DONE** | Sprint 3–4 polish; navigator BFF; export; QA full pass |
 | Weekly pm-status | PM | Ongoing | След. review **06.06** |
 
 ## Вопросы к Human

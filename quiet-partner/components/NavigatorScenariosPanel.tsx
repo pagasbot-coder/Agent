@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { NAVIGATOR_SCENARIOS } from "@/lib/navigatorScenarios";
+import { useProjectStore } from "@/lib/store/useProjectStore";
 import { cn } from "@/lib/utils";
 
 /** Static S1–S4 reference — what «questions-first» commentary should look like. */
 export function NavigatorScenariosPanel({ className }: { className?: string }) {
   const [open, setOpen] = useState(false);
+  const setNavigatorContext = useProjectStore((s) => s.setNavigatorContext);
+  const activeId = useProjectStore((s) => s.navigatorContext?.scenarioId);
 
   return (
     <section
@@ -53,6 +57,20 @@ export function NavigatorScenariosPanel({ className }: { className?: string }) {
                   <li key={line}>{line}</li>
                 ))}
               </ul>
+              <Button
+                type="button"
+                size="sm"
+                variant={activeId === scenario.id ? "default" : "outline"}
+                className="mt-3"
+                onClick={() =>
+                  setNavigatorContext({
+                    scenarioId: scenario.id,
+                    userInput: scenario.userInput,
+                  })
+                }
+              >
+                Спросить напарника
+              </Button>
             </li>
           ))}
         </ul>

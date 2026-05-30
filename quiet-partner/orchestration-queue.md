@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-30 (T-037…T-039 sprint 3 polish; T-014 templates DONE)
+**Последнее обновление:** 2026-05-30 (T-040…T-043 sprint 4 — waitlist CTA, navigator BFF, export)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -79,6 +79,10 @@
 | T-037 | Dashboard domain glossary (RU labels + tooltips) | Developer | DONE | P2 | T-009, T-021 | `@components/DomainGlossary.tsx` | RU labels; radar tooltips; onboarding reuse |
 | T-038 | Navigator scenarios reference panel (static S1–S4) | Developer | DONE | P2 | T-016 | `@components/NavigatorScenariosPanel.tsx` | Dashboard collapsible S1–S4 |
 | T-039 | T-014 dogfood protocol + brief links | Developer | DONE | P1 | T-011 | `@knowledge-base/dogfood-protocol.md` | 5-step protocol; brief + log cross-links |
+| T-040 | Waitlist hero CTA above-the-fold polish | Developer | DONE | P2 | T-023, T-021 | `@docs/landing-waitlist-one-pager.md` | hero email card above bullets; CTA hierarchy; build/lint PASS |
+| T-041 | Navigator scenario → BFF userSituation wiring | Developer | DONE | P2 | T-038, T-007 | `@lib/navigatorScenarios.ts` | «Спросить напарника» → BFF userSituation; refetch |
+| T-042 | Export project snapshot (clipboard JSON) | Developer | DONE | P2 | T-006 | `@lib/exportProjectSnapshot.ts` | clipboard + JSON download; no backend |
+| T-043 | QA Phase 3–4 full checklist pass doc | QA | DONE | P0 | T-040…T-042 | `@docs/qa-report-phase3.md` | §Phase 3–4 full pass PASS; checklist T-040…T-042 |
 
 ---
 
@@ -600,6 +604,7 @@
 | 2026-05-30 | Developer + DevOps | T-031 DONE: `docs/posthog-self-host.md` + `docker/posthog/docker-compose.yml`; ADR-002 OSS optional |
 | 2026-05-30 | PM + Developer | T-032 DONE: `docs/roadmap-phase5.md` — Phase 5 BLOCKED until M0 + Human scope sign-off |
 | 2026-05-30 | Developer | Sprint 3: T-037 glossary + tooltips; T-038 navigator panel; T-039 dogfood-protocol; T-014 templates DONE |
+| 2026-05-30 | PM + Developer | Sprint 4: T-040 waitlist CTA; T-041 navigator→BFF; T-042 export snapshot; T-043 QA full pass |
 
 ---
 

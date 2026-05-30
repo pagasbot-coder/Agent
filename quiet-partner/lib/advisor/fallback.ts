@@ -8,6 +8,7 @@ import {
 /** Offline commentary when LLM key is missing or provider fails. */
 export function buildFallbackCommentary(
   domainScores: Record<DomainId, number>,
+  userSituation?: string,
 ): { commentary: string; questions: string[]; disclaimer: string } {
   const ranked = (Object.entries(domainScores) as [DomainId, number][])
     .map(([id, value]) => ({
@@ -25,10 +26,15 @@ export function buildFallbackCommentary(
     .map((d) => `«${d.label}» (${d.value})`)
     .join(" и ");
 
+  const situationLead =
+    userSituation ?
+      `Вы описали ситуацию: «${userSituation.slice(0, 120)}${userSituation.length > 120 ? "…" : ""}». `
+    : "";
+
   const commentary =
     redCount > 0 ?
-      `Сейчас больше всего давят ${focus}. Это субъективные сигналы — не аудит. Прежде чем менять план, уточните, что реально блокирует прогресс на этой неделе.`
-    : `На первый взгляд слабее всего ${focus}. Стоит проверить: это временный спад или системная проблема?`;
+      `${situationLead}Сейчас больше всего давят ${focus}. Это субъективные сигналы — не аудит. Прежде чем менять план, уточните, что реально блокирует прогресс на этой неделе.`
+    : `${situationLead}На первый взгляд слабее всего ${focus}. Стоит проверить: это временный спад или системная проблема?`;
 
   const questions = [
     "Что можно показать заинтересованным сторонам на этой неделе — даже черновик?",

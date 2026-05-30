@@ -35,7 +35,7 @@ function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-/** Static acquisition landing — copy from landing-waitlist-one-pager; no backend. */
+/** Static acquisition landing — primary CTA above the fold per one-pager. */
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -94,21 +94,7 @@ export default function WaitlistPage() {
           </p>
         </section>
 
-        <ul className="mt-10 space-y-4" aria-label="Преимущества">
-          {VALUE_BULLETS.map((bullet) => (
-            <li
-              key={bullet.title}
-              className="rounded-xl border border-border/80 bg-card p-4 shadow-sm"
-            >
-              <h2 className="text-base font-semibold leading-snug">
-                {bullet.title}
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">{bullet.text}</p>
-            </li>
-          ))}
-        </ul>
-
-        <Card className="mt-10">
+        <Card className="mt-8 border-primary/20 shadow-md">
           <CardHeader>
             <CardTitle>Получить ранний доступ</CardTitle>
             <CardDescription>
@@ -173,7 +159,7 @@ export default function WaitlistPage() {
             href={DEMO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-background px-3 text-xs font-medium hover:bg-muted"
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-background px-4 text-sm font-medium hover:bg-muted"
           >
             Посмотреть demo
           </a>
@@ -183,6 +169,20 @@ export default function WaitlistPage() {
             </Button>
           </Link>
         </div>
+
+        <ul className="mt-10 space-y-4" aria-label="Преимущества">
+          {VALUE_BULLETS.map((bullet) => (
+            <li
+              key={bullet.title}
+              className="rounded-xl border border-border/80 bg-card p-4 shadow-sm"
+            >
+              <h2 className="text-base font-semibold leading-snug">
+                {bullet.title}
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">{bullet.text}</p>
+            </li>
+          ))}
+        </ul>
 
         <footer className="mt-12 rounded-lg border border-dashed bg-muted/30 px-4 py-3 text-xs text-muted-foreground">
           Не сертификация PMBOK · не замена PMO · не подготовка к PMP. Co-pilot

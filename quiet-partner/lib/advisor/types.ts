@@ -5,6 +5,9 @@ export type HealthCommentaryRequest = {
   deliveryApproach?: DeliveryApproach;
   locale?: "ru" | "en";
   projectMeta?: { name?: string; phase?: string };
+  /** Dogfood / navigator scenario — plain-language situation (no PII). */
+  userSituation?: string;
+  navigatorScenarioId?: string;
 };
 
 export type HealthCommentaryResponse = {

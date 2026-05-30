@@ -44,11 +44,20 @@ export type CommentaryFeedbackCounts = {
 /** Zustand persist key in localStorage (dogfood / onboarding banner). */
 export const PROJECT_PERSIST_KEY = "quiet-partner-v1";
 
+export type NavigatorContext = {
+  scenarioId: string;
+  userInput: string;
+};
+
 type ProjectStore = {
   domains: Record<DomainId, DomainHealth>;
   projectProfile: ProjectProfile;
   auditLog: AuditLogEntry[];
   commentaryFeedback: CommentaryFeedbackCounts;
+  /** Session-only navigator scenario for BFF (not persisted). */
+  navigatorContext: NavigatorContext | null;
+  /** Bumps when navigator context applied — triggers commentary refetch. */
+  commentaryTrigger: number;
 
   updateDomainHealth: (id: DomainId, value: number) => void;
   setProjectProfile: (patch: Partial<ProjectProfile>) => void;
@@ -64,6 +73,8 @@ type ProjectStore = {
   ) => void;
   setScore: (id: DomainId, value: number) => void;
   recordCommentaryFeedback: (kind: "useful" | "not_useful") => void;
+  setNavigatorContext: (context: NavigatorContext) => void;
+  clearNavigatorContext: () => void;
 };
 
 function clampScore(value: number): number {
@@ -102,6 +113,8 @@ export const useProjectStore = create<ProjectStore>()(
       },
       auditLog: [],
       commentaryFeedback: { useful: 0, notUseful: 0 },
+      navigatorContext: null,
+      commentaryTrigger: 0,
 
       updateDomainHealth: (id, value) => {
         set((state) => ({
@@ -211,6 +224,21 @@ export const useProjectStore = create<ProjectStore>()(
           kind === "useful" ? "feedback_useful" : "feedback_not_useful",
           kind === "useful" ? "Комментарий: полезно" : "Комментарий: не полезно",
         );
+      },
+
+      setNavigatorContext: (context) => {
+        set((state) => ({
+          navigatorContext: context,
+          commentaryTrigger: state.commentaryTrigger + 1,
+        }));
+        get().logAction(
+          "navigator_scenario",
+          `${context.scenarioId}: ${context.userInput.slice(0, 80)}`,
+        );
+      },
+
+      clearNavigatorContext: () => {
+        set({ navigatorContext: null });
       },
     }),
     {

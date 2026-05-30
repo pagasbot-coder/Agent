@@ -33,6 +33,8 @@ export function HealthCommentary() {
   const projectProfile = useProjectStore((s) => s.projectProfile);
   const getRedDomains = useProjectStore((s) => s.getRedDomains);
   const logAction = useProjectStore((s) => s.logAction);
+  const navigatorContext = useProjectStore((s) => s.navigatorContext);
+  const commentaryTrigger = useProjectStore((s) => s.commentaryTrigger);
 
   const [state, setState] = useState<FetchState>({ status: "idle" });
 
@@ -69,6 +71,12 @@ export function HealthCommentary() {
             name: projectProfile.name,
             phase: projectProfile.phase,
           },
+          ...(navigatorContext ?
+            {
+              userSituation: navigatorContext.userInput,
+              navigatorScenarioId: navigatorContext.scenarioId,
+            }
+          : {}),
         }),
       });
 
@@ -95,7 +103,7 @@ export function HealthCommentary() {
       });
     }
   },
-  [domains, getRedDomains, logAction, projectProfile],
+  [domains, getRedDomains, logAction, navigatorContext, projectProfile],
 );
 
   useEffect(() => {
@@ -104,6 +112,14 @@ export function HealthCommentary() {
     }, 0);
     return () => window.clearTimeout(timer);
   }, [fetchCommentary]);
+
+  useEffect(() => {
+    if (commentaryTrigger === 0) return;
+    const timer = window.setTimeout(() => {
+      void fetchCommentary({ trackRefresh: true });
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [commentaryTrigger, fetchCommentary]);
 
   return (
     <Card
@@ -119,7 +135,9 @@ export function HealthCommentary() {
             <div>
               <CardTitle>Комментарий напарника</CardTitle>
               <CardDescription>
-                Вопросы и наблюдения по сигналам здоровья
+                {navigatorContext ?
+                  `Сценарий ${navigatorContext.scenarioId}: вопросы по вашей ситуации`
+                : "Вопросы и наблюдения по сигналам здоровья"}
               </CardDescription>
             </div>
           </div>

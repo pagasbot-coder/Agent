@@ -51,11 +51,25 @@ function parseBody(body: unknown): HealthCommentaryRequest | null {
     };
   }
 
+  let userSituation: string | undefined;
+  if (typeof raw.userSituation === "string") {
+    const trimmed = raw.userSituation.trim();
+    if (trimmed.length > 0) userSituation = trimmed.slice(0, 500);
+  }
+
+  let navigatorScenarioId: string | undefined;
+  if (typeof raw.navigatorScenarioId === "string") {
+    const id = raw.navigatorScenarioId.trim().slice(0, 8);
+    if (/^S[1-4]$/.test(id)) navigatorScenarioId = id;
+  }
+
   return {
     domainScores,
     deliveryApproach: deliveryApproach as HealthCommentaryRequest["deliveryApproach"],
     locale: (locale as "ru" | "en") ?? "ru",
     projectMeta,
+    userSituation,
+    navigatorScenarioId,
   };
 }
 

@@ -131,3 +131,33 @@
 | T-030 | §A1 analytics wiring (OFF default); consent banner when key set |
 | T-037 | §Glossary & navigator G1–G3 |
 | T-038 | §Glossary & navigator N1–N2 |
+| T-040 | §Waitlist CTA W1–W2 |
+| T-041 | §Navigator wiring N3–N4 |
+| T-042 | §Export E1–E2 |
+
+---
+
+## Waitlist CTA (T-040)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| W1 | `/waitlist` hero | Email form **above** value bullets (above-the-fold) |
+| W2 | CTA hierarchy | One solid primary «Получить ранний доступ»; demo = outline/link |
+
+---
+
+## Navigator → BFF (T-041)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| N3 | «Спросить напарника» | Sets active scenario; commentary card refetches |
+| N4 | BFF body | `userSituation` + `navigatorScenarioId` S1–S4 only; no email in payload |
+
+---
+
+## Export snapshot (T-042)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| E1 | «Копировать снимок» | JSON in clipboard: domains, project name, disclaimer |
+| E2 | «Скачать JSON» | File download; no server POST |

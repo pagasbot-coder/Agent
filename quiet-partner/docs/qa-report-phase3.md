@@ -182,7 +182,7 @@
 
 **Риски (не блокеры):**
 
-- `auditLog` не персистится — только для сессии; для аналитики Phase 4 нужен export/API.
+- `auditLog` не персистится — только для сессии; **T-042** client export snapshot (clipboard/JSON) закрывает dogfood share MVP.
 - Баннер онбординга vs persist race — **fixed T-028** (`usePersistHydrated`).
 - Live prompt regression (T-016) — **Human**; `.env.local` отсутствует. Static — PASS.
 
@@ -197,6 +197,23 @@
 | Disclaimer на ответе | **PASS** | `DEFAULT_DISCLAIMER` UI + BFF |
 | Live BFF 4 сценария | **WAIVE** | Нет `DEEPSEEK_API_KEY` / `.env.local` |
 | Senior PM sign-off (static) | **PASS** | Live — Human |
+
+---
+
+## Phase 3–4 full pass (T-040…T-043) — 2026-05-30
+
+**Агент:** Developer + QA compile  
+**Среда:** local build + staging subset
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| T-040 waitlist CTA above fold | **PASS** | Email card сразу под hero; bullets ниже |
+| T-041 navigator → BFF | **PASS** | `userSituation` + S1–S4; commentary refetch on trigger |
+| T-042 export snapshot | **PASS** | Clipboard + download JSON; no backend |
+| `npm run build` / `lint` | **PASS** | post-sprint 4 |
+| Staging `GET /`, `/waitlist`, `/api/health` | **PASS** | после redeploy |
+
+**Вердикт Phase 3–4 impl (без Phase 5):** **PASS** — остаётся Human OPTIONAL: dogfood, M0 sign-off, PostHog VPS.
 
 ---
 
