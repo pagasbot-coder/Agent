@@ -14,7 +14,7 @@
 | **Платформа** | Vercel (managed preview/production) |
 | **Проект** | `quiet-partner` (team `erp-db-spb-s-projects`) |
 | **Production alias** | https://quiet-partner.vercel.app |
-| **Последний deploy** | 2026-05-30 — `vercel --prod --yes` (T-037…T-039 sprint 3; commit `048dfa9`) |
+| **Последний deploy** | 2026-05-30 — `vercel --prod --yes` (T-040…T-043 sprint 4; commit `141e12f`) |
 | **Build локально** | `npm run build` — PASS |
 | **Live LLM на staging** | Нужен `DEEPSEEK_API_KEY` в Vercel → **Human OPTIONAL** (без ключа — fallback RU) |
 
