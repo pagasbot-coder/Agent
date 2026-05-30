@@ -14,6 +14,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { buildAnalyticsContext } from "@/lib/analytics/context";
+import { trackCommentaryRefresh } from "@/lib/analytics/posthog";
 import { DEFAULT_DISCLAIMER, DOMAIN_IDS, type DomainId } from "@/lib/domains";
 import { useProjectStore } from "@/lib/store/useProjectStore";
 import type { HealthCommentaryResponse } from "@/lib/advisor/types";
@@ -37,9 +39,19 @@ export function HealthCommentary() {
   const redCount = getRedDomains().length;
   const alertBorder = redCount >= 2;
 
-  const fetchCommentary = useCallback(async () => {
+  const fetchCommentary = useCallback(
+    async (options?: { trackRefresh?: boolean }) => {
     setState({ status: "loading" });
     logAction("commentary_fetch");
+    if (options?.trackRefresh) {
+      trackCommentaryRefresh(
+        buildAnalyticsContext(
+          projectProfile.deliveryApproach,
+          getRedDomains().length,
+          "dashboard",
+        ),
+      );
+    }
 
     const domainScores = Object.fromEntries(
       DOMAIN_IDS.map((id) => [id, domains[id].value]),
@@ -82,7 +94,9 @@ export function HealthCommentary() {
           : "Не удалось получить комментарий",
       });
     }
-  }, [domains, projectProfile, logAction]);
+  },
+  [domains, getRedDomains, logAction, projectProfile],
+);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -112,7 +126,7 @@ export function HealthCommentary() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => void fetchCommentary()}
+            onClick={() => void fetchCommentary({ trackRefresh: true })}
             disabled={state.status === "loading"}
             aria-label="Обновить комментарий"
           >

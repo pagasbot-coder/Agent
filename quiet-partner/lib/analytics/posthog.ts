@@ -1,8 +1,10 @@
 /**
- * PostHog analytics stubs — OFF by default until Phase 4 (ADR-002).
- * No posthog-js import: zero bundle impact when disabled.
- * Real init/capture wiring — after consent banner + self-host deploy (Phase 4).
+ * PostHog analytics — OFF by default (ADR-002).
+ * Dynamic posthog-js import only when key present, not disabled, and user consented.
  */
+
+import { hasAnalyticsConsent } from "@/lib/analytics/consent";
+import { sanitizeAnalyticsProperties } from "@/lib/analytics/sanitize";
 
 /** MVP events per adr-002-analytics-posthog.md (no PII in properties). */
 export type AnalyticsEvent =
@@ -19,28 +21,69 @@ export type AnalyticsProperties = Record<
   string | number | boolean | null | undefined
 >;
 
-/** True when analytics should send events (Phase 4 only). */
+type PostHogClient = {
+  init: (
+    key: string,
+    options: {
+      api_host: string;
+      capture_pageview: boolean;
+      persistence: string;
+    },
+  ) => void;
+  capture: (event: string, properties?: Record<string, unknown>) => void;
+};
+
+let posthogClient: PostHogClient | null = null;
+let initPromise: Promise<void> | null = null;
+
+/** True when env allows analytics (consent checked separately on client). */
 export function isAnalyticsEnabled(): boolean {
   if (process.env.POSTHOG_DISABLED === "true") return false;
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim();
   return Boolean(key);
 }
 
-/** No-op until Phase 4: key present and POSTHOG_DISABLED !== "true". */
-export function initPostHog(): void {
+/** Lazy init posthog-js after consent — no bundle when disabled. */
+export async function initPostHog(): Promise<void> {
   if (!isAnalyticsEnabled()) return;
-  // Phase 4: dynamic import posthog-js + init with NEXT_PUBLIC_POSTHOG_HOST
+  if (typeof window === "undefined") return;
+  if (!hasAnalyticsConsent()) return;
+  if (posthogClient) return;
+  if (initPromise) return initPromise;
+
+  initPromise = (async () => {
+    const mod = await import("posthog-js");
+    const posthog = mod.default as PostHogClient;
+    const key = process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim();
+    if (!key) return;
+
+    posthog.init(key, {
+      api_host:
+        process.env.NEXT_PUBLIC_POSTHOG_HOST?.trim() ||
+        "https://eu.i.posthog.com",
+      capture_pageview: false,
+      persistence: "localStorage",
+    });
+    posthogClient = posthog;
+  })();
+
+  return initPromise;
 }
 
-/** No-op capture — call sites stay stable for Phase 4 instrumentation. */
+/** Capture event when enabled + consented; no-op otherwise. */
 export function capture(
   event: AnalyticsEvent,
   properties?: AnalyticsProperties,
 ): void {
   if (!isAnalyticsEnabled()) return;
-  void event;
-  void properties;
-  // Phase 4: posthog.capture(event, sanitize(properties))
+  if (typeof window === "undefined") return;
+  if (!hasAnalyticsConsent()) return;
+
+  const sanitized = sanitizeAnalyticsProperties(properties);
+
+  void initPostHog().then(() => {
+    posthogClient?.capture(event, sanitized);
+  });
 }
 
 /** ADR-002 event helpers — thin wrappers over capture(). */

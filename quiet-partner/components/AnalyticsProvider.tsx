@@ -2,17 +2,26 @@
 
 import { type ReactNode, useEffect } from "react";
 
-import { initPostHog } from "@/lib/analytics/posthog";
+import { AnalyticsConsent } from "@/components/AnalyticsConsent";
+import { hasAnalyticsConsent } from "@/lib/analytics/consent";
+import { initPostHog, isAnalyticsEnabled } from "@/lib/analytics/posthog";
 
 type AnalyticsProviderProps = {
   children: ReactNode;
 };
 
-/** Passthrough wrapper — initPostHog is no-op until Phase 4 (ADR-002). */
+/** Init PostHog after consent; passthrough when disabled (ADR-002). */
 export function AnalyticsProvider({ children }: AnalyticsProviderProps) {
   useEffect(() => {
-    initPostHog();
+    if (isAnalyticsEnabled() && hasAnalyticsConsent()) {
+      void initPostHog();
+    }
   }, []);
 
-  return children;
+  return (
+    <>
+      {children}
+      {isAnalyticsEnabled() ? <AnalyticsConsent /> : null}
+    </>
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { trackLandingView, trackWaitlistSubmit } from "@/lib/analytics/posthog";
 import { cn } from "@/lib/utils";
 
 const DEMO_URL = "https://quiet-partner.vercel.app";
@@ -40,6 +41,10 @@ export default function WaitlistPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    trackLandingView({ source: "waitlist" });
+  }, []);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!isValidEmail(email)) {
@@ -49,6 +54,7 @@ export default function WaitlistPage() {
     }
     setError(null);
     setSubmitted(true);
+    trackWaitlistSubmit({ source: "waitlist" });
   }
 
   return (

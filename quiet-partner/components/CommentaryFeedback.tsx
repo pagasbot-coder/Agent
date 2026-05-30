@@ -4,6 +4,12 @@ import { CheckCircle2, ThumbsDown, ThumbsUp } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { buildAnalyticsContext } from "@/lib/analytics/context";
+import {
+  trackActionLogged,
+  trackFeedbackNegative,
+  trackFeedbackPositive,
+} from "@/lib/analytics/posthog";
 import { useProjectStore } from "@/lib/store/useProjectStore";
 
 /** North Star dogfood: thumbs + optional action mark after commentary loads. */
@@ -11,20 +17,34 @@ export function CommentaryFeedback() {
   const recordCommentaryFeedback = useProjectStore((s) => s.recordCommentaryFeedback);
   const logAction = useProjectStore((s) => s.logAction);
   const counts = useProjectStore((s) => s.commentaryFeedback);
+  const deliveryApproach = useProjectStore((s) => s.projectProfile.deliveryApproach);
+  const getRedDomains = useProjectStore((s) => s.getRedDomains);
 
   const [vote, setVote] = useState<"useful" | "not_useful" | null>(null);
   const [actionMarked, setActionMarked] = useState(false);
+
+  const analyticsContext = buildAnalyticsContext(
+    deliveryApproach,
+    getRedDomains().length,
+    "dashboard",
+  );
 
   const handleVote = (kind: "useful" | "not_useful") => {
     if (vote) return;
     setVote(kind);
     recordCommentaryFeedback(kind);
+    if (kind === "useful") {
+      trackFeedbackPositive(analyticsContext);
+    } else {
+      trackFeedbackNegative(analyticsContext);
+    }
   };
 
   const handleMarkAction = () => {
     if (actionMarked) return;
     setActionMarked(true);
     logAction("action_marked", "Отметил действие по комментарию напарника");
+    trackActionLogged(analyticsContext);
   };
 
   return (

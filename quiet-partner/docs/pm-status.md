@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-05-30 (T-029 DONE — cost guardrails)  
+**Дата:** 2026-05-30 (T-030 DONE — PostHog wiring)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-029 **DONE** локально. Staging health OK (Human confirm). **Следующий без Human:** T-030 PostHog event wiring (BACKLOG) или redeploy staging с T-027/T-029.
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-030 **DONE**. Staging redeploy с health + cost guardrails + analytics wiring (OFF default). **Следующий без Human:** PostHog self-host deploy (DevOps) или Phase 5 roadmap doc.
 
 ---
 
@@ -33,7 +33,7 @@
 | **1** Foundation | 16.06–27.06.2026 (2 нед) | 0% | **~95%** | T-001, T-004, design tokens v1 (T-021) |
 | **2** Spike | 30.06–18.07.2026 (3 нед) | 0% | **~95%** | T-005…T-007, T-012, T-016 static DONE |
 | **3** Onboarding + beta | 21.07–08.08.2026 (3 нед) | 0% | **~75%** | T-008…T-013, T-018, T-022 DONE; dogfood **0/5** |
-| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~65%** | T-017 ADR-002; T-019 copy; **T-023…T-029 DONE**; PostHog wiring BACKLOG |
+| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~75%** | T-017 ADR-002; T-019 copy; **T-023…T-030 DONE**; PostHog self-host — BACKLOG |
 
 ---
 
@@ -53,14 +53,8 @@
 
 | Task | Роль | Статус | Действие |
 |------|------|--------|----------|
-| T-023 | Developer | **DONE** | `/waitlist` static; build/lint PASS |
-| T-024 | Developer | **DONE** | PostHog stub OFF |
-| T-025 | Developer + DevOps | **DONE** | `/waitlist` live на vercel.app |
-| T-026 | QA | **DONE** | Waitlist staging smoke PASS |
-| T-027 | Developer | **DONE** | `GET /api/health` — redeploy для staging |
-| T-028 | Developer | **DONE** | Nav + banner hydration |
-| T-029 | Developer | **DONE** | API cost guardrails |
-| T-030 | Developer | **BACKLOG** | PostHog event wiring (ADR-002, after consent) |
+| T-023…T-029 | Developer | **DONE** | waitlist, health, nav, cost guardrails |
+| T-030 | Developer | **DONE** | PostHog wiring + consent; OFF default |
 | T-014 | PM | IN_PROGRESS | Шаблон log; сессии **OPTIONAL — не блокирует спринт** |
 | Weekly pm-status | PM | Ongoing | След. review **06.06** |
 
@@ -73,23 +67,7 @@
 | 1 | `DEEPSEEK_API_KEY` в Vercel (Settings → Env) | Live LLM на staging вместо fallback RU |
 | 2 | M0 **Go / Pause / Pivot** + sign-off в memo | Закрытие gate G2→3; полный waitlist backend — после Go |
 
-Dogfood #1–5 — по [`dogfood-log-template.md`](./dogfood-log-template.md), **OPTIONAL**, не блокирует T-025/T-026/T-024.
-
----
-
-## Раздача задач — 2026-05-30 (актуально)
-
-| Task | Role | Status | Blocker |
-|------|------|--------|---------|
-| T-012…T-021 | Dev / QA / UX / Growth | DONE | — |
-| T-022 | QA | DONE | — |
-| T-023 | Developer | **DONE** | `/waitlist` локально |
-| T-025 | Developer + DevOps | **READY** | Redeploy после T-023 |
-| T-026 | QA | **READY** | Smoke `/waitlist` (dep T-025) |
-| T-024 | Developer | **READY** | PostHog stub OFF |
-| T-014 | PM / Human | IN_PROGRESS | Human OPTIONAL (gate) |
-| T-015 | PM / Human | DONE (drafts) | Human: sign-off |
-| T-018 | Dev + DevOps | DONE | https://quiet-partner.vercel.app |
+Dogfood #1–5 — по [`dogfood-log-template.md`](./dogfood-log-template.md), **OPTIONAL**, не блокирует спринт.
 
 ---
 
@@ -97,8 +75,8 @@ Dogfood #1–5 — по [`dogfood-log-template.md`](./dogfood-log-template.md), 
 
 | ID | Риск | Статус | Комментарий PM |
 |----|------|--------|----------------|
-| **R8** | Dogfood bias | **Active / High** | 0/5 сессий; не блокирует T-023 |
-| **R7** | LLM variance | **Active / Medium** | Staging BFF fallback OK (T-022) |
+| **R8** | Dogfood bias | **Active / High** | 0/5 сессий; не блокирует Phase 4 impl |
+| **R7** | LLM variance | **Active / Medium** | Staging BFF live LLM (T-026) |
 | **R2** | API cost | **Mitigated / Medium** | T-029 guardrails; weekly budget default 200k tokens |
 
 ---
@@ -113,24 +91,10 @@ Dogfood #1–5 — по [`dogfood-log-template.md`](./dogfood-log-template.md), 
 
 ---
 
-## Связанные артефакты
-
-- [`competitive-scan-1pager.md`](./competitive-scan-1pager.md)
-- [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md)
-- [`dogfood-log-template.md`](./dogfood-log-template.md)
-- [`deploy-staging.md`](./deploy-staging.md)
-- [`landing-waitlist-one-pager.md`](./landing-waitlist-one-pager.md)
-- [`team-assignments.md`](./team-assignments.md)
-
----
-
 ## История
 
 | Дата | Автор | Изменение |
 |------|-------|-----------|
 | 2026-05-30 | PM | v1.0 — первый PM status |
-| 2026-05-30 | PM | v1.1 — T-012…T-019 раздача |
-| 2026-05-30 | PM | v1.2 — T-015 PM drafts DONE; T-014 template |
-| 2026-05-30 | PM | v1.3 — PM-led governance; T-018/T-019/T-020 READY |
-| 2026-05-30 | PM | **v1.4** — T-019…T-021 DONE; T-022 PASS; T-023 READY; T-024 BACKLOG; staging live |
-| 2026-05-30 | PM | **v1.5** — Human «идите дальше»; T-023 DONE; T-025 redeploy + T-026 QA waitlist READY; T-024 READY; «Вопросы к Human» — только OPTIONAL |
+| 2026-05-30 | PM | v1.5 — Human «идите дальше»; T-023…T-026 |
+| 2026-05-30 | PM | **v1.6** — T-027…T-030 DONE; Phase 4 ~75%; next: PostHog self-host / Phase 5 doc |

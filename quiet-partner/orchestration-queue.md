@@ -73,6 +73,7 @@
 | T-027 | `GET /api/health` liveness endpoint | Developer | DONE | P1 | T-018 | `@docs/deploy-staging.md` `@knowledge-base/qa-checklist.md` | `app/api/health/route.ts`; boolean env checks; qa-checklist R6; deploy S6; build/lint PASS |
 | T-028 | Dashboard ↔ waitlist nav + onboarding banner hydration | Developer | DONE | P2 | T-023, T-009 | `@components/DashboardShell.tsx` `@docs/qa-report-phase3.md` | «Ранний доступ» → `/waitlist`; `usePersistHydrated` — no banner flash; build/lint PASS |
 | T-029 | API cost guardrails (Phase 4) | Developer | DONE | P1 | T-027, T-004 | `@knowledge-base/adr-001-llm-bff.md` `@lib/advisor/costGuardrails.ts` | `costGuardrails.ts`; ADR-001 15min rate limit; token budgets; health snapshot; build/lint PASS |
+| T-030 | PostHog event wiring + consent (ADR-002) | Developer | DONE | P1 | T-024, T-029 | `@knowledge-base/adr-002-analytics-posthog.md` `@lib/analytics/` | call sites wired; consent banner; dynamic posthog-js; OFF default; build/lint PASS |
 
 ---
 
@@ -515,6 +516,23 @@
 
 ---
 
+### T-030 — PostHog event wiring + consent (ADR-002)
+
+**Acceptance criteria:**
+- [x] Call sites: onboarding, commentary refresh, feedback 👍/👎, action_logged, waitlist view/submit
+- [x] `sanitizeAnalyticsProperties` — whitelist `delivery_approach`, `domain_count_red`, `source` only
+- [x] `AnalyticsConsent` RU banner; init only after consent + key + `POSTHOG_DISABLED !== true`
+- [x] Dynamic `posthog-js` import — no bundle impact when disabled (default)
+- [x] `npm run build` && `npm run lint` green
+
+**Product Map phase:** Delivery (4) — instrumentation
+
+**Depends:** T-024 DONE
+
+**Notes:** Self-host PostHog deploy — DevOps Phase 4; events no-op until key + consent.
+
+---
+
 ## Журнал (лог решений)
 
 | Дата | Кто | Событие |
@@ -549,6 +567,7 @@
 | 2026-05-30 | Developer | T-027 DONE: `GET /api/health` liveness; qa-checklist R6; deploy-staging S6; build/lint PASS |
 | 2026-05-30 | Developer | T-028 DONE: dashboard «Ранний доступ» → `/waitlist`; `usePersistHydrated` fixes onboarding banner race |
 | 2026-05-30 | Developer | T-029 DONE: `lib/advisor/costGuardrails.ts`; ADR-001 15min rate limit; token budgets; health snapshot; build/lint PASS |
+| 2026-05-30 | Developer | T-030 DONE: PostHog wiring + consent; call sites; sanitize; dynamic posthog-js; OFF default; build/lint PASS; redeploy staging |
 
 ---
 

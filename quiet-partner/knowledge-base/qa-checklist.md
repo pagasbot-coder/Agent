@@ -98,6 +98,16 @@
 
 ---
 
+## Analytics (T-030, ADR-002)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| A1 | Default (`POSTHOG_DISABLED=true`) | Нет consent banner; `capture()` no-op; build без posthog в critical path |
+| A2 | Key + consent granted | Banner RU; `posthog-js` lazy load; events без email/project name |
+| A3 | Sanitize | Payload только `delivery_approach`, `domain_count_red`, `source` |
+
+---
+
 ## Связь с очередью
 
 | Task | Чеклист |
@@ -106,3 +116,4 @@
 | T-011 | H5 + dogfood feedback |
 | T-022 | R1–R3, S1 на https://quiet-partner.vercel.app → `docs/qa-report-phase3.md` §Staging smoke |
 | T-029 | §S3–S4 cost guardrails; R6 `checks.cost_guardrails` |
+| T-030 | §A1 analytics wiring (OFF default); consent banner when key set |

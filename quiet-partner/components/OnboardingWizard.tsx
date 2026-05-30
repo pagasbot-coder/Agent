@@ -12,7 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { DeliveryApproach } from "@/lib/domains";
+import { buildAnalyticsContext } from "@/lib/analytics/context";
+import { trackOnboardingComplete } from "@/lib/analytics/posthog";
+import { deriveDomainStatus, type DeliveryApproach } from "@/lib/domains";
 import {
   computeDomainScoresFromOnboarding,
   DELIVERY_APPROACH_OPTIONS,
@@ -63,6 +65,12 @@ export function OnboardingWizard() {
   const handleFinish = useCallback(() => {
     const trimmedName = projectName.trim() || "Мой проект";
     const scores = computeDomainScoresFromOnboarding({ turbulence, pain });
+    const domainCountRed = Object.values(scores).filter(
+      (value) => deriveDomainStatus(value) === "red",
+    ).length;
+    trackOnboardingComplete(
+      buildAnalyticsContext(deliveryApproach, domainCountRed, "onboarding"),
+    );
     hydrateFromOnboarding(scores, { name: trimmedName, deliveryApproach });
     router.push("/");
   }, [
