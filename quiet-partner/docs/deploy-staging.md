@@ -14,7 +14,7 @@
 | **Платформа** | Vercel (managed preview/production) |
 | **Проект** | `quiet-partner` (team `erp-db-spb-s-projects`) |
 | **Production alias** | https://quiet-partner.vercel.app |
-| **Последний deploy** | 2026-05-30 — `vercel --prod --yes` (T-025; `/waitlist` live) |
+| **Последний deploy** | 2026-05-30 — `vercel --prod --yes` (T-031…T-032 docs; commit `584cfe8`) |
 | **Build локально** | `npm run build` — PASS |
 | **Live LLM на staging** | Нужен `DEEPSEEK_API_KEY` в Vercel → **Human OPTIONAL** (без ключа — fallback RU) |
 
@@ -212,3 +212,4 @@ Invoke-RestMethod -Uri "$base/api/advisor/health-commentary" -Method POST -Body 
 |------|-----|---------|
 | 2026-05-30 | DevOps | `npm run build` PASS; `vercel --yes` → alias `quiet-partner.vercel.app`; S1–S3 smoke PASS (fallback BFF) |
 | 2026-05-30 | DevOps | T-025: `vercel --prod --yes` → `/waitlist` live; GET https://quiet-partner.vercel.app/waitlist **200** |
+| 2026-05-30 | Developer | T-031…T-032: `584cfe8` push + `vercel --prod --yes`; smoke `/`, `/onboarding`, `/waitlist`, `/api/health` **PASS** |
