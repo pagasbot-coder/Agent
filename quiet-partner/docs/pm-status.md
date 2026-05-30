@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-05-30 (Human «идите дальше» — sprint unblocked)  
+**Дата:** 2026-05-30 (T-027/T-028 DONE — Phase 4 polish)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023 `/waitlist` **DONE** (локально). **Следующий без Human:** T-025 redeploy Vercel → T-026 QA `/waitlist`; параллельно T-024 PostHog stub. Gate G2→3 — dogfood + M0 **OPTIONAL**, не блокирует спринт.
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-026 **DONE** на staging. **T-027** health endpoint + **T-028** nav/banner polish **DONE** локально. **Следующий без Human:** T-029 API cost guardrails (BACKLOG → PM groom) или redeploy staging с `/api/health`.
 
 ---
 
@@ -33,7 +33,7 @@
 | **1** Foundation | 16.06–27.06.2026 (2 нед) | 0% | **~95%** | T-001, T-004, design tokens v1 (T-021) |
 | **2** Spike | 30.06–18.07.2026 (3 нед) | 0% | **~95%** | T-005…T-007, T-012, T-016 static DONE |
 | **3** Onboarding + beta | 21.07–08.08.2026 (3 нед) | 0% | **~75%** | T-008…T-013, T-018, T-022 DONE; dogfood **0/5** |
-| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~45%** | T-017 ADR-002; T-019 copy; **T-023 DONE**; T-025 redeploy → T-026 QA |
+| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~55%** | T-017 ADR-002; T-019 copy; **T-023…T-028 DONE**; cost guards BACKLOG |
 
 ---
 
@@ -54,9 +54,12 @@
 | Task | Роль | Статус | Действие |
 |------|------|--------|----------|
 | T-023 | Developer | **DONE** | `/waitlist` static; build/lint PASS |
-| T-025 | Developer + DevOps | **READY** | Redeploy Vercel → `/waitlist` live на vercel.app |
-| T-026 | QA | **READY** | Smoke `/waitlist` на staging (после T-025 deploy) |
-| T-024 | Developer | **READY** | PostHog stub OFF (ADR-002); параллельно T-025 |
+| T-024 | Developer | **DONE** | PostHog stub OFF |
+| T-025 | Developer + DevOps | **DONE** | `/waitlist` live на vercel.app |
+| T-026 | QA | **DONE** | Waitlist staging smoke PASS |
+| T-027 | Developer | **DONE** | `GET /api/health` — redeploy для staging |
+| T-028 | Developer | **DONE** | Nav + banner hydration |
+| T-029 | Developer + Architect | **BACKLOG** | API cost guardrails (Phase 4) |
 | T-014 | PM | IN_PROGRESS | Шаблон log; сессии **OPTIONAL — не блокирует спринт** |
 | Weekly pm-status | PM | Ongoing | След. review **06.06** |
 

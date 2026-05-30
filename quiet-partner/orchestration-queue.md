@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-30 (T-026 DONE; redeploy + live DeepSeek smoke)
+**Последнее обновление:** 2026-05-30 (T-027/T-028 DONE — health + nav polish)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -70,6 +70,8 @@
 | T-024 | PostHog client stub OFF by default (ADR-002) | Developer | DONE | P2 | T-017, T-023 | `@knowledge-base/adr-002-analytics-posthog.md` `.env.example` | `lib/analytics/posthog.ts` no-op; `AnalyticsProvider` passthrough; `.env.example` POSTHOG_DISABLED; build/lint PASS |
 | T-025 | Redeploy staging (Vercel) — `/waitlist` live | Developer + DevOps | DONE | P0 | T-023 | `@docs/deploy-staging.md` | `vercel --prod --yes` → quiet-partner.vercel.app; build `/waitlist`; GET `/waitlist` 200 |
 | T-026 | QA waitlist verify on staging | QA + DevOps | DONE | P0 | T-025 | `@docs/landing-waitlist-one-pager.md` `@knowledge-base/qa-checklist.md` `@docs/qa-report-phase3.md` | Redeploy `vercel --prod` после `DEEPSEEK_API_KEY` в Vercel; GET `/waitlist` 200; POST BFF 200 **live LLM** (без fallback-сuffix); §Waitlist staging в qa-report |
+| T-027 | `GET /api/health` liveness endpoint | Developer | DONE | P1 | T-018 | `@docs/deploy-staging.md` `@knowledge-base/qa-checklist.md` | `app/api/health/route.ts`; boolean env checks; qa-checklist R6; deploy S6; build/lint PASS |
+| T-028 | Dashboard ↔ waitlist nav + onboarding banner hydration | Developer | DONE | P2 | T-023, T-009 | `@components/DashboardShell.tsx` `@docs/qa-report-phase3.md` | «Ранний доступ» → `/waitlist`; `usePersistHydrated` — no banner flash; build/lint PASS |
 
 ---
 
@@ -471,6 +473,30 @@
 
 ---
 
+### T-027 — `GET /api/health` liveness
+
+**Acceptance criteria:**
+- [x] Route `app/api/health/route.ts` — JSON `{ ok: true, service, version, timestamp, checks }`
+- [x] Boolean env checks only (`deepseek_api_key_configured`, `posthog_disabled`); no secret values
+- [x] `knowledge-base/qa-checklist.md` §R6; `docs/deploy-staging.md` §S6
+- [x] `npm run build` && `npm run lint` green
+
+**Product Map phase:** Delivery (4) — Product Ops
+
+---
+
+### T-028 — Nav polish + onboarding banner hydration
+
+**Acceptance criteria:**
+- [x] Dashboard header link «Ранний доступ» → `/waitlist`
+- [x] Onboarding banner waits for Zustand persist hydration (`usePersistHydrated`) — no flash on return visit
+- [x] `docs/qa-report-phase3.md` risk note updated
+- [x] `npm run build` && `npm run lint` green
+
+**Product Map phase:** Generation (2) + Delivery (4)
+
+---
+
 ## Журнал (лог решений)
 
 | Дата | Кто | Событие |
@@ -502,6 +528,8 @@
 | 2026-05-30 | DevOps | T-025 DONE: `vercel --prod --yes`; GET `/waitlist` 200 на quiet-partner.vercel.app; deploy-staging.md updated |
 | 2026-05-30 | PM | **Human «идите дальше»:** sprint без блокеров; **T-025 READY** (redeploy `/waitlist`); **T-026 READY** (QA waitlist staging); **T-024 → READY**; `pm-status` v1.5 «Вопросы к Human» — только OPTIONAL (API key Vercel, M0 sign-off) |
 | 2026-05-30 | DevOps | T-026 DONE: `vercel deploy --prod` после `DEEPSEEK_API_KEY` в Vercel; GET `/waitlist` 200; POST BFF live LLM; qa-report §Waitlist staging |
+| 2026-05-30 | Developer | T-027 DONE: `GET /api/health` liveness; qa-checklist R6; deploy-staging S6; build/lint PASS |
+| 2026-05-30 | Developer | T-028 DONE: dashboard «Ранний доступ» → `/waitlist`; `usePersistHydrated` fixes onboarding banner race |
 
 ---
 

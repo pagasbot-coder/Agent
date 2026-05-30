@@ -25,6 +25,7 @@
 | R1 | `GET /` | Dashboard: радар + комментарий + disclaimer |
 | R2 | `GET /onboarding` | 3 шага, RU copy, прогресс 1/3…3/3 |
 | R3 | `POST /api/advisor/health-commentary` | JSON body: `domainScores`, `deliveryApproach`; 200 + `commentary` + `disclaimer` |
+| R6 | `GET /api/health` | HTTP 200, JSON `{ ok: true, service, checks }`; без секретов в ответе |
 | R4 | После онбординга | Redirect на `/`, persist `localStorage` ключ `quiet-partner-v1` |
 | R5 | Первый визит без persist | Баннер «Пройдите настройку» → `/onboarding` |
 

@@ -120,6 +120,7 @@ vercel --yes --token $env:VERCEL_TOKEN
 | S3 | Waitlist | `{BASE}/waitlist` | HTTP 200, RU landing stub (T-023) |
 | S4 | BFF fallback | `POST {BASE}/api/advisor/health-commentary` | 200, `commentary` + `disclaimer` |
 | S5 | BFF live | То же, после `DEEPSEEK_API_KEY` в Vercel | `source: "llm"` (опционально) |
+| S6 | Health | `GET {BASE}/api/health` | 200, `{ ok: true }`; boolean checks only |
 
 **Текущий staging (2026-05-30):**
 
@@ -137,6 +138,7 @@ $base = "https://quiet-partner.vercel.app"
 Invoke-WebRequest -Uri "$base/" -UseBasicParsing
 Invoke-WebRequest -Uri "$base/onboarding" -UseBasicParsing
 Invoke-WebRequest -Uri "$base/waitlist" -UseBasicParsing
+Invoke-RestMethod -Uri "$base/api/health" -Method GET
 $body = '{"domainScores":{"D1":50,"D2":60,"D3":70,"D4":80,"D5":90,"D6":85,"D7":75,"D8":65},"deliveryApproach":"hybrid","locale":"ru"}'
 Invoke-RestMethod -Uri "$base/api/advisor/health-commentary" -Method POST -Body $body -ContentType "application/json"
 ```

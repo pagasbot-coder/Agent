@@ -59,7 +59,7 @@
 | T-013 | GitHub push + Vercel deploy | Developer | BLOCKED | P0 | T-012 | `docs/GITHUB-DEPLOY.md` | commit ba47cdc; build OK; блокер: `gh auth login` + `vercel login` (репо на GitHub не создан) |
 | T-017 | iGaming BiJi Phase 2: product-brief Ops Scan + problem interviews | PM | DONE | P0 | — | `iGaming BiJi/knowledge-base/product-brief.md` `iGaming BiJi/knowledge-base/problem-interviews-script.md` | Variant A primary, C fallback; см. `iGaming BiJi/orchestration-queue.md` |
 | T-018 | iGaming BiJi Phase 2: ADR-001 data ingestion + internet research | IT-Architect | DONE | P0 | T-017 | `iGaming BiJi/knowledge-base/adr-001-data-ingestion.md` `iGaming BiJi/knowledge-base/phase2-internet-research.md` | CSV-first + Affilka Reports API v0; T-003 research pack ready |
-| T-019 | **Quiet Partner / PM Co-Pilot** — PMBOK 7 co-pilot (parallel track) | PM / Senior PM | BACKLOG | P2 | — | [`quiet-partner/orchestration-queue.md`](quiet-partner/orchestration-queue.md) `@quiet-partner/docs/implementation-plan.md` | Bootstrap DONE 2026-05-30: `quiet-partner/` Next.js 16; T-002…T-008 READY/BACKLOG; не блокирует Banya T-028 |
+| T-019 | **Quiet Partner** — PM-led; G2→3 open | PM | IN_PROGRESS | P1 | — | [`quiet-partner/orchestration-queue.md`](quiet-partner/orchestration-queue.md) | **DONE:** T-018…T-028 (staging, waitlist, PostHog stub, health, nav); **BACKLOG:** T-029 cost guards; Human OPTIONAL dogfood → [`pm-governance.md`](quiet-partner/docs/pm-governance.md) |
 
 ---
 
@@ -121,23 +121,42 @@
 | 2026-05-27 | PM | T-017 DONE: iGaming BiJi Phase 2 — `product-brief.md`, `problem-interviews-script.md`; локальная очередь `iGaming BiJi/orchestration-queue.md` |
 | 2026-05-27 | IT-Architect | T-018 DONE (локально T-002): ADR-001, phase2-internet-research, Affilka appendix; T-003 READY + research pack; T-006 CSV parser READY |
 | 2026-05-30 | Developer | T-019: bootstrap `quiet-partner/` — Тихий напарник; implementation-plan 14w; local queue T-001 DONE |
+| 2026-05-30 | PM | T-019 docs: plan v1.1 RU + `technical-specification.md`; Phase 0 без интервью |
+| 2026-05-30 | PM | T-019 PM control: `quiet-partner/docs/pm-status.md`; T-010 QA IN_PROGRESS; gate G2→3 |
+| 2026-05-30 | PM | T-019 grooming: T-012…T-019 в `quiet-partner/`; team-assignments; G2→3 раздача |
 | 2026-05-30 | Developer | **Banya-Digital PROJECT HOLD:** T-028 paused; code review + hold docs; prod unchanged |
+| 2026-05-30 | PM | Quiet Partner: T-022 staging PASS; T-023 READY (M0 waive stub); T-024 BACKLOG; см. `quiet-partner/` journal |
 
 ---
 
 ## Phase 4 — Quiet Partner (зеркало)
 
-См. **`quiet-partner/orchestration-queue.md`** и **`quiet-partner/docs/implementation-plan.md`**.
+См. **`quiet-partner/orchestration-queue.md`**, **`quiet-partner/docs/implementation-plan.md`**, **`quiet-partner/docs/technical-specification.md`**.
 
 | ID | Задача | Роль | Статус |
 |----|--------|------|--------|
 | T-001 | Bootstrap Next.js + Muster | Developer | DONE |
-| T-002 | Phase 0 discovery | PM | READY |
-| T-003 | PMBOK playbook v0 | Senior PM | READY |
-| T-004 | LLM ADR | IT-Architect | READY |
-| T-005…T-008 | Spike radar / store / API / onboarding | Dev / PM | BACKLOG |
-
-**Note:** Parallel track — не отвлекать от Banya-Digital T-028.
+| T-002 | Phase 0 discovery | PM | DONE |
+| T-003 | PMBOK playbook v1 | Senior PM | DONE |
+| T-004 | LLM ADR | IT-Architect | DONE |
+| T-005…T-007 | Spike radar / store / API | Developer | DONE |
+| T-008 | Onboarding spec | PM / UI/UX | DONE |
+| T-009 | Onboarding UI | Developer | DONE |
+| T-010 | QA smoke + checklist | QA | DONE |
+| T-011 | Feedback UI + banner | Developer / QA | DONE |
+| T-012 | Align thresholds 40/70 | Senior PM + Developer | DONE |
+| T-013 | Browser smoke + Phase 3 sign-off | QA | DONE |
+| T-014 | Dogfood protocol + sessions 1–5 | PM (+ Human) | IN_PROGRESS (OPTIONAL gate) |
+| T-015 | M0 memo + competitive scan | PM | DONE (drafts) |
+| T-016 | Navigator prompt regression | Senior PM + QA | DONE |
+| T-017 | ADR analytics PostHog | IT-Architect | DONE |
+| T-018 | Deploy staging Vercel | Developer + DevOps | DONE |
+| T-019 | Landing / waitlist one-pager | Growth | DONE |
+| T-020 | UX reference productmap | UI/UX | DONE |
+| T-021 | Design tokens refresh | Developer | DONE |
+| T-022 | Staging smoke vercel.app | QA | DONE |
+| T-023 | `/waitlist` static stub | Developer | READY |
+| T-024 | PostHog stub OFF (ADR-002) | Developer | BACKLOG |
 
 ---
 

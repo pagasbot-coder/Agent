@@ -7,6 +7,7 @@ import { DomainRadar } from "@/components/DomainRadar";
 import { HealthCommentary } from "@/components/HealthCommentary";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DISCLAIMER } from "@/lib/domains";
+import { usePersistHydrated } from "@/lib/store/usePersistHydrated";
 import {
   PROJECT_PERSIST_KEY,
   useProjectStore,
@@ -16,9 +17,17 @@ export function DashboardShell() {
   const runAudit = useProjectStore((s) => s.runAudit);
   const projectProfile = useProjectStore((s) => s.projectProfile);
   const { deliveryApproach, name, phase } = projectProfile;
+  const hasHydrated = usePersistHydrated();
   const showOnboardingBanner = useSyncExternalStore(
-    () => () => {},
+    (onStoreChange) => {
+      const onStorage = (event: StorageEvent) => {
+        if (event.key === PROJECT_PERSIST_KEY) onStoreChange();
+      };
+      window.addEventListener("storage", onStorage);
+      return () => window.removeEventListener("storage", onStorage);
+    },
     () => {
+      if (!hasHydrated) return false;
       try {
         return !localStorage.getItem(PROJECT_PERSIST_KEY);
       } catch {
@@ -52,6 +61,11 @@ export function DashboardShell() {
             <Link href="/onboarding">
               <Button variant="outline" size="sm">
                 Настроить проект
+              </Button>
+            </Link>
+            <Link href="/waitlist">
+              <Button variant="ghost" size="sm">
+                Ранний доступ
               </Button>
             </Link>
             <Button variant="ghost" size="sm" onClick={() => runAudit()}>

@@ -27,10 +27,19 @@
 - [x] Feedback UI 👍/👎 + «Отметить действие» (T-011)
 - [x] Баннер первого визита → `/onboarding`
 
-## Далее (Phase 3–4)
+## Сделано (Phase 3–4)
 
-- Design tokens polish
-- Landing + analytics + API cost guards
+- [x] Design tokens polish (T-021)
+- [x] Landing `/waitlist` + staging deploy (T-023…T-026)
+- [x] PostHog stub OFF (T-024)
+- [x] `GET /api/health` liveness (T-027)
+- [x] Dashboard ↔ waitlist nav + onboarding banner fix (T-028)
+
+## Далее (Phase 4)
+
+- API cost guardrails (Dev + Architect)
+- PostHog instrumentation after G3→4 consent
+- Phase 5 roadmap (auth, persistence) — PM doc, Human sign-off
 
 ## Не сейчас
 

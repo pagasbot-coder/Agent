@@ -11,7 +11,7 @@
 
 | Команда | Результат |
 |---------|-----------|
-| `npm run build` | **PASS** — Next.js 16.2.6, routes: `/`, `/onboarding`, `POST /api/advisor/health-commentary` |
+| `npm run build` | **PASS** — Next.js 16.2.6, routes: `/`, `/onboarding`, `/waitlist`, `GET /api/health`, `POST /api/advisor/health-commentary` |
 | `npm run lint` | **PASS** — ESLint без замечаний |
 
 **Вердикт Phase 3 compile + browser smoke:** **PASS with notes** — UI и BFF fallback проверены в браузере; live LLM и полный onboarding redirect — Human dogfood (T-014).
@@ -63,7 +63,7 @@
 |----------|--------|------------|
 | `GET /waitlist` → 200 | **PASS** | Статическая страница после T-025/T-026 redeploy |
 | `POST /api/advisor/health-commentary` → 200 | **PASS** | **Live DeepSeek** — commentary без суффиксов `(локальный режим…)` / `(сервис LLM временно…)`; `questions` ≥1 |
-| `GET /api/health` | **N/A** | Маршрут не реализован в app (404) — smoke health через BFF + Vercel dashboard |
+| `GET /api/health` | **PASS** | `app/api/health/route.ts` — `{ ok: true, checks }`; boolean env only |
 | Локально `npm run build` / `lint` | **PASS** | DevOps post-deploy sanity |
 
 **Вердикт T-026:** **PASS** — waitlist на staging; live LLM подтверждён после redeploy.
@@ -166,7 +166,7 @@
 **Риски (не блокеры):**
 
 - `auditLog` не персистится — только для сессии; для аналитики Phase 4 нужен export/API.
-- Баннер онбординга vs persist race — UX polish BACKLOG.
+- Баннер онбординга vs persist race — **fixed T-028** (`usePersistHydrated`).
 - Live prompt regression (T-016) — **Human**; `.env.local` отсутствует. Static — PASS.
 
 ---
