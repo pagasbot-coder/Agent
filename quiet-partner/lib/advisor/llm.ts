@@ -6,6 +6,7 @@ import {
   type DomainId,
 } from "@/lib/domains";
 
+import { isTokenBudgetExceeded, recordTokenUsage } from "./costGuardrails";
 import { buildFallbackCommentary } from "./fallback";
 import type { HealthCommentaryRequest, HealthCommentaryResponse } from "./types";
 
@@ -86,6 +87,15 @@ export async function generateHealthCommentary(
     };
   }
 
+  if (isTokenBudgetExceeded()) {
+    const fallback = buildFallbackCommentary(req.domainScores);
+    console.warn("[advisor] token budget exceeded — fallback");
+    return {
+      ...fallback,
+      commentary: `${fallback.commentary} (дневной или недельный лимит токенов исчерпан)`,
+    };
+  }
+
   const locale = req.locale ?? "ru";
   const weakDomains = (Object.entries(req.domainScores) as [DomainId, number][])
     .filter(([, v]) => deriveDomainStatus(v) !== "green")
@@ -134,9 +144,12 @@ export async function generateHealthCommentary(
     const content = data.choices?.[0]?.message?.content ?? "";
     const parsed = parseLlmJson(content);
 
+    const totalTokens = data.usage?.total_tokens ?? 0;
+    if (totalTokens > 0) recordTokenUsage(totalTokens);
+
     console.info("[advisor] request ok", {
       provider: "deepseek",
-      tokens: data.usage?.total_tokens ?? null,
+      tokens: totalTokens || null,
     });
 
     return {

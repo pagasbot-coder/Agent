@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-30 (T-027/T-028 DONE — health + nav polish)
+**Последнее обновление:** 2026-05-30 (T-029 DONE — API cost guardrails)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -72,6 +72,7 @@
 | T-026 | QA waitlist verify on staging | QA + DevOps | DONE | P0 | T-025 | `@docs/landing-waitlist-one-pager.md` `@knowledge-base/qa-checklist.md` `@docs/qa-report-phase3.md` | Redeploy `vercel --prod` после `DEEPSEEK_API_KEY` в Vercel; GET `/waitlist` 200; POST BFF 200 **live LLM** (без fallback-сuffix); §Waitlist staging в qa-report |
 | T-027 | `GET /api/health` liveness endpoint | Developer | DONE | P1 | T-018 | `@docs/deploy-staging.md` `@knowledge-base/qa-checklist.md` | `app/api/health/route.ts`; boolean env checks; qa-checklist R6; deploy S6; build/lint PASS |
 | T-028 | Dashboard ↔ waitlist nav + onboarding banner hydration | Developer | DONE | P2 | T-023, T-009 | `@components/DashboardShell.tsx` `@docs/qa-report-phase3.md` | «Ранний доступ» → `/waitlist`; `usePersistHydrated` — no banner flash; build/lint PASS |
+| T-029 | API cost guardrails (Phase 4) | Developer | DONE | P1 | T-027, T-004 | `@knowledge-base/adr-001-llm-bff.md` `@lib/advisor/costGuardrails.ts` | `costGuardrails.ts`; ADR-001 15min rate limit; token budgets; health snapshot; build/lint PASS |
 
 ---
 
@@ -497,6 +498,23 @@
 
 ---
 
+### T-029 — API cost guardrails (Phase 4)
+
+**Acceptance criteria:**
+- [x] `lib/advisor/costGuardrails.ts` — rate limit per IP (ADR-001: 20 / 15 min, env-configurable)
+- [x] Optional daily/weekly token budgets; fallback RU when exceeded (not 500)
+- [x] `recordTokenUsage()` after LLM response; no PII in logs
+- [x] `GET /api/health` → `checks.cost_guardrails` snapshot (counters only)
+- [x] `.env.example` + `deploy-staging.md` env contract
+- [x] `qa-checklist.md` §S3–S4; `architecture.md` cost abuse row
+- [x] `npm run build` && `npm run lint` green
+
+**Product Map phase:** Delivery (4) — Measurement / R2 mitigation
+
+**Notes:** In-memory per serverless instance; Redis/Postgres — Phase 5. Per-user budget after auth.
+
+---
+
 ## Журнал (лог решений)
 
 | Дата | Кто | Событие |
@@ -530,6 +548,7 @@
 | 2026-05-30 | DevOps | T-026 DONE: `vercel deploy --prod` после `DEEPSEEK_API_KEY` в Vercel; GET `/waitlist` 200; POST BFF live LLM; qa-report §Waitlist staging |
 | 2026-05-30 | Developer | T-027 DONE: `GET /api/health` liveness; qa-checklist R6; deploy-staging S6; build/lint PASS |
 | 2026-05-30 | Developer | T-028 DONE: dashboard «Ранний доступ» → `/waitlist`; `usePersistHydrated` fixes onboarding banner race |
+| 2026-05-30 | Developer | T-029 DONE: `lib/advisor/costGuardrails.ts`; ADR-001 15min rate limit; token budgets; health snapshot; build/lint PASS |
 
 ---
 

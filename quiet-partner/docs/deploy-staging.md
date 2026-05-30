@@ -55,6 +55,10 @@
 | `ADVISOR_LLM_PROVIDER` | опц. | опц. | — | default `deepseek` |
 | `ADVISOR_LLM_MODEL` | опц. | опц. | — | default `deepseek-chat` |
 | `ADVISOR_MAX_TOKENS` | опц. | опц. | — | default `512` |
+| `ADVISOR_RATE_LIMIT_MAX` | опц. | опц. | — | default `20` (ADR-001) |
+| `ADVISOR_RATE_LIMIT_WINDOW_MS` | опц. | опц. | — | default `900000` (15 min) |
+| `ADVISOR_DAILY_TOKEN_BUDGET` | опц. | опц. | — | `0` = off |
+| `ADVISOR_WEEKLY_TOKEN_BUDGET` | опц. | опц. | — | default `200000`; `0` = off |
 
 **Запрещено:** `NEXT_PUBLIC_DEEPSEEK_*`, `NEXT_PUBLIC_GEMINI_*` (ADR-001).
 
@@ -120,7 +124,7 @@ vercel --yes --token $env:VERCEL_TOKEN
 | S3 | Waitlist | `{BASE}/waitlist` | HTTP 200, RU landing stub (T-023) |
 | S4 | BFF fallback | `POST {BASE}/api/advisor/health-commentary` | 200, `commentary` + `disclaimer` |
 | S5 | BFF live | То же, после `DEEPSEEK_API_KEY` в Vercel | `source: "llm"` (опционально) |
-| S6 | Health | `GET {BASE}/api/health` | 200, `{ ok: true }`; boolean checks only |
+| S6 | Health | `GET {BASE}/api/health` | 200, `{ ok: true, checks.cost_guardrails }`; counters only |
 
 **Текущий staging (2026-05-30):**
 

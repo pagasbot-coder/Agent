@@ -1,32 +1,15 @@
 import { NextResponse } from "next/server";
 
+import {
+  checkRateLimit,
+  getClientIp,
+  getRateLimitRetryAfterSec,
+} from "@/lib/advisor/costGuardrails";
 import { generateHealthCommentary } from "@/lib/advisor/llm";
 import type { HealthCommentaryRequest } from "@/lib/advisor/types";
 import { DOMAIN_IDS, type DomainId } from "@/lib/domains";
 
 const MAX_BODY_BYTES = 16_384;
-const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = 20;
-
-const ipHits = new Map<string, { count: number; resetAt: number }>();
-
-function getClientIp(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]?.trim() ?? "unknown";
-  return "local";
-}
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = ipHits.get(ip);
-  if (!entry || now > entry.resetAt) {
-    ipHits.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return true;
-  }
-  if (entry.count >= RATE_LIMIT_MAX) return false;
-  entry.count += 1;
-  return true;
-}
 
 function isValidScore(value: unknown): value is number {
   return typeof value === "number" && !Number.isNaN(value) && value >= 0 && value <= 100;
@@ -88,7 +71,13 @@ export async function POST(request: Request) {
 
   const ip = getClientIp(request);
   if (!checkRateLimit(ip)) {
-    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    return NextResponse.json(
+      { error: "rate_limited" },
+      {
+        status: 429,
+        headers: { "Retry-After": String(getRateLimitRetryAfterSec(ip)) },
+      },
+    );
   }
 
   let body: unknown;

@@ -25,7 +25,7 @@
 | R1 | `GET /` | Dashboard: радар + комментарий + disclaimer |
 | R2 | `GET /onboarding` | 3 шага, RU copy, прогресс 1/3…3/3 |
 | R3 | `POST /api/advisor/health-commentary` | JSON body: `domainScores`, `deliveryApproach`; 200 + `commentary` + `disclaimer` |
-| R6 | `GET /api/health` | HTTP 200, JSON `{ ok: true, service, checks }`; без секретов в ответе |
+| R6 | `GET /api/health` | HTTP 200, JSON `{ ok: true, service, checks }`; `checks.cost_guardrails` — counters без секретов |
 | R4 | После онбординга | Redirect на `/`, persist `localStorage` ключ `quiet-partner-v1` |
 | R5 | Первый визит без persist | Баннер «Пройдите настройку» → `/onboarding` |
 
@@ -72,7 +72,8 @@
 |---|----------|-----|
 | S1 | API key server-only | `DEEPSEEK_API_KEY` только в route/BFF (`lib/advisor/llm.ts`) |
 | S2 | Client bundle | После `npm run build`: `rg DEEPSEEK` в `.next/static` — **нет совпадений** (ручной grep) |
-| S3 | Rate limit | При превышении — 429 (если включён middleware; smoke по ADR) |
+| S3 | Rate limit | При превышении — 429 + `Retry-After` (ADR-001: 20 req / 15 min / IP; env `ADVISOR_RATE_LIMIT_*`) |
+| S4 | Token budget | При `budget_exceeded: true` в `/api/health` — BFF fallback RU, не 500 |
 
 ---
 
@@ -104,3 +105,4 @@
 | T-010 | Весь документ + отчёт phase3 |
 | T-011 | H5 + dogfood feedback |
 | T-022 | R1–R3, S1 на https://quiet-partner.vercel.app → `docs/qa-report-phase3.md` §Staging smoke |
+| T-029 | §S3–S4 cost guardrails; R6 `checks.cost_guardrails` |

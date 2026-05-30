@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-05-30 (T-027/T-028 DONE — Phase 4 polish)  
+**Дата:** 2026-05-30 (T-029 DONE — cost guardrails)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-026 **DONE** на staging. **T-027** health endpoint + **T-028** nav/banner polish **DONE** локально. **Следующий без Human:** T-029 API cost guardrails (BACKLOG → PM groom) или redeploy staging с `/api/health`.
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-023…T-029 **DONE** локально. Staging health OK (Human confirm). **Следующий без Human:** T-030 PostHog event wiring (BACKLOG) или redeploy staging с T-027/T-029.
 
 ---
 
@@ -33,7 +33,7 @@
 | **1** Foundation | 16.06–27.06.2026 (2 нед) | 0% | **~95%** | T-001, T-004, design tokens v1 (T-021) |
 | **2** Spike | 30.06–18.07.2026 (3 нед) | 0% | **~95%** | T-005…T-007, T-012, T-016 static DONE |
 | **3** Onboarding + beta | 21.07–08.08.2026 (3 нед) | 0% | **~75%** | T-008…T-013, T-018, T-022 DONE; dogfood **0/5** |
-| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~55%** | T-017 ADR-002; T-019 copy; **T-023…T-028 DONE**; cost guards BACKLOG |
+| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~65%** | T-017 ADR-002; T-019 copy; **T-023…T-029 DONE**; PostHog wiring BACKLOG |
 
 ---
 
@@ -59,7 +59,8 @@
 | T-026 | QA | **DONE** | Waitlist staging smoke PASS |
 | T-027 | Developer | **DONE** | `GET /api/health` — redeploy для staging |
 | T-028 | Developer | **DONE** | Nav + banner hydration |
-| T-029 | Developer + Architect | **BACKLOG** | API cost guardrails (Phase 4) |
+| T-029 | Developer | **DONE** | API cost guardrails |
+| T-030 | Developer | **BACKLOG** | PostHog event wiring (ADR-002, after consent) |
 | T-014 | PM | IN_PROGRESS | Шаблон log; сессии **OPTIONAL — не блокирует спринт** |
 | Weekly pm-status | PM | Ongoing | След. review **06.06** |
 
@@ -98,7 +99,7 @@ Dogfood #1–5 — по [`dogfood-log-template.md`](./dogfood-log-template.md), 
 |----|------|--------|----------------|
 | **R8** | Dogfood bias | **Active / High** | 0/5 сессий; не блокирует T-023 |
 | **R7** | LLM variance | **Active / Medium** | Staging BFF fallback OK (T-022) |
-| **R2** | API cost | **Active / Medium** | Нет baseline 100 calls |
+| **R2** | API cost | **Mitigated / Medium** | T-029 guardrails; weekly budget default 200k tokens |
 
 ---
 

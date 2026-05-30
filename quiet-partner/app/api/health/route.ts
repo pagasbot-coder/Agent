@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { getCostGuardSnapshot } from "@/lib/advisor/costGuardrails";
+
 /**
  * Liveness for Vercel smoke, reverse proxy, and future Docker healthcheck.
  * No auth — boolean env checks only; never expose secret values.
@@ -17,6 +19,7 @@ export async function GET() {
     checks: {
       deepseek_api_key_configured: Boolean(process.env.DEEPSEEK_API_KEY?.trim()),
       posthog_disabled: posthogDisabled,
+      cost_guardrails: getCostGuardSnapshot(),
     },
   });
 }

@@ -70,6 +70,23 @@
 
 ---
 
+## Cost guardrails (T-029) — 2026-05-30
+
+**Агент:** Developer (muster-developer)  
+**Среда:** локально после `npm run build` + `npm run lint`
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| `lib/advisor/costGuardrails.ts` | **PASS** | Rate limit 20/15min/IP (ADR-001); env `ADVISOR_RATE_LIMIT_*` |
+| Token budgets | **PASS** | `ADVISOR_WEEKLY_TOKEN_BUDGET=200000` default; daily `0`=off; fallback RU при exceed |
+| `GET /api/health` | **PASS** | `checks.cost_guardrails` — counters only, no secrets |
+| BFF 429 | **PASS*** | *429 + `Retry-After` при rate limit; не smoke в этой сессии (S3)* |
+| `npm run build` / `lint` | **PASS** | 2026-05-30 |
+
+**Вердикт T-029:** **PASS** — redeploy staging для live `cost_guardrails` — DevOps OPTIONAL.
+
+---
+
 ## Результаты по чеклисту
 
 Источник: [`knowledge-base/qa-checklist.md`](../knowledge-base/qa-checklist.md)

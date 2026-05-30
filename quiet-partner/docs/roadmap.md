@@ -34,10 +34,10 @@
 - [x] PostHog stub OFF (T-024)
 - [x] `GET /api/health` liveness (T-027)
 - [x] Dashboard ↔ waitlist nav + onboarding banner fix (T-028)
+- [x] API cost guardrails — rate limit ADR-001 + token budgets (T-029)
 
 ## Далее (Phase 4)
 
-- API cost guardrails (Dev + Architect)
 - PostHog instrumentation after G3→4 consent
 - Phase 5 roadmap (auth, persistence) — PM doc, Human sign-off
 
