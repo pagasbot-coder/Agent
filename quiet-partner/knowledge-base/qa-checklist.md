@@ -98,6 +98,18 @@
 
 ---
 
+## Glossary & navigator (T-037, T-038)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| G1 | Dashboard «8 доменов PMBOK 7» | `<details>`/кнопка раскрывает RU labels + plain hints, не D1–D8 |
+| G2 | Onboarding шаг 3 | Тот же глоссарий; labels совпадают с радаром |
+| G3 | Radar pills `title` | Tooltip с hint из glossary |
+| N1 | «Навигатор неопределённости» | S1–S4: ввод + ожидания; collapsible |
+| N2 | Сценарии vs `navigator-scenarios.md` | Тексты не расходятся с knowledge-base |
+
+---
+
 ## Analytics (T-030, ADR-002)
 
 | # | Проверка | Ожидание |
@@ -117,3 +129,5 @@
 | T-022 | R1–R3, S1 на https://quiet-partner.vercel.app → `docs/qa-report-phase3.md` §Staging smoke |
 | T-029 | §S3–S4 cost guardrails; R6 `checks.cost_guardrails` |
 | T-030 | §A1 analytics wiring (OFF default); consent banner when key set |
+| T-037 | §Glossary & navigator G1–G3 |
+| T-038 | §Glossary & navigator N1–N2 |

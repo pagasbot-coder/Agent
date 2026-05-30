@@ -3,7 +3,7 @@
 **Продукт:** Тихий напарник (Quiet Partner)  
 **Владелец записи:** Human (Pavel)  
 **Шаблон:** PM (T-014)  
-**Протокол:** 30–45 мин — onboarding → radar → commentary → 👍/👎 → 1 решение за сессию
+**Протокол:** [`knowledge-base/dogfood-protocol.md`](../knowledge-base/dogfood-protocol.md) — 30–45 мин, 5 шагов
 
 > Заполняйте после каждой сессии. Для gate **G2→3** нужно **≥3 сессий** с «Полезно?» = **Y**.  
 > **R8:** первая сессия — явная пометка «validation только на проектах Human».

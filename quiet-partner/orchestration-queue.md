@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-30 (T-031…T-032 DONE — PostHog runbook + Phase 5 roadmap)
+**Последнее обновление:** 2026-05-30 (T-037…T-039 sprint 3 polish; T-014 templates DONE)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -57,7 +57,7 @@
 | T-011 | Dogfood: feedback UI (👍/👎 + «Отметить действие») | Developer / QA | DONE | P0 | T-007, T-010 | `CommentaryFeedback.tsx` | UI + persist; Human 3–5 сессий → T-014 |
 | T-012 | Align health thresholds 40/70 (code + playbook + QA) | Senior PM + Developer | DONE | P0 | T-010 | `@lib/domains.ts` `@components/DomainRadar.tsx` `@knowledge-base/pmbok-domain-playbook.md` `@docs/technical-specification.md` §3.2 | `THRESHOLD_RED=40`; DomainRadar import; qa-checklist §D2; build/lint PASS |
 | T-013 | Browser smoke + Phase 3 sign-off (extend qa-report) | QA | DONE | P0 | T-012 | `@knowledge-base/qa-checklist.md` `@docs/qa-report-phase3.md` | Browser smoke 3002 PASS with notes; qa-report §Browser smoke; compile+smoke sign-off |
-| T-014 | Dogfood sessions 1–5: протокол + log template | PM | IN_PROGRESS | P0 | T-011 | `@docs/dogfood-log-template.md` `@docs/team-assignments.md` | **Шаблон готов**; сессии 1–5 = **Human OPTIONAL** — **не блокирует спринт** |
+| T-014 | Dogfood sessions 1–5: протокол + log template | PM | DONE | P0 | T-011 | `@docs/dogfood-log-template.md` `@knowledge-base/dogfood-protocol.md` | Protocol + log + brief links; сессии 1–5 = **Human OPTIONAL** |
 | T-015 | M0 go/no-go memo + competitive scan 1-pager | PM | DONE | P0 | T-014 | `@docs/m0-go-no-go-memo.md` `@docs/competitive-scan-1pager.md` | PM-черновики готовы; sign-off + evidence = Human |
 | T-016 | Navigator prompt regression (4 scenarios) | Senior PM + QA | DONE | P1 | T-012 | `@docs/prompt-regression-T-016.md` | Static PASS; live LLM — Human + API key |
 | T-017 | ADR analytics (PostHog OSS) Phase 4 | IT-Architect | DONE | P1 | T-004 | `@knowledge-base/architecture.md` `@docs/implementation-plan.md` Phase 4 | `adr-002-analytics-posthog.md`; PostHog impl — backlog после G3→4 |
@@ -76,6 +76,9 @@
 | T-030 | PostHog event wiring + consent (ADR-002) | Developer | DONE | P1 | T-024, T-029 | `@knowledge-base/adr-002-analytics-posthog.md` `@lib/analytics/` | call sites wired; consent banner; dynamic posthog-js; OFF default; build/lint PASS |
 | T-031 | PostHog self-host compose + runbook (ADR-002) | Developer + DevOps | DONE | P1 | T-030 | `@docs/posthog-self-host.md` `docker/posthog/docker-compose.yml` | runbook RU; hobby script + local compose; no secrets in git; Human VPS OPTIONAL |
 | T-032 | Phase 5 roadmap doc (auth/DB/billing BLOCKED) | PM + Developer | DONE | P1 | T-015 | `@docs/roadmap-phase5.md` | scope draft BLOCKED until M0; P5-ADR placeholders; no Phase 5 app code |
+| T-037 | Dashboard domain glossary (RU labels + tooltips) | Developer | DONE | P2 | T-009, T-021 | `@components/DomainGlossary.tsx` | RU labels; radar tooltips; onboarding reuse |
+| T-038 | Navigator scenarios reference panel (static S1–S4) | Developer | DONE | P2 | T-016 | `@components/NavigatorScenariosPanel.tsx` | Dashboard collapsible S1–S4 |
+| T-039 | T-014 dogfood protocol + brief links | Developer | DONE | P1 | T-011 | `@knowledge-base/dogfood-protocol.md` | 5-step protocol; brief + log cross-links |
 
 ---
 
@@ -596,6 +599,7 @@
 | 2026-05-30 | Developer | T-030 DONE: PostHog wiring + consent; call sites; sanitize; dynamic posthog-js; OFF default; build/lint PASS; redeploy staging |
 | 2026-05-30 | Developer + DevOps | T-031 DONE: `docs/posthog-self-host.md` + `docker/posthog/docker-compose.yml`; ADR-002 OSS optional |
 | 2026-05-30 | PM + Developer | T-032 DONE: `docs/roadmap-phase5.md` — Phase 5 BLOCKED until M0 + Human scope sign-off |
+| 2026-05-30 | Developer | Sprint 3: T-037 glossary + tooltips; T-038 navigator panel; T-039 dogfood-protocol; T-014 templates DONE |
 
 ---
 

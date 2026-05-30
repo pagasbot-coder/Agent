@@ -16,7 +16,9 @@
 
 ## Сейчас (Human / gate)
 
-- [ ] 3–5 dogfood сессий (Human OPTIONAL) — [`dogfood-log-template.md`](./dogfood-log-template.md)
+- [x] Dogfood protocol + log template (T-014, T-039) — [`dogfood-protocol.md`](../knowledge-base/dogfood-protocol.md), [`dogfood-log-template.md`](./dogfood-log-template.md)
+- [ ] 3–5 dogfood сессий (Human OPTIONAL) — заполнить log
+- [x] Dashboard glossary + navigator panel (T-037, T-038)
 - [ ] M0 Go / Pause / Pivot sign-off — [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md)
 - [x] QA staging smoke — T-022, T-026 **PASS** (https://quiet-partner.vercel.app)
 - [x] Senior PM static prompt regression — T-016

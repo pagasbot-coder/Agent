@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-05-30 (T-031…T-032 DONE — PostHog runbook + Phase 5 doc)  
+**Дата:** 2026-05-30 (T-037…T-039 sprint 3 — glossary, navigator, dogfood protocol)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -57,7 +57,8 @@
 | T-030 | Developer | **DONE** | PostHog wiring + consent; OFF default |
 | T-031 | DevOps + Developer | **DONE** | `posthog-self-host.md` + compose reference |
 | T-032 | PM + Developer | **DONE** | `roadmap-phase5.md` — BLOCKED until M0 |
-| T-014 | PM | IN_PROGRESS | Шаблон log; сессии **OPTIONAL — не блокирует спринт** |
+| T-014 | PM | **DONE** | Protocol + log + links; сессии **OPTIONAL** |
+| T-037…T-039 | Developer | **DONE** | Glossary, navigator panel, dogfood protocol |
 | Weekly pm-status | PM | Ongoing | След. review **06.06** |
 
 ## Вопросы к Human
@@ -101,3 +102,4 @@ Dogfood #1–5 — по [`dogfood-log-template.md`](./dogfood-log-template.md), 
 | 2026-05-30 | PM | v1.5 — Human «идите дальше»; T-023…T-026 |
 | 2026-05-30 | PM | **v1.6** — T-027…T-030 DONE; Phase 4 ~75%; next: PostHog self-host / Phase 5 doc |
 | 2026-05-30 | Developer | **v1.7** — T-031…T-032 DONE; Phase 4 ~85%; Phase 5 app **BLOCKED** |
+| 2026-05-30 | Developer | **v1.8** — T-037…T-039; T-014 templates DONE; Phase 3 UX ~80% |

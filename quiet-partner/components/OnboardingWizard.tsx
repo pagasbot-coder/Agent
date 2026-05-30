@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { DomainGlossary } from "@/components/DomainGlossary";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +19,6 @@ import { deriveDomainStatus, type DeliveryApproach } from "@/lib/domains";
 import {
   computeDomainScoresFromOnboarding,
   DELIVERY_APPROACH_OPTIONS,
-  DOMAIN_GLOSSARY,
   PAIN_OPTIONS,
   TURBULENCE_QUESTIONS,
   type PainOption,
@@ -51,7 +51,6 @@ export function OnboardingWizard() {
   const [turbulence, setTurbulence] =
     useState<TurbulenceAnswers>(DEFAULT_TURBULENCE);
   const [pain, setPain] = useState<PainOption>("schedule");
-  const [showGlossary, setShowGlossary] = useState(false);
 
   useEffect(() => {
     const panel = panelRef.current;
@@ -60,7 +59,7 @@ export function OnboardingWizard() {
       'input:not([disabled]), button:not([disabled]), [tabindex="0"]',
     );
     focusable?.focus();
-  }, [step, showGlossary]);
+  }, [step]);
 
   const handleFinish = useCallback(() => {
     const trimmedName = projectName.trim() || "Мой проект";
@@ -269,29 +268,7 @@ export function OnboardingWizard() {
                 ))}
               </fieldset>
 
-              <div className="rounded-lg border border-dashed bg-muted/30 p-3">
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-between text-left text-sm font-medium"
-                  onClick={() => setShowGlossary((v) => !v)}
-                  aria-expanded={showGlossary}
-                >
-                  <span>8 доменов — что это?</span>
-                  <span aria-hidden="true">{showGlossary ? "−" : "?"}</span>
-                </button>
-                {showGlossary && (
-                  <ul className="mt-3 space-y-2 border-t pt-3">
-                    {Object.entries(DOMAIN_GLOSSARY).map(([id, hint]) => (
-                      <li key={id} className="text-xs text-muted-foreground">
-                        <span className="font-medium text-foreground">
-                          {id}
-                        </span>{" "}
-                        — {hint}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              <DomainGlossary />
             </CardContent>
           </>
         )}

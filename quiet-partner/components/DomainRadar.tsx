@@ -31,6 +31,7 @@ import {
   type DomainId,
   type DomainStatus,
 } from "@/lib/domains";
+import { DOMAIN_GLOSSARY } from "@/lib/onboarding";
 import { useProjectStore, type DomainHealth } from "@/lib/store/useProjectStore";
 
 const DOMAIN_ICONS: Record<DomainId, LucideIcon> = {
@@ -63,7 +64,7 @@ function StatusPill({
         domain.status === "red" && "animate-pulse",
         highlighted && "ring-2 ring-red-500 ring-offset-1",
       )}
-      title={`${domain.name}: ${domain.value}`}
+      title={`${domain.name}: ${domain.value} — ${DOMAIN_GLOSSARY[domain.id]}`}
     >
       <Icon className="size-3.5" aria-hidden />
       <span className="hidden sm:inline">{domain.name}</span>

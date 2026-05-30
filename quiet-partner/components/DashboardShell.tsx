@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 
+import { DomainGlossary } from "@/components/DomainGlossary";
 import { DomainRadar } from "@/components/DomainRadar";
 import { HealthCommentary } from "@/components/HealthCommentary";
+import { NavigatorScenariosPanel } from "@/components/NavigatorScenariosPanel";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DISCLAIMER } from "@/lib/domains";
 import { usePersistHydrated } from "@/lib/store/usePersistHydrated";
@@ -101,6 +103,11 @@ export function DashboardShell() {
           <section className="lg:col-span-2" aria-label="Комментарий напарника">
             <HealthCommentary />
           </section>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <DomainGlossary variant="compact" />
+          <NavigatorScenariosPanel />
         </div>
 
         <footer className="mt-10 rounded-lg border border-dashed bg-muted/30 px-4 py-3 text-center text-xs text-muted-foreground">
