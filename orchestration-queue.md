@@ -5,7 +5,7 @@
 
 **Проект:** Muster monorepo + Banya-Digital ERP  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-26 (DevOps: role-devops + devops-runbook-template; SME + app backlog в `banya-digital/`)
+**Последнее обновление:** 2026-05-30 (Banya-Digital PROJECT HOLD)
 
 > **Очередь приложения (канон):** [`banya-digital/orchestration-queue.md`](banya-digital/orchestration-queue.md) — Phase 3 задачи **T-009…T-014** (auth, CRM CRUD, finance input, inventory, checklists, pilot reglement).
 
@@ -57,6 +57,9 @@
 | T-011 | Operations: тайминги spa + kitchen SLA | Developer | DONE | P0 | T-006 | `modules/operations/` | `/operations` timings, kitchen status, link to dashboard checklists |
 | T-012 | Docs: management + technical overview | Developer | DONE | P1 | T-009…011 | `docs/*.md` | Обновлены overview + roadmap + GITHUB-DEPLOY |
 | T-013 | GitHub push + Vercel deploy | Developer | BLOCKED | P0 | T-012 | `docs/GITHUB-DEPLOY.md` | commit ba47cdc; build OK; блокер: `gh auth login` + `vercel login` (репо на GitHub не создан) |
+| T-017 | iGaming BiJi Phase 2: product-brief Ops Scan + problem interviews | PM | DONE | P0 | — | `iGaming BiJi/knowledge-base/product-brief.md` `iGaming BiJi/knowledge-base/problem-interviews-script.md` | Variant A primary, C fallback; см. `iGaming BiJi/orchestration-queue.md` |
+| T-018 | iGaming BiJi Phase 2: ADR-001 data ingestion + internet research | IT-Architect | DONE | P0 | T-017 | `iGaming BiJi/knowledge-base/adr-001-data-ingestion.md` `iGaming BiJi/knowledge-base/phase2-internet-research.md` | CSV-first + Affilka Reports API v0; T-003 research pack ready |
+| T-019 | **Quiet Partner / PM Co-Pilot** — PMBOK 7 co-pilot (parallel track) | PM / Senior PM | BACKLOG | P2 | — | [`quiet-partner/orchestration-queue.md`](quiet-partner/orchestration-queue.md) `@quiet-partner/docs/implementation-plan.md` | Bootstrap DONE 2026-05-30: `quiet-partner/` Next.js 16; T-002…T-008 READY/BACKLOG; не блокирует Banya T-028 |
 
 ---
 
@@ -115,21 +118,52 @@
 | 2026-05-26 | PM | Усилен `@role-pm` + `muster-pm`; Phase 3 T-009…T-014 в `banya-digital/orchestration-queue.md` |
 | 2026-05-26 | SME | Добавлен `@role-sme` + `muster-sme`; discovery pipeline SME → CMO/Architect → PM |
 | 2026-05-26 | DevOps | Добавлен `@role-devops` + `muster-devops`; runbook template; deploy handoff Architect → DevOps → Developer → QA |
+| 2026-05-27 | PM | T-017 DONE: iGaming BiJi Phase 2 — `product-brief.md`, `problem-interviews-script.md`; локальная очередь `iGaming BiJi/orchestration-queue.md` |
+| 2026-05-27 | IT-Architect | T-018 DONE (локально T-002): ADR-001, phase2-internet-research, Affilka appendix; T-003 READY + research pack; T-006 CSV parser READY |
+| 2026-05-30 | Developer | T-019: bootstrap `quiet-partner/` — Тихий напарник; implementation-plan 14w; local queue T-001 DONE |
+| 2026-05-30 | Developer | **Banya-Digital PROJECT HOLD:** T-028 paused; code review + hold docs; prod unchanged |
+
+---
+
+## Phase 4 — Quiet Partner (зеркало)
+
+См. **`quiet-partner/orchestration-queue.md`** и **`quiet-partner/docs/implementation-plan.md`**.
+
+| ID | Задача | Роль | Статус |
+|----|--------|------|--------|
+| T-001 | Bootstrap Next.js + Muster | Developer | DONE |
+| T-002 | Phase 0 discovery | PM | READY |
+| T-003 | PMBOK playbook v0 | Senior PM | READY |
+| T-004 | LLM ADR | IT-Architect | READY |
+| T-005…T-008 | Spike radar / store / API / onboarding | Dev / PM | BACKLOG |
+
+**Note:** Parallel track — не отвлекать от Banya-Digital T-028.
+
+---
+
+## Phase 2 — iGaming BiJi (зеркало)
+
+См. **`iGaming BiJi/orchestration-queue.md`**.
+
+| ID | Задача | Роль | Статус |
+|----|--------|------|--------|
+| T-001 | Product brief + interview script | PM | DONE |
+| T-002 | ADR ingest / PII / Affilka | IT-Architect | DONE → `adr-001-data-ingestion.md` |
+| T-003 | 5 problem interviews | PM | READY · research pack ready |
+| T-006 | CSV parser spec | Developer | READY |
 
 ---
 
 ## Phase 3 — Banya-Digital (зеркало статусов)
 
-См. детали и AC в **`banya-digital/orchestration-queue.md`**.
+> **PROJECT HOLD (2026-05-30):** разработка и пилот приостановлены. Канон: [`banya-digital/orchestration-queue.md`](banya-digital/orchestration-queue.md) · resume: [`banya-digital/docs/hold-status.md`](banya-digital/docs/hold-status.md)
 
 | ID | Задача | Роль | Статус |
 |----|--------|------|--------|
-| T-009 | Auth | Developer | BACKLOG |
-| T-010 | CRM CRUD | Developer | READY |
-| T-011 | Finance input | Developer | READY |
-| T-012 | Inventory FIFO UI | Developer | READY |
-| T-013 | Operations checklists | Developer | READY |
-| T-014 | Pilot reglement | PM | READY |
+| T-009…T-027 | MVP modules + prod smoke | Dev / QA | DONE |
+| T-028 | Pilot Week 1 | Human / Ops | **ON HOLD** (Day 1 ✅; Days 2–7 не завершены) |
+| T-024 | YCLIENTS import | Developer | BLOCKED |
+| T-015 | Product Map Phase 2 | PM | BACKLOG |
 
 ---
 
