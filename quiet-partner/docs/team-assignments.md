@@ -1,7 +1,7 @@
 # Раздача задач — Quiet Partner
 
-**Дата:** 2026-06-07 (Phase 5 prep sprint)  
-**Gate:** G2→3 (dogfood + M0 Human) · G4→5 prep **active** (ADR-003 Accepted)  
+**Дата:** 2026-06-07 (Sprint 3 — T-044…T-047 DONE)  
+**Gate:** G2→3 (dogfood + M0 Human) · G4→5 prep **active**  
 **Канон очереди:** [`orchestration-queue.md`](../orchestration-queue.md)  
 **PM status:** [`pm-status.md`](./pm-status.md)  
 **Governance:** [`pm-governance.md`](./pm-governance.md)  
@@ -11,22 +11,22 @@
 
 ## Режим PM-led (2026-06-07)
 
-**Phase 5 prep DONE:** T-033…T-036. **Next:** post-M0 backlog (T-044+).  
-**Human MUST:** `DATABASE_URL`, `AUTH_ENABLED=true`, `REDIS_URL`+`REDIS_TOKEN` on prod, M0 sign-off, billing.  
-**Human OPTIONAL (G2→3):** dogfood #5 или waiver.
+**Sprint 3 DONE:** T-044 waitlist API · T-045 LS migrate doc · T-046 QA Phase 5 · T-047 ADR-004 draft.  
+**Human MUST:** `DATABASE_URL`, `AUTH_ENABLED=true`, Redis keys, M0 sign-off, billing.  
+**Human OPTIONAL:** dogfood #5 / waiver G2→3; PostHog VPS (T-048).
 
 ---
 
-## Без Human (закрыто / READY)
+## Без Human (закрыто)
 
 | Кто | Task | Статус |
 |-----|------|--------|
 | Developer | T-001…T-043 | ✅ DONE |
-| IT-Architect | T-033 ADR-003 Accepted | ✅ DONE |
-| Developer | T-034 Drizzle schema spike | ✅ DONE |
-| Developer | T-035 Auth scaffold (AUTH off) | ✅ DONE |
-| Developer + DevOps | T-036 Redis rate limit scaffold | ✅ DONE |
-| PM | M0 evidence, BACKLOG groom | ✅ DONE |
+| IT-Architect | T-033 ADR-003 · T-047 ADR-004 draft | ✅ DONE |
+| Developer | T-034…T-036 Phase 5 scaffold | ✅ DONE |
+| Developer | T-044 waitlist API + form wire | ✅ DONE |
+| PM + Developer | T-045 localStorage migrate design | ✅ DONE |
+| QA | T-046 Phase 5 prep checklist | ✅ DONE |
 
 ---
 
@@ -34,35 +34,54 @@
 
 | # | Task | Действие | Артефакт |
 |---|------|----------|----------|
-| D1 | T-014 | Dogfood **#1–#4** | ✅ 2026-05-31 — **2/4 useful** |
-| D2 | T-047 | Dogfood **#5** (+1 useful) **или** waiver G2→3 | §guides + log |
-| D3 | T-015 | **Go / Pause / Pivot** + sign-off | [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md) |
-| D4 | Phase 5 activation | `DATABASE_URL`, Neon/Supabase, `AUTH_ENABLED=true` | Vercel env |
+| D1 | T-050 | Dogfood **#5** (+1 useful) **или** waiver G2→3 | §guides + log |
+| D2 | T-015 | **Go / Pause / Pivot** + sign-off | [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md) |
+| D3 | Phase 5 activation | Neon/Supabase + `DATABASE_URL` | ADR-004 one-liner |
+| D4 | Phase 5 activation | `AUTH_ENABLED=true` + `AUTH_SECRET` | Vercel env |
 | D5 | Billing | Stripe / subscriptions | Out of MVP |
 
 ---
 
-## WBS — Phase 5 (текущий)
+## WBS — Sprint 3 (закрыт)
 
 | Владелец | Deliverable | Статус |
 |----------|-------------|--------|
-| IT-Architect | ADR-003 Auth.js | ✅ Accepted |
-| Developer | Drizzle schema draft | ✅ T-034 |
-| Developer | Auth scaffold OFF | ✅ T-035 |
-| Developer + DevOps | Redis per-user limits | ✅ T-036 (scaffold; keys Human) |
-| Human | DB host (P5-ADR-2) + keys | ⬜ |
-| Human | M0 + G2→3 waiver/useful | ⬜ |
+| Developer | `POST /api/waitlist` (noop default) | ✅ T-044 |
+| Developer | `/waitlist` form → API validation | ✅ T-044 |
+| PM + Developer | `localstorage-migrate-phase5.md` | ✅ T-045 |
+| QA | `qa-phase5-prep.md` | ✅ T-046 |
+| IT-Architect | `adr-004-db-host-phase5.md` (Neon lean) | ✅ T-047 |
 
 ---
 
-## Порядок (актуальный)
+## Следующие владельцы
+
+| Владелец | Task | Статус | Блокер |
+|----------|------|--------|--------|
+| **Human** | T-050 dogfood #5 / waiver | BACKLOG | — |
+| **Human** | M0 sign-off | BACKLOG | G2→3 useful |
+| **DevOps** | T-048 PostHog VPS | BACKLOG | OPTIONAL |
+| **Senior PM + QA** | T-049 live LLM regression | BACKLOG | staging key OPTIONAL |
+| **Developer** | T-051 Drizzle + waitlist postgres | BACKLOG | `DATABASE_URL` |
+| **Developer** | T-052 migrate-from-local API | BACKLOG | AUTH on |
+
+---
+
+## Journal
+
+| Дата | Событие |
+|------|---------|
+| 2026-06-07 | Phase 5 prep T-033…T-036 DONE |
+| 2026-06-07 | PM groom sprint 3: T-044…T-046 READY (no live secrets) |
+| 2026-06-07 | T-044…T-047 DONE; build/lint; deploy staging |
+
+---
+
+## Порядок
 
 ```mermaid
 flowchart LR
-  P5[T-033…T-036 DONE] --> H[Human: DB + AUTH + Redis keys]
-  H --> M0[M0 Go]
-  D[Dogfood waiver] --> M0
+  S3[T-044…T-047 DONE] --> H[Human: M0 + DB + AUTH]
+  H --> P5[T-051…T-052]
+  D[T-050 dogfood] --> M0[M0 Go]
 ```
-
-1. **Human:** Neon/Supabase + `AUTH_ENABLED=true` + Upstash when готовы.  
-2. **Параллельно:** dogfood #5 или waiver → M0 sign-off.

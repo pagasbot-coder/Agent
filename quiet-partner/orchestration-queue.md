@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-06-07 (T-036 **DONE** — Redis/Upstash scaffold; activation Human MUST)
+**Последнее обновление:** 2026-06-07 (T-044…T-046 **DONE** — waitlist API stub, LS migrate doc, QA Phase 5 prep)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -92,14 +92,19 @@
 
 ## Backlog (post-M0 — activation Human MUST)
 
-> PM groom 2026-06-07 sprint 2. **T-036 DONE** (Redis scaffold). Live DB / `AUTH_ENABLED=true` / Upstash keys — Human MUST. Dogfood G2→3 still open (4/5, 2 useful).
+> PM groom 2026-06-07 sprint 3. **T-044…T-046 DONE** (safe OFF-by-default). Live DB / AUTH / Redis / Listmonk — Human MUST. Dogfood G2→3 open (4/5, 2 useful).
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Notes |
 |----|--------|------|--------|-----------|-------------|----------|-------|
-| T-044 | Waitlist backend (Listmonk or Postgres API) | Developer + Growth | BACKLOG | P2 | M0 Go | `@docs/landing-waitlist-one-pager.md` | Replace demo ack |
-| T-045 | PostHog VPS deploy + Vercel keys | DevOps | BACKLOG | P2 | M0 Go | `@docs/posthog-self-host.md` | Human OPTIONAL pre-M0 |
-| T-046 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | BACKLOG | P1 | `.env.local` / staging key | `@docs/prompt-regression-T-016.md` | Static PASS done |
-| T-047 | Dogfood session **#5** (+1 useful) **или** waiver G2→3 | Human + PM | BACKLOG | P0 | T-014 | `@docs/dogfood-session-guides.md` | 4/5 done, 2 useful — Human only |
+| T-044 | Waitlist API stub (`POST /api/waitlist`, noop/file) | Developer | DONE | P1 | T-023 | `@lib/waitlist/store.ts` `@app/api/waitlist/route.ts` | Form wired; no Listmonk; build/lint PASS |
+| T-045 | localStorage → server migrate design + env flag | PM + Developer | DONE | P1 | T-034 | `@docs/localstorage-migrate-phase5.md` | `MIGRATE_LOCALSTORAGE_ON_LOGIN=false` |
+| T-046 | QA Phase 5 prep checklist | QA | DONE | P0 | T-035, T-036, T-044 | `@docs/qa-phase5-prep.md` | AUTH/Redis/DB OFF smoke |
+| T-047 | ADR-004 DB host draft (P5-ADR-2 Neon lean) | IT-Architect | DONE | P1 | T-034 | `@knowledge-base/adr-004-db-host-phase5.md` | Draft; Human picks Neon/Supabase |
+| T-048 | PostHog VPS deploy + Vercel keys | DevOps | BACKLOG | P2 | M0 Go | `@docs/posthog-self-host.md` | Human OPTIONAL |
+| T-049 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | BACKLOG | P1 | staging key | `@docs/prompt-regression-T-016.md` | Static PASS done |
+| T-050 | Dogfood session **#5** (+1 useful) **или** waiver G2→3 | Human + PM | BACKLOG | P0 | T-014 | `@docs/dogfood-session-guides.md` | 4/5 done, 2 useful — Human only |
+| T-051 | Drizzle migrate + waitlist `postgres` backend | Developer | BACKLOG | P1 | M0 Go, T-047 Human | `@lib/db/schema.ts` | BLOCKED — `DATABASE_URL` |
+| T-052 | `POST /api/projects/migrate-from-local` | Developer | BACKLOG | P2 | T-045, AUTH on | `@docs/localstorage-migrate-phase5.md` | BLOCKED |
 
 ---
 
@@ -651,6 +656,11 @@
 | 2026-06-07 | Developer | T-035 **DONE**: auth scaffold (`AUTH_ENABLED=false`); middleware stub; `/api/auth/*` 503 when off |
 | 2026-06-07 | PM | **T-036 READY** (Redis/Upstash); activation (`DATABASE_URL`, AUTH on) — Human MUST |
 | 2026-06-07 | Developer + DevOps | T-036 **DONE**: `redisRateLimit.ts`; `checkRateLimitAsync`; Redis OFF default; `redis-rate-limit-T-036.md`; build/lint PASS; vercel --prod |
+| 2026-06-07 | PM | Sprint 3 groom: **T-044…T-046 READY** → safe OFF-by-default; T-048+ renumber post-M0 |
+| 2026-06-07 | Developer | T-044 **DONE**: `POST /api/waitlist` noop; form wired; health `waitlist_backend` |
+| 2026-06-07 | PM + Developer | T-045 **DONE**: `localstorage-migrate-phase5.md`; env `MIGRATE_LOCALSTORAGE_ON_LOGIN` |
+| 2026-06-07 | QA | T-046 **DONE**: `qa-phase5-prep.md`; qa-checklist §Phase 5 prep |
+| 2026-06-07 | IT-Architect | T-047 **DONE**: ADR-004 DB host draft (Neon lean) |
 
 ---
 

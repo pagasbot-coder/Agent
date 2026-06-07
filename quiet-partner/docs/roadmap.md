@@ -1,6 +1,6 @@
 # Roadmap — Тихий напарник
 
-**Обновлено:** 2026-05-30  
+**Обновлено:** 2026-06-07  
 **План:** [`implementation-plan.md`](./implementation-plan.md) · **ТЗ:** [`technical-specification.md`](./technical-specification.md) · **Phase 5:** [`roadmap-phase5.md`](./roadmap-phase5.md) (**BLOCKED** до M0)
 
 ---
@@ -17,7 +17,7 @@
 ## Сейчас (Human / gate)
 
 - [x] Dogfood protocol + log template (T-014, T-039) — [`dogfood-protocol.md`](../knowledge-base/dogfood-protocol.md), [`dogfood-log-template.md`](./dogfood-log-template.md)
-- [ ] 3–5 dogfood сессий (Human OPTIONAL) — заполнить log
+- [ ] 3–5 dogfood сессий (Human OPTIONAL) — [`dogfood-session-guides.md`](./dogfood-session-guides.md) + log
 - [x] Dashboard glossary + navigator panel (T-037, T-038)
 - [x] Navigator → BFF wiring + export snapshot (T-041, T-042)
 - [x] Waitlist hero CTA polish (T-040)
@@ -42,10 +42,15 @@
 - [x] Dashboard ↔ waitlist nav + onboarding banner fix (T-028)
 - [x] API cost guardrails — rate limit ADR-001 + token budgets (T-029)
 - [x] Phase 5 roadmap doc — BLOCKED until M0 (T-032)
+- [x] Phase 5 prep scaffold AUTH/Redis OFF (T-033…T-036)
+- [x] Waitlist API stub + form wire (T-044) — `POST /api/waitlist` noop default
+- [x] localStorage migrate design (T-045) — [`localstorage-migrate-phase5.md`](./localstorage-migrate-phase5.md)
+- [x] QA Phase 5 prep checklist (T-046) — [`qa-phase5-prep.md`](./qa-phase5-prep.md)
+- [x] ADR-004 DB host draft Neon lean (T-047)
 
 ## Далее (после M0 Go — Human)
 
-- Phase 5: auth, PostgreSQL, waitlist backend — см. [`roadmap-phase5.md`](./roadmap-phase5.md)
+- Phase 5 activation: Drizzle migrate + waitlist postgres (T-051) — см. [`roadmap-phase5.md`](./roadmap-phase5.md)
 - PostHog live on VPS + Vercel keys (Human OPTIONAL)
 - Live LLM prompt regression (Human + `.env.local`)
 

@@ -36,26 +36,54 @@ function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-/** Static acquisition landing — primary CTA above the fold per one-pager. */
+/** Acquisition landing — POST `/api/waitlist` (noop default; no Listmonk). */
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     trackLandingView({ source: "waitlist" });
   }, []);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!isValidEmail(email)) {
       setError("Укажите корректный email.");
       setSubmitted(false);
       return;
     }
+
     setError(null);
-    setSubmitted(true);
-    trackWaitlistSubmit({ source: "waitlist" });
+    setSubmitting(true);
+
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), source: "waitlist" }),
+      });
+
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        if (payload?.error === "invalid_email") {
+          setError("Укажите корректный email.");
+        } else {
+          setError("Не удалось записать в очередь. Попробуйте позже.");
+        }
+        return;
+      }
+
+      setSubmitted(true);
+      trackWaitlistSubmit({ source: "waitlist" });
+    } catch {
+      setError("Сеть недоступна. Проверьте соединение и повторите.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -121,7 +149,7 @@ export default function WaitlistPage() {
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {email.trim()} — invite пришлём на этот адрес, когда
-                      откроем beta (демо-режим, без backend).
+                      откроем beta.
                     </p>
                   </div>
                 </div>
@@ -177,8 +205,12 @@ export default function WaitlistPage() {
                     </p>
                   )}
                 </div>
-                <Button type="submit" className="w-full sm:w-auto">
-                  Получить ранний доступ
+                <Button
+                  type="submit"
+                  className="w-full sm:w-auto"
+                  disabled={submitting}
+                >
+                  {submitting ? "Отправляем…" : "Получить ранний доступ"}
                 </Button>
               </form>
             )}

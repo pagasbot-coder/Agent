@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getCostGuardSnapshot } from "@/lib/advisor/costGuardrails";
 import { getRateLimitBackend } from "@/lib/advisor/redisRateLimit";
+import { getWaitlistBackend } from "@/lib/waitlist/store";
 
 /**
  * Liveness for Vercel smoke, reverse proxy, and future Docker healthcheck.
@@ -22,6 +23,8 @@ export async function GET() {
       posthog_disabled: posthogDisabled,
       auth_enabled: process.env.AUTH_ENABLED === "true",
       auth_secret_configured: Boolean(process.env.AUTH_SECRET?.trim()),
+      waitlist_backend: getWaitlistBackend(),
+      database_url_configured: Boolean(process.env.DATABASE_URL?.trim()),
       cost_guardrails: {
         ...getCostGuardSnapshot(),
         rate_limit_backend: getRateLimitBackend(),

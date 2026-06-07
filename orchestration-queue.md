@@ -59,7 +59,7 @@
 | T-013 | GitHub push + Vercel deploy | Developer | BLOCKED | P0 | T-012 | `docs/GITHUB-DEPLOY.md` | commit ba47cdc; build OK; блокер: `gh auth login` + `vercel login` (репо на GitHub не создан) |
 | T-017 | iGaming BiJi Phase 2: product-brief Ops Scan + problem interviews | PM | DONE | P0 | — | `iGaming BiJi/knowledge-base/product-brief.md` `iGaming BiJi/knowledge-base/problem-interviews-script.md` | Variant A primary, C fallback; см. `iGaming BiJi/orchestration-queue.md` |
 | T-018 | iGaming BiJi Phase 2: ADR-001 data ingestion + internet research | IT-Architect | DONE | P0 | T-017 | `iGaming BiJi/knowledge-base/adr-001-data-ingestion.md` `iGaming BiJi/knowledge-base/phase2-internet-research.md` | CSV-first + Affilka Reports API v0; T-003 research pack ready |
-| T-019 | **Quiet Partner** — PM-led; G2→3 open | PM | IN_PROGRESS | P1 | — | [`quiet-partner/orchestration-queue.md`](quiet-partner/orchestration-queue.md) | **DONE:** T-018…T-030 (staging, waitlist, PostHog wiring, health, nav, cost guardrails); **BACKLOG:** PostHog self-host; Human OPTIONAL dogfood → [`pm-governance.md`](quiet-partner/docs/pm-governance.md) |
+| T-019 | **Quiet Partner** — PM-led; G2→3 open | PM | DONE | P1 | — | [`quiet-partner/orchestration-queue.md`](quiet-partner/orchestration-queue.md) | **DONE:** T-001…T-043 Phase 3–4 impl; staging PASS; **Human gate:** dogfood 0/5, M0 unsigned; Phase 5 BLOCKED; prep 2026-06-07: M0 evidence, dogfood guides, BACKLOG T-033…T-047 |
 
 ---
 
@@ -126,37 +126,22 @@
 | 2026-05-30 | PM | T-019 grooming: T-012…T-019 в `quiet-partner/`; team-assignments; G2→3 раздача |
 | 2026-05-30 | Developer | **Banya-Digital PROJECT HOLD:** T-028 paused; code review + hold docs; prod unchanged |
 | 2026-05-30 | PM | Quiet Partner: T-022 staging PASS; T-023 READY (M0 waive stub); T-024 BACKLOG; см. `quiet-partner/` journal |
+| 2026-06-07 | Developer | Quiet Partner prep: M0 evidence; `dogfood-session-guides.md`; post-M0 BACKLOG; root T-019 → DONE (Human dogfood/M0 pending) |
 
 ---
 
 ## Phase 4 — Quiet Partner (зеркало)
 
-См. **`quiet-partner/orchestration-queue.md`**, **`quiet-partner/docs/implementation-plan.md`**, **`quiet-partner/docs/technical-specification.md`**.
+См. **`quiet-partner/orchestration-queue.md`**, **`quiet-partner/docs/implementation-plan.md`**, **`quiet-partner/docs/pm-status.md`**.
+
+**Статус 2026-06-07:** Phase 3–4 impl **DONE** (T-001…T-043). **Human gate:** dogfood 0/5, M0 unsigned. Phase 5 **BLOCKED**.
 
 | ID | Задача | Роль | Статус |
 |----|--------|------|--------|
-| T-001 | Bootstrap Next.js + Muster | Developer | DONE |
-| T-002 | Phase 0 discovery | PM | DONE |
-| T-003 | PMBOK playbook v1 | Senior PM | DONE |
-| T-004 | LLM ADR | IT-Architect | DONE |
-| T-005…T-007 | Spike radar / store / API | Developer | DONE |
-| T-008 | Onboarding spec | PM / UI/UX | DONE |
-| T-009 | Onboarding UI | Developer | DONE |
-| T-010 | QA smoke + checklist | QA | DONE |
-| T-011 | Feedback UI + banner | Developer / QA | DONE |
-| T-012 | Align thresholds 40/70 | Senior PM + Developer | DONE |
-| T-013 | Browser smoke + Phase 3 sign-off | QA | DONE |
-| T-014 | Dogfood protocol + sessions 1–5 | PM (+ Human) | IN_PROGRESS (OPTIONAL gate) |
-| T-015 | M0 memo + competitive scan | PM | DONE (drafts) |
-| T-016 | Navigator prompt regression | Senior PM + QA | DONE |
-| T-017 | ADR analytics PostHog | IT-Architect | DONE |
-| T-018 | Deploy staging Vercel | Developer + DevOps | DONE |
-| T-019 | Landing / waitlist one-pager | Growth | DONE |
-| T-020 | UX reference productmap | UI/UX | DONE |
-| T-021 | Design tokens refresh | Developer | DONE |
-| T-022 | Staging smoke vercel.app | QA | DONE |
-| T-023 | `/waitlist` static stub | Developer | READY |
-| T-024 | PostHog stub OFF (ADR-002) | Developer | BACKLOG |
+| T-001…T-043 | Phase 0–4 impl | Dev / PM / QA / … | **DONE** |
+| T-014 | Dogfood sessions 1–5 | Human + PM | **OPTIONAL** (0/5) — guides: `docs/dogfood-session-guides.md` |
+| T-015 | M0 memo + competitive scan | PM | DONE (drafts; evidence filled; **Human sign-off** ⬜) |
+| T-033…T-047 | Post-M0 (auth, DB, waitlist backend) | Architect / Dev | **BACKLOG** — blocked until M0 Go |
 
 ---
 

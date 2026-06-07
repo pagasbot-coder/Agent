@@ -57,8 +57,8 @@
 | ID | Вопрос | Статус |
 |----|--------|--------|
 | P5-ADR-1 | Auth provider (NextAuth v5 vs Clerk OSS vs custom) | **Accepted** — [`adr-003-auth-phase5.md`](../knowledge-base/adr-003-auth-phase5.md) T-033 **DONE** |
-| P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **Draft** — [`phase5-schema-draft.md`](./phase5-schema-draft.md); Drizzle spike T-034 **DONE** |
-| P5-ADR-3 | Migrate localStorage → server on login | **BLOCKED** |
+| P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **Draft** — [`adr-004-db-host-phase5.md`](../knowledge-base/adr-004-db-host-phase5.md); Drizzle spike T-034 **DONE** |
+| P5-ADR-3 | Migrate localStorage → server on login | **Design** — [`localstorage-migrate-phase5.md`](./localstorage-migrate-phase5.md) T-045; `MIGRATE_LOCALSTORAGE_ON_LOGIN=false` |
 | P5-ADR-4 | Redis for rate limit + token budget per user | **Scaffold DONE** (T-036); activation Human MUST |
 
 Связь: [`architecture.md`](../knowledge-base/architecture.md) · [`adr-001-llm-bff.md`](../knowledge-base/adr-001-llm-bff.md) (Redis note).

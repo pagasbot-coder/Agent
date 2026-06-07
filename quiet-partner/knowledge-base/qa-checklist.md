@@ -134,6 +134,20 @@
 | T-040 | §Waitlist CTA W1–W2 |
 | T-041 | §Navigator wiring N3–N4 |
 | T-042 | §Export E1–E2 |
+| T-043 | Phase 3–4 full pass + glossary/nav doc pass |
+| T-046 | [`docs/qa-phase5-prep.md`](../docs/qa-phase5-prep.md) §P5-* Phase 5 scaffold |
+
+---
+
+## Phase 5 prep (T-046)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| P5-A1 | `GET /api/health` | `auth_enabled: false`, `waitlist_backend: noop` |
+| P5-W2 | `POST /api/waitlist` | 200 registered; invalid → 400 |
+| P5-R1 | Rate limit backend | `memory` (Redis OFF) |
+
+Полный список: [`docs/qa-phase5-prep.md`](../docs/qa-phase5-prep.md).
 
 ---
 
