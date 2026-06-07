@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -104,12 +105,42 @@ export default function WaitlistPage() {
           </CardHeader>
           <CardContent>
             {submitted ? (
-              <p
-                className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-foreground"
+              <div
+                className="space-y-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-5"
                 role="status"
+                aria-live="polite"
               >
-                Спасибо, записали в очередь (демо)
-              </p>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2
+                    className="mt-0.5 size-5 shrink-0 text-primary"
+                    aria-hidden
+                  />
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-foreground">
+                      Вы в очереди на ранний доступ
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {email.trim()} — invite пришлём на этот адрес, когда
+                      откроем beta (демо-режим, без backend).
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <a
+                    href={DEMO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                  >
+                    Посмотреть demo
+                  </a>
+                  <Link href="/">
+                    <Button variant="outline" size="sm">
+                      Открыть приложение
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             ) : (
               <form className="space-y-4" onSubmit={handleSubmit} noValidate>
                 <div className="space-y-2">

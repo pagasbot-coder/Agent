@@ -3,7 +3,7 @@
 **Версия:** 1.0  
 **Дата:** 2026-05-30  
 **Владелец:** PM + IT-Architect  
-**Статус:** **BLOCKED** до Human sign-off **M0 Go** и отдельного решения по scope Phase 5+ ([`pm-governance.md`](./pm-governance.md) §Human MUST #2)
+**Статус:** **Prep** — G2→3 waiver 2026-06-07; app impl BLOCKED until Architect ADR sign-off
 
 > **Не реализовывать** auth / PostgreSQL / billing в приложении без подписи Human (Pavel).
 
@@ -56,8 +56,8 @@
 
 | ID | Вопрос | Статус |
 |----|--------|--------|
-| P5-ADR-1 | Auth provider (NextAuth v5 vs Clerk OSS vs custom) | **BLOCKED** |
-| P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **BLOCKED** |
+| P5-ADR-1 | Auth provider (NextAuth v5 vs Clerk OSS vs custom) | **Draft** — [`adr-003-auth-phase5.md`](../knowledge-base/adr-003-auth-phase5.md) T-033 READY |
+| P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **Draft** — [`phase5-schema-draft.md`](./phase5-schema-draft.md) T-034 BACKLOG |
 | P5-ADR-3 | Migrate localStorage → server on login | **BLOCKED** |
 | P5-ADR-4 | Redis for rate limit + token budget per user | **BLOCKED** |
 

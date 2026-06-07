@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-30 (T-040…T-043 sprint 4 — waitlist CTA, navigator BFF, export)
+**Последнее обновление:** 2026-06-07 (G2→3 closed with waiver; Phase 5 prep)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -83,6 +83,23 @@
 | T-041 | Navigator scenario → BFF userSituation wiring | Developer | DONE | P2 | T-038, T-007 | `@lib/navigatorScenarios.ts` | «Спросить напарника» → BFF userSituation; refetch |
 | T-042 | Export project snapshot (clipboard JSON) | Developer | DONE | P2 | T-006 | `@lib/exportProjectSnapshot.ts` | clipboard + JSON download; no backend |
 | T-043 | QA Phase 3–4 full checklist pass doc | QA | DONE | P0 | T-040…T-042 | `@docs/qa-report-phase3.md` | §Phase 3–4 full pass PASS; checklist T-040…T-042 |
+
+---
+
+## Backlog (Phase 5 prep — app code BLOCKED until ADR sign-off)
+
+> PM groom 2026-06-07. **G2→3 closed with waiver** (Human directive «продолжаем работу»). Auth/Postgres **impl BLOCKED** до Architect ADR sign-off. См. [`roadmap-phase5.md`](docs/roadmap-phase5.md).
+
+| ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Notes |
+|----|--------|------|--------|-----------|-------------|----------|-------|
+| T-033 | ADR auth + env contract | IT-Architect | **READY** | P0 | G2→3 waiver | `@knowledge-base/adr-003-auth-phase5.md` | Draft spike; NextAuth vs alternatives; Architect sign-off |
+| T-034 | PostgreSQL schema + migrate spike | Developer | BACKLOG | P0 | T-033 | `@docs/phase5-schema-draft.md` | Schema draft only; no migrations |
+| T-035 | Auth UI + session middleware | Developer | BACKLOG | P1 | T-033 ADR accepted | `@docs/technical-specification.md` §8 | No impl until ADR sign-off |
+| T-036 | BFF rate limit → Redis/Upstash | Developer + DevOps | BACKLOG | P1 | T-034 | `@lib/advisor/costGuardrails.ts` | Per-user budget |
+| T-044 | Waitlist backend (Listmonk or Postgres API) | Developer + Growth | BACKLOG | P2 | T-034 | `@docs/landing-waitlist-one-pager.md` | Replace demo ack |
+| T-045 | PostHog VPS deploy + Vercel keys | DevOps | BACKLOG | P2 | M0 Go | `@docs/posthog-self-host.md` | Human OPTIONAL pre-M0 |
+| T-046 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | BACKLOG | P1 | `.env.local` / staging key | `@docs/prompt-regression-T-016.md` | Static PASS done |
+| T-047 | Dogfood sessions #4–#5 (если <3 useful) | Human + PM | **CANCELLED** | — | T-014 | `@docs/dogfood-session-guides.md` | Waived 2026-06-07; 4/2 sufficient |
 
 ---
 
@@ -605,6 +622,14 @@
 | 2026-05-30 | PM + Developer | T-032 DONE: `docs/roadmap-phase5.md` — Phase 5 BLOCKED until M0 + Human scope sign-off |
 | 2026-05-30 | Developer | Sprint 3: T-037 glossary + tooltips; T-038 navigator panel; T-039 dogfood-protocol; T-014 templates DONE |
 | 2026-05-30 | PM + Developer | Sprint 4: T-040 waitlist CTA; T-041 navigator→BFF; T-042 export snapshot; T-043 QA full pass |
+| 2026-06-07 | Developer (prep) | M0 evidence из qa-report; `dogfood-session-guides.md` #1–#3; post-M0 BACKLOG T-033…T-047; root T-019 mirror sync |
+| 2026-05-31 | Human (Pavel) | Dogfood **#1** — Проект 1; сессия завершена |
+| 2026-05-31 | Human (Pavel) | Dogfood **#2** — Проект 2; сессия завершена |
+| 2026-05-31 | Human (Pavel) | Dogfood **#3** — Проект 3; сессия завершена |
+| 2026-05-31 | Human (Pavel) | Dogfood **#4** — Проект 4; сессия завершена |
+| 2026-06-07 | PM (dogfood sync) | Human report **4/2** → **4/5 сессий, 2 useful** (👍); G2→3 **blocked** (нужно ≥3 useful); M0 Go blocked до +1 useful или waiver |
+| 2026-06-07 | Human (Pavel) | Directive **«продолжаем работу»** — **G2→3 waiver** (4 sessions, 2 useful sufficient); dogfood gate closed; no further Human questions on dogfood |
+| 2026-06-07 | PM | M0 memo → **Go recommended with waiver**; T-033 **READY** (`adr-003-auth-phase5.md` draft); T-034 schema draft `phase5-schema-draft.md`; waitlist thank-you + OG tags; Phase 5 app **BLOCKED** until Architect ADR |
 
 ---
 
