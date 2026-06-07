@@ -59,7 +59,7 @@
 | P5-ADR-1 | Auth provider (NextAuth v5 vs Clerk OSS vs custom) | **Accepted** — [`adr-003-auth-phase5.md`](../knowledge-base/adr-003-auth-phase5.md) T-033 **DONE** |
 | P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **Draft** — [`phase5-schema-draft.md`](./phase5-schema-draft.md); Drizzle spike T-034 **DONE** |
 | P5-ADR-3 | Migrate localStorage → server on login | **BLOCKED** |
-| P5-ADR-4 | Redis for rate limit + token budget per user | **BLOCKED** |
+| P5-ADR-4 | Redis for rate limit + token budget per user | **Scaffold DONE** (T-036); activation Human MUST |
 
 Связь: [`architecture.md`](../knowledge-base/architecture.md) · [`adr-001-llm-bff.md`](../knowledge-base/adr-001-llm-bff.md) (Redis note).
 
@@ -74,7 +74,7 @@ PM заведёт `T-03x+` после M0 Go:
 | T-033 | ADR auth + env contract | Architect | ✅ **DONE** |
 | T-034 | PostgreSQL schema + migrate spike | Developer | ✅ **DONE** (Drizzle draft; no migrate) |
 | T-035 | Auth UI + session middleware | Developer | ✅ **DONE** (scaffold; AUTH off) |
-| T-036 | BFF rate limit → Redis | Developer + DevOps | **READY** |
+| T-036 | BFF rate limit → Redis | Developer + DevOps | ✅ **DONE** (scaffold) |
 
 **Activation** (`AUTH_ENABLED=true`, `DATABASE_URL`) — Human MUST.
 

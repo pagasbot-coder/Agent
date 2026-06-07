@@ -11,8 +11,8 @@
 
 ## Режим PM-led (2026-06-07)
 
-**Phase 5 prep DONE:** T-033…T-035. **Next READY:** T-036 (Redis/Upstash).  
-**Human MUST:** `DATABASE_URL`, `AUTH_ENABLED=true` on prod, M0 sign-off, billing.  
+**Phase 5 prep DONE:** T-033…T-036. **Next:** post-M0 backlog (T-044+).  
+**Human MUST:** `DATABASE_URL`, `AUTH_ENABLED=true`, `REDIS_URL`+`REDIS_TOKEN` on prod, M0 sign-off, billing.  
 **Human OPTIONAL (G2→3):** dogfood #5 или waiver.
 
 ---
@@ -25,7 +25,7 @@
 | IT-Architect | T-033 ADR-003 Accepted | ✅ DONE |
 | Developer | T-034 Drizzle schema spike | ✅ DONE |
 | Developer | T-035 Auth scaffold (AUTH off) | ✅ DONE |
-| Developer + DevOps | **T-036** Redis rate limit | **READY** |
+| Developer + DevOps | T-036 Redis rate limit scaffold | ✅ DONE |
 | PM | M0 evidence, BACKLOG groom | ✅ DONE |
 
 ---
@@ -49,7 +49,7 @@
 | IT-Architect | ADR-003 Auth.js | ✅ Accepted |
 | Developer | Drizzle schema draft | ✅ T-034 |
 | Developer | Auth scaffold OFF | ✅ T-035 |
-| Developer + DevOps | Redis per-user limits | ⬜ **T-036 READY** |
+| Developer + DevOps | Redis per-user limits | ✅ T-036 (scaffold; keys Human) |
 | Human | DB host (P5-ADR-2) + keys | ⬜ |
 | Human | M0 + G2→3 waiver/useful | ⬜ |
 
@@ -59,12 +59,10 @@
 
 ```mermaid
 flowchart LR
-  P5[T-033…T-035 DONE] --> T36[T-036 READY]
-  T36 --> H[Human: DB + AUTH on]
+  P5[T-033…T-036 DONE] --> H[Human: DB + AUTH + Redis keys]
   H --> M0[M0 Go]
   D[Dogfood waiver] --> M0
 ```
 
-1. **Сейчас:** T-036 Redis spike (без prod keys).  
-2. **Human:** Neon/Supabase + `AUTH_ENABLED=true` когда готовы.  
-3. **Параллельно:** dogfood #5 или waiver → M0 sign-off.
+1. **Human:** Neon/Supabase + `AUTH_ENABLED=true` + Upstash when готовы.  
+2. **Параллельно:** dogfood #5 или waiver → M0 sign-off.

@@ -1,8 +1,15 @@
 /**
  * API cost guardrails — in-memory per ADR-001 (Phase 4).
  * Rate limit per IP; optional daily/weekly token budgets (instance-level until auth in Phase 5).
- * Replace with Redis / Postgres counters when multi-tenant.
+ * Redis / Upstash hot path: `redisRateLimit.ts` (T-036); falls back here when REDIS_URL empty.
  */
+
+import {
+  buildRateLimitKey,
+  checkRedisRateLimit,
+  getRedisRateLimitSnapshot,
+  type RateLimitScope,
+} from "./redisRateLimit";
 
 const MS_PER_DAY = 86_400_000;
 const MS_PER_WEEK = 7 * MS_PER_DAY;
@@ -56,6 +63,45 @@ export function getClientIp(request: Request): string {
   return "local";
 }
 
+export type RateLimitCheck = {
+  allowed: boolean;
+  retryAfterSec: number;
+};
+
+function resolveRateLimitScope(
+  ip: string,
+  userId?: string | null,
+): {
+  scope: RateLimitScope;
+  id: string;
+} {
+  if (userId?.trim()) return { scope: "user", id: userId.trim() };
+  return { scope: "ip", id: ipOrUnknown(ip) };
+}
+
+function ipOrUnknown(ip: string): string {
+  return ip.trim() || "unknown";
+}
+
+/**
+ * Redis when configured; otherwise in-memory. Prefer this in async BFF routes.
+ * Pass userId when AUTH is on for per-user budget (Phase 5).
+ */
+export async function checkRateLimitAsync(
+  ip: string,
+  userId?: string | null,
+): Promise<RateLimitCheck> {
+  const { scope, id } = resolveRateLimitScope(ip, userId);
+  const redisResult = await checkRedisRateLimit(buildRateLimitKey(scope, id));
+  if (redisResult !== null) return redisResult;
+
+  const allowed = checkRateLimit(ip);
+  return {
+    allowed,
+    retryAfterSec: getRateLimitRetryAfterSec(ip),
+  };
+}
+
 /** Returns false when IP exceeded ADVISOR_RATE_LIMIT_* (ADR-001: 20 / 15 min default). */
 export function checkRateLimit(ip: string): boolean {
   const now = Date.now();
@@ -106,6 +152,9 @@ export function recordTokenUsage(tokens: number): void {
 export type CostGuardSnapshot = {
   rate_limit_max: number;
   rate_limit_window_ms: number;
+  redis_rate_limit_enabled: boolean;
+  redis_url_configured: boolean;
+  redis_token_configured: boolean;
   daily_token_budget: number | null;
   daily_tokens_used: number;
   weekly_token_budget: number | null;
@@ -121,6 +170,7 @@ export function getCostGuardSnapshot(): CostGuardSnapshot {
   return {
     rate_limit_max: getRateLimitMax(),
     rate_limit_window_ms: getRateLimitWindowMs(),
+    ...getRedisRateLimitSnapshot(),
     daily_token_budget: getDailyTokenBudget(),
     daily_tokens_used: dailyTokensUsed,
     weekly_token_budget: getWeeklyTokenBudget(),

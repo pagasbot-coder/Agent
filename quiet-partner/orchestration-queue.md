@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-06-07 (Phase 5 prep — T-033…T-035 **DONE**; T-036 **READY**)
+**Последнее обновление:** 2026-06-07 (T-036 **DONE** — Redis/Upstash scaffold; activation Human MUST)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -86,16 +86,16 @@
 | T-033 | ADR auth + env contract (ADR-003 Accepted) | IT-Architect | DONE | P0 | T-032 | `@knowledge-base/adr-003-auth-phase5.md` | Auth.js v5 + PostgreSQL adapter; OSS choice signed |
 | T-034 | PostgreSQL schema spike (Drizzle draft) | Developer | DONE | P0 | T-033 | `@lib/db/schema.ts` `@docs/phase5-schema-draft.md` | No live DB; no migrations |
 | T-035 | Auth scaffold (middleware + routes; AUTH off) | Developer | DONE | P1 | T-033 | `auth.ts` `middleware.ts` `.env.example` | `AUTH_ENABLED=false` default; `/login` placeholder |
+| T-036 | BFF rate limit → Redis/Upstash | Developer + DevOps | DONE | P1 | T-034 | `@lib/advisor/redisRateLimit.ts` `@docs/redis-rate-limit-T-036.md` | Redis OFF default; in-memory fallback; no prod keys |
 
 ---
 
 ## Backlog (post-M0 — activation Human MUST)
 
-> PM groom 2026-06-07 sprint 2. Phase 5 **prep DONE** (T-033…T-035); **T-036 READY**. Live DB / `AUTH_ENABLED=true` — Human MUST. Dogfood G2→3 still open (4/5, 2 useful).
+> PM groom 2026-06-07 sprint 2. **T-036 DONE** (Redis scaffold). Live DB / `AUTH_ENABLED=true` / Upstash keys — Human MUST. Dogfood G2→3 still open (4/5, 2 useful).
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Notes |
 |----|--------|------|--------|-----------|-------------|----------|-------|
-| T-036 | BFF rate limit → Redis/Upstash | Developer + DevOps | READY | P1 | T-034 | `@lib/advisor/costGuardrails.ts` | Per-user budget; no Redis keys until Human |
 | T-044 | Waitlist backend (Listmonk or Postgres API) | Developer + Growth | BACKLOG | P2 | M0 Go | `@docs/landing-waitlist-one-pager.md` | Replace demo ack |
 | T-045 | PostHog VPS deploy + Vercel keys | DevOps | BACKLOG | P2 | M0 Go | `@docs/posthog-self-host.md` | Human OPTIONAL pre-M0 |
 | T-046 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | BACKLOG | P1 | `.env.local` / staging key | `@docs/prompt-regression-T-016.md` | Static PASS done |
@@ -542,6 +542,23 @@
 
 ---
 
+### T-036 — BFF rate limit → Redis/Upstash
+
+**Acceptance criteria:**
+- [x] `lib/advisor/redisRateLimit.ts` — Upstash sliding window; `REDIS_URL`+`REDIS_TOKEN` OFF by default
+- [x] `costGuardrails.ts` — `checkRateLimitAsync()` Redis first, in-memory fallback; per-user key when `userId` passed
+- [x] BFF route async rate limit; 429 + `Retry-After` unchanged (ADR-001)
+- [x] `GET /api/health` → `redis_rate_limit_*` + `rate_limit_backend` snapshot
+- [x] `.env.example` + `docs/redis-rate-limit-T-036.md` + `deploy-staging.md` env row
+- [x] No prod Redis keys in repo; Human activation documented
+- [x] `npm run build` && `npm run lint` green; `vercel --prod`
+
+**Product Map phase:** Phase 5 prep — R2 mitigation (shared rate limit)
+
+**Notes:** Token budgets remain in-memory until Phase 5 activation. PostHog docker Redis is not Upstash REST.
+
+---
+
 ### T-030 — PostHog event wiring + consent (ADR-002)
 
 **Acceptance criteria:**
@@ -633,6 +650,7 @@
 | 2026-06-07 | Developer | T-034 **DONE**: `lib/db/schema.ts` Drizzle draft; `phase5-schema-draft.md` v0.2 |
 | 2026-06-07 | Developer | T-035 **DONE**: auth scaffold (`AUTH_ENABLED=false`); middleware stub; `/api/auth/*` 503 when off |
 | 2026-06-07 | PM | **T-036 READY** (Redis/Upstash); activation (`DATABASE_URL`, AUTH on) — Human MUST |
+| 2026-06-07 | Developer + DevOps | T-036 **DONE**: `redisRateLimit.ts`; `checkRateLimitAsync`; Redis OFF default; `redis-rate-limit-T-036.md`; build/lint PASS; vercel --prod |
 
 ---
 

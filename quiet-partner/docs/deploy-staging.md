@@ -59,6 +59,8 @@
 | `ADVISOR_RATE_LIMIT_WINDOW_MS` | опц. | опц. | — | default `900000` (15 min) |
 | `ADVISOR_DAILY_TOKEN_BUDGET` | опц. | опц. | — | `0` = off |
 | `ADVISOR_WEEKLY_TOKEN_BUDGET` | опц. | опц. | — | default `200000`; `0` = off |
+| `REDIS_URL` | опц. | опц. | — | Upstash REST URL; empty = in-memory (T-036) |
+| `REDIS_TOKEN` | опц. | опц. | — | Upstash REST token; both required to enable Redis |
 
 **Запрещено:** `NEXT_PUBLIC_DEEPSEEK_*`, `NEXT_PUBLIC_GEMINI_*` (ADR-001).
 
@@ -178,7 +180,7 @@ Invoke-RestMethod -Uri "$base/api/advisor/health-commentary" -Method POST -Body 
 ## 7. Безопасность и ограничения
 
 - Секреты только в Vercel Env / `.env.local`; grep в клиентском bundle — см. qa-checklist S2
-- Rate limit BFF: in-memory per IP (ADR-001); на serverless — лимит на instance
+- Rate limit BFF: in-memory per IP (ADR-001) by default; Upstash when `REDIS_URL` + `REDIS_TOKEN` set (T-036)
 - **Human MUST (pm-governance):** prod budget, политика LLM spend, финальный prod URL policy
 - **Human OPTIONAL:** `DEEPSEEK_API_KEY` на staging для dogfood с live AI
 

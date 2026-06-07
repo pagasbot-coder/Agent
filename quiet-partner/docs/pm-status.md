@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-06-07 (v2.1 — Phase 5 prep T-033…T-035 **DONE**; T-036 **READY**)  
+**Дата:** 2026-06-07 (v2.2 — T-036 **DONE**; Redis scaffold; activation Human MUST)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-001…T-043 + **T-033…T-035 DONE** (Phase 5 prep scaffold). **ADR-003 Accepted** (Auth.js v5). Live DB / `AUTH_ENABLED=true` — **Human MUST**. Dogfood: **4/5, 2 useful** — G2→3 открыт (нужно ≥3 useful или waiver). **Next READY:** T-036 (Redis rate limit).
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-001…T-043 + **T-033…T-036 DONE** (Phase 5 prep scaffold). **ADR-003 Accepted** (Auth.js v5). Live DB / `AUTH_ENABLED=true` / Upstash keys — **Human MUST**. Dogfood: **4/5, 2 useful** — G2→3 открыт (нужно ≥3 useful или waiver). **Next:** post-M0 backlog (T-044+).
 
 ---
 
@@ -62,7 +62,7 @@
 | T-033 ADR-003 | IT-Architect | **DONE** | Auth.js v5 Accepted |
 | T-034 Drizzle schema | Developer | **DONE** | `lib/db/schema.ts`; no migrate |
 | T-035 Auth scaffold | Developer | **DONE** | `AUTH_ENABLED=false`; staging unchanged |
-| T-036 Redis limits | Developer + DevOps | **READY** | Per-user budget; Human keys |
+| T-036 Redis limits | Developer + DevOps | **DONE** | Scaffold; `REDIS_URL` OFF; Human keys for prod |
 | Dogfood guides #1–#3 | PM | **DONE** | [`dogfood-session-guides.md`](./dogfood-session-guides.md) |
 | M0 evidence (QA PASS) | PM | **DONE** | [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md) §Evidence |
 | Post-M0 BACKLOG groom | PM | **DONE** | T-033…T-047 в queue |
@@ -114,3 +114,4 @@ Dogfood **#1–#4 завершены** (2026-05-31); **2 useful** из 4. #5 —
 | 2026-06-07 | Developer (prep) | **v1.9** — M0 evidence; dogfood guides; BACKLOG T-033…T-047; impl queue empty → Human dogfood/M0 |
 | 2026-06-07 | PM (dogfood sync) | **v2.0** — Human dogfood **4/5, 2 useful** (4/2 report); G2→3 blocked; M0 Go blocked до +1 useful или waiver |
 | 2026-06-07 | PM + Architect + Developer | **v2.1** — Phase 5 prep sprint: ADR-003 Accepted; T-033…T-035 DONE; T-036 READY |
+| 2026-06-07 | Developer + DevOps | **v2.2** — T-036 DONE: Redis/Upstash scaffold; build/lint PASS; vercel --prod |

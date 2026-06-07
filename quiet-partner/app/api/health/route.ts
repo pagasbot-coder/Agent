@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getCostGuardSnapshot } from "@/lib/advisor/costGuardrails";
+import { getRateLimitBackend } from "@/lib/advisor/redisRateLimit";
 
 /**
  * Liveness for Vercel smoke, reverse proxy, and future Docker healthcheck.
@@ -21,7 +22,10 @@ export async function GET() {
       posthog_disabled: posthogDisabled,
       auth_enabled: process.env.AUTH_ENABLED === "true",
       auth_secret_configured: Boolean(process.env.AUTH_SECRET?.trim()),
-      cost_guardrails: getCostGuardSnapshot(),
+      cost_guardrails: {
+        ...getCostGuardSnapshot(),
+        rate_limit_backend: getRateLimitBackend(),
+      },
     },
   });
 }

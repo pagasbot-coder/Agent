@@ -30,7 +30,7 @@
 | Утечка API key | BFF-only, ADR-001 |
 | Prompt injection | System prompt + ограничение user payload size |
 | PII в логах | Не логировать projectMeta.name в production logs (MVP: dev only) |
-| Cost abuse | In-memory rate limit (20/15min/IP); token cap; daily/weekly budgets (`lib/advisor/costGuardrails.ts`) |
+| Cost abuse | In-memory rate limit (20/15min/IP) by default; Upstash when `REDIS_URL`+`REDIS_TOKEN` (`redisRateLimit.ts` + `costGuardrails.ts`) |
 
 ---
 

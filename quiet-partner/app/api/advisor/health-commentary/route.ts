@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 
-import {
-  checkRateLimit,
-  getClientIp,
-  getRateLimitRetryAfterSec,
-} from "@/lib/advisor/costGuardrails";
+import { checkRateLimitAsync, getClientIp } from "@/lib/advisor/costGuardrails";
 import { generateHealthCommentary } from "@/lib/advisor/llm";
 import type { HealthCommentaryRequest } from "@/lib/advisor/types";
 import { DOMAIN_IDS, type DomainId } from "@/lib/domains";
@@ -84,12 +80,13 @@ export async function POST(request: Request) {
   }
 
   const ip = getClientIp(request);
-  if (!checkRateLimit(ip)) {
+  const rateLimit = await checkRateLimitAsync(ip);
+  if (!rateLimit.allowed) {
     return NextResponse.json(
       { error: "rate_limited" },
       {
         status: 429,
-        headers: { "Retry-After": String(getRateLimitRetryAfterSec(ip)) },
+        headers: { "Retry-After": String(rateLimit.retryAfterSec) },
       },
     );
   }
