@@ -19,6 +19,8 @@ export async function GET() {
     checks: {
       deepseek_api_key_configured: Boolean(process.env.DEEPSEEK_API_KEY?.trim()),
       posthog_disabled: posthogDisabled,
+      auth_enabled: process.env.AUTH_ENABLED === "true",
+      auth_secret_configured: Boolean(process.env.AUTH_SECRET?.trim()),
       cost_guardrails: getCostGuardSnapshot(),
     },
   });

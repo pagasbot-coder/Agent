@@ -1,10 +1,10 @@
 # ADR-003: Auth Phase 5 (spike / draft)
 
-**Статус:** Draft — **T-033 READY** (Architect sign-off pending)  
+**Статус:** **Accepted** — 2026-06-07 (IT-Architect; T-033 DONE)  
 **Дата:** 2026-06-07  
 **Контекст:** Phase 5 persistence + per-user rate limits; сейчас anonymous + IP guardrails (ADR-001, T-029)
 
-> **Не реализовывать** до подписи Architect и Human scope Phase 5 ([`docs/roadmap-phase5.md`](../docs/roadmap-phase5.md)).
+> **Решение:** Auth.js v5 (NextAuth) + PostgreSQL adapter. App scaffold **AUTH_ENABLED=false** по умолчанию. Live DB / billing — Human MUST.
 
 ---
 
@@ -115,9 +115,11 @@ DATABASE_URL=postgresql://...
 
 ## Open questions (Architect → Human)
 
-1. **Resend vs SMTP self-host** для magic link (EU data residency)?
-2. **Google OAuth** в MVP или только email?
-3. **Beta gate:** login required для `/` или soft launch (anonymous + upsell)?
+1. **Resend vs SMTP self-host** для magic link (EU data residency)? — *default: Resend при activation*
+2. **Google OAuth** в MVP или только email? — *default: email first; Google optional T-035+*
+3. **Beta gate:** login required для `/` или soft launch (anonymous + upsell)? — *default: soft launch (AUTH off)*
+
+**Sign-off:** IT-Architect 2026-06-07 — OSS Auth.js принят; Human waiver Phase 5 prep без M0 Go (PM sprint).
 
 ---
 

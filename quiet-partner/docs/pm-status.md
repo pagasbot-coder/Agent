@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-06-07 (v2.0 — dogfood **4/5, 2 useful** — G2→3 blocked)  
+**Дата:** 2026-06-07 (v2.1 — Phase 5 prep T-033…T-035 **DONE**; T-036 **READY**)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-001…T-043 **DONE** (Phase 3–4 impl). Phase 5 app **BLOCKED** до M0. Dogfood Human: **4/5 сессий, 2 useful** (👍, 2026-05-31) — **G2→3 не закрыт** (нужно ≥3 useful). **Ждёт Human:** +1 useful сессия **или** waiver G2→3 **или** M0 **Pause**; M0 Go sign-off заблокирован.
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-001…T-043 + **T-033…T-035 DONE** (Phase 5 prep scaffold). **ADR-003 Accepted** (Auth.js v5). Live DB / `AUTH_ENABLED=true` — **Human MUST**. Dogfood: **4/5, 2 useful** — G2→3 открыт (нужно ≥3 useful или waiver). **Next READY:** T-036 (Redis rate limit).
 
 ---
 
@@ -59,9 +59,13 @@
 | T-032 | PM + Developer | **DONE** | `roadmap-phase5.md` — BLOCKED until M0 |
 | T-014 | PM | **DONE** | Protocol + log + links; сессии **OPTIONAL** |
 | T-037…T-043 | Developer + QA | **DONE** | Sprint 3–4 polish; navigator BFF; export; QA full pass |
+| T-033 ADR-003 | IT-Architect | **DONE** | Auth.js v5 Accepted |
+| T-034 Drizzle schema | Developer | **DONE** | `lib/db/schema.ts`; no migrate |
+| T-035 Auth scaffold | Developer | **DONE** | `AUTH_ENABLED=false`; staging unchanged |
+| T-036 Redis limits | Developer + DevOps | **READY** | Per-user budget; Human keys |
 | Dogfood guides #1–#3 | PM | **DONE** | [`dogfood-session-guides.md`](./dogfood-session-guides.md) |
 | M0 evidence (QA PASS) | PM | **DONE** | [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md) §Evidence |
-| Post-M0 BACKLOG groom | PM | **DONE** | T-033…T-047 в queue §Backlog |
+| Post-M0 BACKLOG groom | PM | **DONE** | T-033…T-047 в queue |
 | Weekly pm-status | PM | Ongoing | След. review **13.06** (M0) |
 
 ## Вопросы к Human
@@ -109,3 +113,4 @@ Dogfood **#1–#4 завершены** (2026-05-31); **2 useful** из 4. #5 —
 | 2026-05-30 | Developer | **v1.8** — T-037…T-039; T-014 templates DONE; Phase 3 UX ~80% |
 | 2026-06-07 | Developer (prep) | **v1.9** — M0 evidence; dogfood guides; BACKLOG T-033…T-047; impl queue empty → Human dogfood/M0 |
 | 2026-06-07 | PM (dogfood sync) | **v2.0** — Human dogfood **4/5, 2 useful** (4/2 report); G2→3 blocked; M0 Go blocked до +1 useful или waiver |
+| 2026-06-07 | PM + Architect + Developer | **v2.1** — Phase 5 prep sprint: ADR-003 Accepted; T-033…T-035 DONE; T-036 READY |

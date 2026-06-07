@@ -1,11 +1,11 @@
 # Phase 5 — PostgreSQL schema draft (T-034)
 
-**Версия:** 0.1 draft  
+**Версия:** 0.2 (Drizzle spike)  
 **Дата:** 2026-06-07  
-**Статус:** **BACKLOG** — no migrations until ADR-003 signed + Human Phase 5 scope  
+**Статус:** **Spike DONE (T-034)** — Drizzle types in [`lib/db/schema.ts`](../lib/db/schema.ts); no migrations / live DB  
 **Владелец:** Developer (spike) + Architect review
 
-> Черновик отражает текущий Zustand store ([`lib/store/useProjectStore.ts`](../lib/store/useProjectStore.ts)) и Auth.js tables. **Не запускать** `prisma migrate` / SQL до sign-off.
+> Черновик отражает Zustand store ([`lib/store/useProjectStore.ts`](../lib/store/useProjectStore.ts)) и Auth.js tables. **Не запускать** `drizzle-kit push` / SQL до `DATABASE_URL` + Human scope.
 
 ---
 
@@ -210,10 +210,10 @@ Import endpoint: idempotent on `user_id` — second import returns 409.
 
 ## Next steps
 
-1. Architect sign-off ADR-003 + P5-ADR-2 (host)
-2. Choose ORM: **Drizzle** (light) vs Prisma (Auth.js adapter mature)
-3. T-034 spike: `drizzle-kit generate` dry-run in branch — **no merge** until Human scope
-4. T-035 auth UI after session middleware design
+1. ~~Architect sign-off ADR-003~~ ✅ Accepted 2026-06-07
+2. ~~ORM: **Drizzle**~~ ✅ `lib/db/schema.ts` (T-034 DONE)
+3. P5-ADR-2: Neon vs Supabase host — Architect + Human
+4. T-036 Redis/Upstash rate limit; T-035 activation (`AUTH_ENABLED=true`) after `DATABASE_URL`
 
 ---
 

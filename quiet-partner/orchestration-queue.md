@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-06-07 (G2→3 closed with waiver; Phase 5 prep)
+**Последнее обновление:** 2026-06-07 (Phase 5 prep — T-033…T-035 **DONE**; T-036 **READY**)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -83,23 +83,23 @@
 | T-041 | Navigator scenario → BFF userSituation wiring | Developer | DONE | P2 | T-038, T-007 | `@lib/navigatorScenarios.ts` | «Спросить напарника» → BFF userSituation; refetch |
 | T-042 | Export project snapshot (clipboard JSON) | Developer | DONE | P2 | T-006 | `@lib/exportProjectSnapshot.ts` | clipboard + JSON download; no backend |
 | T-043 | QA Phase 3–4 full checklist pass doc | QA | DONE | P0 | T-040…T-042 | `@docs/qa-report-phase3.md` | §Phase 3–4 full pass PASS; checklist T-040…T-042 |
+| T-033 | ADR auth + env contract (ADR-003 Accepted) | IT-Architect | DONE | P0 | T-032 | `@knowledge-base/adr-003-auth-phase5.md` | Auth.js v5 + PostgreSQL adapter; OSS choice signed |
+| T-034 | PostgreSQL schema spike (Drizzle draft) | Developer | DONE | P0 | T-033 | `@lib/db/schema.ts` `@docs/phase5-schema-draft.md` | No live DB; no migrations |
+| T-035 | Auth scaffold (middleware + routes; AUTH off) | Developer | DONE | P1 | T-033 | `auth.ts` `middleware.ts` `.env.example` | `AUTH_ENABLED=false` default; `/login` placeholder |
 
 ---
 
-## Backlog (Phase 5 prep — app code BLOCKED until ADR sign-off)
+## Backlog (post-M0 — activation Human MUST)
 
-> PM groom 2026-06-07. **G2→3 closed with waiver** (Human directive «продолжаем работу»). Auth/Postgres **impl BLOCKED** до Architect ADR sign-off. См. [`roadmap-phase5.md`](docs/roadmap-phase5.md).
+> PM groom 2026-06-07 sprint 2. Phase 5 **prep DONE** (T-033…T-035); **T-036 READY**. Live DB / `AUTH_ENABLED=true` — Human MUST. Dogfood G2→3 still open (4/5, 2 useful).
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Notes |
 |----|--------|------|--------|-----------|-------------|----------|-------|
-| T-033 | ADR auth + env contract | IT-Architect | **READY** | P0 | G2→3 waiver | `@knowledge-base/adr-003-auth-phase5.md` | Draft spike; NextAuth vs alternatives; Architect sign-off |
-| T-034 | PostgreSQL schema + migrate spike | Developer | BACKLOG | P0 | T-033 | `@docs/phase5-schema-draft.md` | Schema draft only; no migrations |
-| T-035 | Auth UI + session middleware | Developer | BACKLOG | P1 | T-033 ADR accepted | `@docs/technical-specification.md` §8 | No impl until ADR sign-off |
-| T-036 | BFF rate limit → Redis/Upstash | Developer + DevOps | BACKLOG | P1 | T-034 | `@lib/advisor/costGuardrails.ts` | Per-user budget |
-| T-044 | Waitlist backend (Listmonk or Postgres API) | Developer + Growth | BACKLOG | P2 | T-034 | `@docs/landing-waitlist-one-pager.md` | Replace demo ack |
+| T-036 | BFF rate limit → Redis/Upstash | Developer + DevOps | READY | P1 | T-034 | `@lib/advisor/costGuardrails.ts` | Per-user budget; no Redis keys until Human |
+| T-044 | Waitlist backend (Listmonk or Postgres API) | Developer + Growth | BACKLOG | P2 | M0 Go | `@docs/landing-waitlist-one-pager.md` | Replace demo ack |
 | T-045 | PostHog VPS deploy + Vercel keys | DevOps | BACKLOG | P2 | M0 Go | `@docs/posthog-self-host.md` | Human OPTIONAL pre-M0 |
 | T-046 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | BACKLOG | P1 | `.env.local` / staging key | `@docs/prompt-regression-T-016.md` | Static PASS done |
-| T-047 | Dogfood sessions #4–#5 (если <3 useful) | Human + PM | **CANCELLED** | — | T-014 | `@docs/dogfood-session-guides.md` | Waived 2026-06-07; 4/2 sufficient |
+| T-047 | Dogfood session **#5** (+1 useful) **или** waiver G2→3 | Human + PM | BACKLOG | P0 | T-014 | `@docs/dogfood-session-guides.md` | 4/5 done, 2 useful — Human only |
 
 ---
 
@@ -293,8 +293,8 @@
 - [ ] `knowledge-base/dogfood-protocol.md`: цель, длительность 30–45 мин, 5 шагов (onboarding → radar → commentary → 👍 → 1 решение) — *опционально; чеклист в `docs/dogfood-log-template.md`*
 - [x] `docs/dogfood-log-template.md`: таблица сессий #1–5 (дата, проект, useful Y/N, действие, заметки; R8 bias note)
 - [ ] Ссылка из `product-brief.md` и `docs/team-assignments.md`
-- [ ] Human: минимум **3 из 5** сессий до закрытия G2→3 (исполняет Human, **OPTIONAL — не блокирует спринт**)
-- [ ] PM: после каждой сессии Human — 1 строка в log + journal queue
+- [x] Human: **4 из 5** сессий проведено (2026-05-31); **2 useful** — G2→3 **blocked** (нужно ≥3 useful или waiver)
+- [x] PM: journal queue — dogfood sync 2026-06-07 (4/5, 2 useful)
 
 **Product Map phase:** People + Delivery (4)
 
@@ -628,8 +628,11 @@
 | 2026-05-31 | Human (Pavel) | Dogfood **#3** — Проект 3; сессия завершена |
 | 2026-05-31 | Human (Pavel) | Dogfood **#4** — Проект 4; сессия завершена |
 | 2026-06-07 | PM (dogfood sync) | Human report **4/2** → **4/5 сессий, 2 useful** (👍); G2→3 **blocked** (нужно ≥3 useful); M0 Go blocked до +1 useful или waiver |
-| 2026-06-07 | Human (Pavel) | Directive **«продолжаем работу»** — **G2→3 waiver** (4 sessions, 2 useful sufficient); dogfood gate closed; no further Human questions on dogfood |
-| 2026-06-07 | PM | M0 memo → **Go recommended with waiver**; T-033 **READY** (`adr-003-auth-phase5.md` draft); T-034 schema draft `phase5-schema-draft.md`; waitlist thank-you + OG tags; Phase 5 app **BLOCKED** until Architect ADR |
+| 2026-06-07 | PM | Human «погнали дальше» — Phase 5 prep sprint без dogfood gate; **T-033 READY** → Architect |
+| 2026-06-07 | IT-Architect | T-033 **DONE**: ADR-003 **Accepted** — Auth.js v5 + PG adapter |
+| 2026-06-07 | Developer | T-034 **DONE**: `lib/db/schema.ts` Drizzle draft; `phase5-schema-draft.md` v0.2 |
+| 2026-06-07 | Developer | T-035 **DONE**: auth scaffold (`AUTH_ENABLED=false`); middleware stub; `/api/auth/*` 503 when off |
+| 2026-06-07 | PM | **T-036 READY** (Redis/Upstash); activation (`DATABASE_URL`, AUTH on) — Human MUST |
 
 ---
 

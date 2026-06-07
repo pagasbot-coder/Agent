@@ -3,9 +3,9 @@
 **Версия:** 1.0  
 **Дата:** 2026-05-30  
 **Владелец:** PM + IT-Architect  
-**Статус:** **Prep** — G2→3 waiver 2026-06-07; app impl BLOCKED until Architect ADR sign-off
+**Статус:** **Prep active** — ADR-003 **Accepted**; T-033…T-035 spike DONE; live DB / AUTH on prod — Human MUST
 
-> **Не реализовывать** auth / PostgreSQL / billing в приложении без подписи Human (Pavel).
+> Scaffold only: `AUTH_ENABLED=false` default. **Не включать** `DATABASE_URL` / billing без Human (Pavel).
 
 ---
 
@@ -56,8 +56,8 @@
 
 | ID | Вопрос | Статус |
 |----|--------|--------|
-| P5-ADR-1 | Auth provider (NextAuth v5 vs Clerk OSS vs custom) | **Draft** — [`adr-003-auth-phase5.md`](../knowledge-base/adr-003-auth-phase5.md) T-033 READY |
-| P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **Draft** — [`phase5-schema-draft.md`](./phase5-schema-draft.md) T-034 BACKLOG |
+| P5-ADR-1 | Auth provider (NextAuth v5 vs Clerk OSS vs custom) | **Accepted** — [`adr-003-auth-phase5.md`](../knowledge-base/adr-003-auth-phase5.md) T-033 **DONE** |
+| P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **Draft** — [`phase5-schema-draft.md`](./phase5-schema-draft.md); Drizzle spike T-034 **DONE** |
 | P5-ADR-3 | Migrate localStorage → server on login | **BLOCKED** |
 | P5-ADR-4 | Redis for rate limit + token budget per user | **BLOCKED** |
 
@@ -71,12 +71,12 @@ PM заведёт `T-03x+` после M0 Go:
 
 | ID (draft) | Задача | Роль | Блокер |
 |------------|--------|------|--------|
-| T-033 | ADR auth + env contract | Architect | M0 + Human scope |
-| T-034 | PostgreSQL schema + migrate spike | Developer | T-033 |
-| T-035 | Auth UI + session middleware | Developer | T-033 |
-| T-036 | BFF rate limit → Redis | Developer + DevOps | T-034 |
+| T-033 | ADR auth + env contract | Architect | ✅ **DONE** |
+| T-034 | PostgreSQL schema + migrate spike | Developer | ✅ **DONE** (Drizzle draft; no migrate) |
+| T-035 | Auth UI + session middleware | Developer | ✅ **DONE** (scaffold; AUTH off) |
+| T-036 | BFF rate limit → Redis | Developer + DevOps | **READY** |
 
-**Не создавать READY** до Human sign-off Phase 5.
+**Activation** (`AUTH_ENABLED=true`, `DATABASE_URL`) — Human MUST.
 
 ---
 
