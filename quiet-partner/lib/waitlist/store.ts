@@ -1,5 +1,9 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { eq } from "drizzle-orm";
+
+import { getDb } from "@/lib/db";
+import { waitlistSignups } from "@/lib/db/schema";
 
 /** Waitlist persistence backends — OFF by default (noop); no Listmonk without keys. */
 export type WaitlistBackend = "noop" | "file" | "postgres";
@@ -87,8 +91,24 @@ export async function saveWaitlistSignup(
   }
 
   if (backend === "postgres") {
-    // Drizzle insert when DATABASE_URL + migrations are Human-approved (T-044 follow-up).
-    throw new Error("postgres_not_ready");
+    const db = getDb();
+    if (!db) throw new Error("postgres_not_ready");
+
+    const existing = await db
+      .select({ id: waitlistSignups.id })
+      .from(waitlistSignups)
+      .where(eq(waitlistSignups.email, email))
+      .limit(1);
+    const duplicate = existing.length > 0;
+
+    if (!duplicate) {
+      await db.insert(waitlistSignups).values({
+        email,
+        source: record.source,
+      });
+    }
+
+    return { ok: true, backend, duplicate };
   }
 
   const filePath = resolveFilePath();

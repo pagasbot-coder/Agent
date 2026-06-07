@@ -31,8 +31,8 @@ function parseBody(body: unknown): WaitlistSignupInput | null {
 }
 
 /**
- * Waitlist capture BFF — noop default; optional local JSON file (WAITLIST_BACKEND=file).
- * No Listmonk / Postgres until Human scopes keys (T-044).
+ * Waitlist capture BFF — noop default; file or postgres when Human scopes env (T-044 / T-051).
+ * Postgres writes to `waitlist_signups` via Drizzle when WAITLIST_BACKEND=postgres + DATABASE_URL.
  */
 export async function POST(request: Request) {
   const contentLength = Number(request.headers.get("content-length") ?? 0);

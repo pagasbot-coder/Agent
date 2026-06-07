@@ -61,8 +61,20 @@
 | `ADVISOR_WEEKLY_TOKEN_BUDGET` | опц. | опц. | — | default `200000`; `0` = off |
 | `REDIS_URL` | опц. | опц. | — | Upstash REST URL; empty = in-memory (T-036) |
 | `REDIS_TOKEN` | опц. | опц. | — | Upstash REST token; both required to enable Redis |
+| `DATABASE_URL` | опц. | опц. | — | Neon/Supabase pooled URL; empty = no DB (T-051) |
+| `WAITLIST_BACKEND` | опц. | опц. | — | default `noop`; `postgres` after `npm run db:push` |
 
 **Запрещено:** `NEXT_PUBLIC_DEEPSEEK_*`, `NEXT_PUBLIC_GEMINI_*` (ADR-001).
+
+### PostgreSQL + waitlist (T-051 — Human activation)
+
+1. Neon project → pooled `DATABASE_URL` в Vercel (Production + Preview).
+2. Локально (shell only): `npm run db:push` — см. [`drizzle/README.md`](../drizzle/README.md).
+3. Vercel: `WAITLIST_BACKEND=postgres` → **Redeploy**.
+4. Smoke: `GET /api/health` → `database_configured: true`, `waitlist_backend: "postgres"`.
+5. `POST /api/waitlist` с валидным email → `backend: "postgres"`, `registered`.
+
+Без `DATABASE_URL`: приложение работает в **noop** — waitlist принимает без персистенции.
 
 **PostHog (Phase 4, ADR-002):** `POSTHOG_DISABLED=true` по умолчанию; `NEXT_PUBLIC_POSTHOG_*` — только после consent + self-host; не блокирует staging MVP. Runbook: [`posthog-self-host.md`](./posthog-self-host.md) (T-031).
 

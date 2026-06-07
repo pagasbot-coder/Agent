@@ -62,7 +62,7 @@
 | **Human** | M0 sign-off | BACKLOG | G2→3 useful |
 | **DevOps** | T-048 PostHog VPS | BACKLOG | OPTIONAL |
 | **Senior PM + QA** | T-049 live LLM regression | BACKLOG | staging key OPTIONAL |
-| **Developer** | T-051 Drizzle + waitlist postgres | BACKLOG | `DATABASE_URL` |
+| **Developer** | T-051 Drizzle + waitlist postgres | ✅ DONE | Human: Neon + `db:push` + Vercel env |
 | **Developer** | T-052 migrate-from-local API | BACKLOG | AUTH on |
 
 ---
@@ -74,6 +74,7 @@
 | 2026-06-07 | Phase 5 prep T-033…T-036 DONE |
 | 2026-06-07 | PM groom sprint 3: T-044…T-046 READY (no live secrets) |
 | 2026-06-07 | T-044…T-047 DONE; build/lint; deploy staging |
+| 2026-06-07 | T-051 DONE: Drizzle + waitlist postgres OFF-by-default |
 
 ---
 

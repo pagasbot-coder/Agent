@@ -47,10 +47,11 @@
 - [x] localStorage migrate design (T-045) — [`localstorage-migrate-phase5.md`](./localstorage-migrate-phase5.md)
 - [x] QA Phase 5 prep checklist (T-046) — [`qa-phase5-prep.md`](./qa-phase5-prep.md)
 - [x] ADR-004 DB host draft Neon lean (T-047)
+- [x] Drizzle client + waitlist postgres backend OFF-by-default (T-051) — [`drizzle/README.md`](../drizzle/README.md)
 
 ## Далее (после M0 Go — Human)
 
-- Phase 5 activation: Drizzle migrate + waitlist postgres (T-051) — см. [`roadmap-phase5.md`](./roadmap-phase5.md)
+- Human: Neon `DATABASE_URL` + `npm run db:push` + `WAITLIST_BACKEND=postgres` — см. [`roadmap-phase5.md`](./roadmap-phase5.md)
 - PostHog live on VPS + Vercel keys (Human OPTIONAL)
 - Live LLM prompt regression (Human + `.env.local`)
 

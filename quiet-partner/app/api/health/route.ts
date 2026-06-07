@@ -24,7 +24,7 @@ export async function GET() {
       auth_enabled: process.env.AUTH_ENABLED === "true",
       auth_secret_configured: Boolean(process.env.AUTH_SECRET?.trim()),
       waitlist_backend: getWaitlistBackend(),
-      database_url_configured: Boolean(process.env.DATABASE_URL?.trim()),
+      database_configured: Boolean(process.env.DATABASE_URL?.trim()),
       cost_guardrails: {
         ...getCostGuardSnapshot(),
         rate_limit_backend: getRateLimitBackend(),

@@ -1,6 +1,7 @@
 /**
- * Phase 5 PostgreSQL schema draft (T-034) — Drizzle ORM types only.
- * No live DB connection; migrations deferred until DATABASE_URL + Human scope.
+ * Phase 5 PostgreSQL schema (T-034 / T-051) — Drizzle ORM types.
+ * Live connection via `lib/db/index.ts` when DATABASE_URL is set.
+ * Apply with `npm run db:push` — see `drizzle/README.md`.
  * @see docs/phase5-schema-draft.md
  */
 import {

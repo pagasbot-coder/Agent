@@ -55,7 +55,7 @@
 | # | Проверка | Ожидание |
 |---|----------|----------|
 | P5-D1 | No live migrate | `drizzle-kit` not in CI deploy |
-| P5-D2 | `DATABASE_URL` empty local | App boots; health `database_url_configured: false` |
+| P5-D2 | `DATABASE_URL` empty local | App boots; health `database_configured: false` |
 | P5-D3 | Docs exist | `phase5-schema-draft.md`, `localstorage-migrate-phase5.md`, `adr-004-db-host-phase5.md` |
 
 ---

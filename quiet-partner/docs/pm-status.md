@@ -1,6 +1,6 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-06-07 (v2.3 — T-044…T-047 **DONE**; waitlist API; Phase 5 docs)  
+**Дата:** 2026-06-07 (v2.4 — T-051 **DONE**; Drizzle + waitlist postgres OFF-by-default)  
 **Владелец:** PM (muster-pm)  
 **План:** [`implementation-plan.md`](./implementation-plan.md) v1.1 + Phase 4→5 transition  
 **Очередь:** [`orchestration-queue.md`](../orchestration-queue.md)  
@@ -21,7 +21,7 @@
 
 ## TL;DR
 
-Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-001…T-043 + T-033…T-036 + **T-044…T-047 DONE** (waitlist API noop, LS migrate doc, QA Phase 5, ADR-004 draft). Live DB / AUTH / Redis / Listmonk — **Human MUST**. Dogfood: **4/5, 2 useful** — G2→3 открыт. **Next owner:** Human (T-050 dogfood/M0) → Developer T-051 после `DATABASE_URL`.
+Календарь плана (старт 02.06) **не нарушен**; факт **опережает график**. **G1→2 закрыт.** T-001…T-047 + **T-051 DONE** (Drizzle client, `waitlist_signups` postgres path, `db:push` runbook). Prod/staging **noop** до Human Neon. Dogfood: **4/5, 2 useful**. **Next owner:** Human — Neon `DATABASE_URL` → `npm run db:push` → Vercel `WAITLIST_BACKEND=postgres` → redeploy.
 
 ---
 

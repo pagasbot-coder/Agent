@@ -103,7 +103,7 @@
 | T-048 | PostHog VPS deploy + Vercel keys | DevOps | BACKLOG | P2 | M0 Go | `@docs/posthog-self-host.md` | Human OPTIONAL |
 | T-049 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | BACKLOG | P1 | staging key | `@docs/prompt-regression-T-016.md` | Static PASS done |
 | T-050 | Dogfood session **#5** (+1 useful) **или** waiver G2→3 | Human + PM | BACKLOG | P0 | T-014 | `@docs/dogfood-session-guides.md` | 4/5 done, 2 useful — Human only |
-| T-051 | Drizzle migrate + waitlist `postgres` backend | Developer | BACKLOG | P1 | M0 Go, T-047 Human | `@lib/db/schema.ts` | BLOCKED — `DATABASE_URL` |
+| T-051 | Drizzle migrate + waitlist `postgres` backend | Developer | DONE | P1 | T-047 | `@lib/db/` `drizzle/` | Drizzle client; waitlist_signups postgres; db:push runbook; noop default; build/lint PASS |
 | T-052 | `POST /api/projects/migrate-from-local` | Developer | BACKLOG | P2 | T-045, AUTH on | `@docs/localstorage-migrate-phase5.md` | BLOCKED |
 
 ---
@@ -661,6 +661,7 @@
 | 2026-06-07 | PM + Developer | T-045 **DONE**: `localstorage-migrate-phase5.md`; env `MIGRATE_LOCALSTORAGE_ON_LOGIN` |
 | 2026-06-07 | QA | T-046 **DONE**: `qa-phase5-prep.md`; qa-checklist §Phase 5 prep |
 | 2026-06-07 | IT-Architect | T-047 **DONE**: ADR-004 DB host draft (Neon lean) |
+| 2026-06-07 | Developer | T-051 **DONE**: `lib/db/index.ts` Neon HTTP; waitlist postgres; `drizzle/` + `db:push`; health `database_configured`; noop default |
 
 ---
 
