@@ -163,6 +163,19 @@ Paid ads — **не** до CR waitlist ≥12% organic и M0 Go.
 
 ---
 
+## SEO / OG spec (T-053 — READY)
+
+| Route | `title` | `description` | `og:title` |
+|-------|---------|-----------------|------------|
+| `/` | Тихий напарник — здоровье проекта за один экран | Co-pilot для PM: DomainRadar по 8 доменам PMBOK 7, AI-комментарий без экзамена PMP | Тихий напарник — co-pilot для PM |
+| `/waitlist` | Ранний доступ — Тихий напарник | Один экран — здоровье проекта. Запишитесь в waitlist для PM в агентстве и SMB | Ранний доступ — Тихий напарник |
+
+**Keywords (не stuffing):** PM co-pilot, PMBOK 7, здоровье проекта, DomainRadar.  
+**Robots:** `index,follow` на `/waitlist`; dashboard `/` — `noindex` до публичного beta (PM recommendation).  
+**Impl:** ✅ T-053 DONE — `app/layout.tsx`, `app/waitlist/layout.tsx`, `app/robots.ts`, `app/sitemap.ts`, `lib/site.ts`.
+
+---
+
 ## References
 
 - `@knowledge-base/product-brief.md` — ICP, metrics, personas

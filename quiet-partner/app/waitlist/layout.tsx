@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 
-const SITE_URL = "https://quiet-partner.vercel.app";
+import { SITE_URL } from "@/lib/site";
 
+/** Acquisition landing — indexable (T-053). */
 export const metadata: Metadata = {
-  title: "Ранний доступ · Тихий напарник",
+  title: "Ранний доступ — Тихий напарник",
   description:
-    "PMBOK 7 co-pilot для PM в агентстве: DomainRadar, HealthCommentary, без экзамена PMP. Запишитесь в waitlist.",
+    "Один экран — здоровье проекта. Запишитесь в waitlist для PM в агентстве и SMB.",
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "Тихий напарник — здоровье проекта без экзамена PMP",
+    title: "Ранний доступ — Тихий напарник",
     description:
-      "8 доменов PMBOK 7 на одном экране. AI co-pilot для PM агентств и SMB. Ранний доступ.",
+      "Один экран — здоровье проекта. DomainRadar по 8 доменам PMBOK 7, AI co-pilot без экзамена PMP.",
     url: `${SITE_URL}/waitlist`,
     siteName: "Тихий напарник",
     locale: "ru_RU",
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Тихий напарник — PMBOK 7 co-pilot",
+    title: "Ранний доступ — Тихий напарник",
     description:
       "DomainRadar + HealthCommentary для PM. Не сертификация PMI — инструмент для реальных проектов.",
   },

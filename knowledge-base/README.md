@@ -9,3 +9,5 @@ Product-specific specs live in subprojects:
 | iGaming BiJi | [`iGaming BiJi/knowledge-base/`](../iGaming%20BiJi/knowledge-base/) |
 
 Root orchestration: [`../orchestration-queue.md`](../orchestration-queue.md).
+
+Agent router: [`INDEX.md`](./INDEX.md). Context engineering (Product Map): [`context-engineering-productmap.md`](./context-engineering-productmap.md).

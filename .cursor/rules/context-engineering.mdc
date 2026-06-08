@@ -1,0 +1,16 @@
+---
+description: Context engineering — git as agent environment, attention budget, fix correct layer
+alwaysApply: true
+---
+
+# Context Engineering
+
+Git is the agent environment — not chat stuffing.
+
+- **Repo-first:** `knowledge-base/`, `.cursor/rules/`, and `orchestration-queue.md` are canonical context; vendor/IDE memory is cache, not source of truth.
+- **Attention budget:** every context line must earn its place; prefer minimal high-signal sets over dumping specs into chat.
+- **Linking beats paste:** use `@knowledge-base/...`, `@docs/...`, and `@.cursor/rules/...` instead of copying long content into prompts.
+- **Four layers:** facts → knowledge-base; stable behavior → rules; current task → queue + branch; tone prefs → user rules.
+- **Friction-driven fix:** when output is wrong, stale, or generic — diagnose the gap and update the **right layer** (KB, rule, skill, or queue AC), not re-prompt alone.
+
+See `@knowledge-base/context-engineering-productmap.md` and `@knowledge-base/INDEX.md` for full principles and routing.

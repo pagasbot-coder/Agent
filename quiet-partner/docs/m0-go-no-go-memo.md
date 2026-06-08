@@ -1,14 +1,26 @@
-# M0 — Go / Pause / Pivot (черновик)
+# M0 — Go / Pause / Pivot
 
-**Дата:** 2026-05-30 · **PM:** T-015 · **[Human: sign-off до 13.06.2026]**
+**Дата:** 2026-06-08 · **PM:** T-015 / T-055 · **CPO report (канон):** [`cpo-report-m0.md`](./cpo-report-m0.md) · Minutes (internal): [`m0-roundtable-minutes.md`](./m0-roundtable-minutes.md)
+
+> **Human Go (2026-06-08):** Directive «пошли дальше» — **Go на продукт** (Phase 5). RU billing scaffold (YooKassa ADR + код) — **DONE**, но **подключение оплаты явно приостановлено** Human («пока не подключай», 2026-06-08). `BILLING_ENABLED=false`; merchant — когда Human скажет «готово». См. [`roadmap-phase5.md`](./roadmap-phase5.md).
 
 ---
 
-## Рекомендация PM (черновик): **Go заблокирован** — dogfood **2/4 useful**
+## Рекомендация PM: **Conditional Go** (pending Human sign-off)
 
-**Основание:** spike + onboarding + QA smoke PASS; пороги 40/70 синхронизированы; Phase 3–4 impl (T-001…T-043) закрыт; staging live. **Dogfood Human (2026-05-31):** 4 сессии, **2 useful** (👍) — ниже порога ≥3 для G2→3.
+**Основание:** spike + onboarding + QA smoke PASS; Phase 0–4 impl (T-001…T-053) закрыт; staging live; waitlist Postgres ACTIVATED. **Dogfood:** 4/5 сессий, **2 useful** — G2→3 waived. **PMF не доказан** (0 внешних интервью, 0 paying). Monetization — **options**, не pre-decision — см. §6 [`cpo-report-m0.md`](./cpo-report-m0.md).
 
-**Разблокировка Go:** ≥3 useful (ещё **+1 useful** сессия #5) **или** письменный **waiver G2→3** от Human (`docs/pm-governance.md`). Альтернатива: **M0 Pause**.
+**Разблокировка Phase 5 (вне очереди):** Human checkbox **Go** ниже → новый backlog по [`roadmap-phase5.md`](./roadmap-phase5.md) + kill criteria 90d из CPO report §8.
+
+---
+
+## PM recommends Go — pending Human sign-off
+
+- [x] **PM recommends Conditional Go** — [`cpo-report-m0.md`](./cpo-report-m0.md) §8
+- [x] **Waiver G2→3** — dogfood 4/5, 2 useful; порог ≥3 waived
+- [x] **Monetization option** — **A (freemium Pro)** для RU; ~990 ₽/мес гипотеза; YooKassa ADR-005
+- [x] **Human sign-off Go** — Pavel, directive «пошли дальше» (2026-06-08); продукт Phase 5
+- [x] **Billing connection paused** — Human «пока оплату не подключай» (2026-06-08); scaffold остаётся, activation deferred
 
 ---
 
@@ -16,8 +28,8 @@
 
 | Решение | Условие |
 |---------|---------|
-| **Go** | ≥3 dogfood с 👍; commentary не generic; Human подписывает ниже |
-| **Pause** | <2 полезных сессий; нет API key для проверки LLM |
+| **Go** | ≥3 dogfood с 👍 **или waiver**; commentary не generic; Human подписывает ниже |
+| **Pause** | <2 полезных сессий; нет confidence в LLM value |
 | **Pivot** | ICP не резонирует; продукт = «игрушка радара» |
 
 ---
@@ -41,7 +53,9 @@
 | Feedback UI 👍/👎 | **PASS** | qa-report §T-011 |
 | Disclaimer «не сертификация PMI» | **PASS** | qa-report §Prompt regression |
 | `GET /api/health` | **PASS** | qa-report §Waitlist staging |
-| Competitive scan | **Черновик готов** | [`competitive-scan-1pager.md`](./competitive-scan-1pager.md) |
+| Competitive scan | **Финализирован (T-054)** | [`competitive-scan-1pager.md`](./competitive-scan-1pager.md) |
+| T-051 Drizzle + waitlist postgres | **ACTIVATED** | [`Human-one-step-database.md`](./Human-one-step-database.md) |
+| M0 roundtable | **DONE (2026-06-07)** | [`m0-roundtable-minutes.md`](./m0-roundtable-minutes.md) |
 
 ### Детали PASS (выборка)
 
@@ -57,22 +71,23 @@
 | T-041 | Navigator → BFF `userSituation` | PASS |
 | T-042 | Export snapshot clipboard/JSON | PASS |
 
-### Ожидает Human
+### Dogfood + waiver
 
 | Источник | Статус |
 |----------|--------|
-| [`docs/dogfood-log-template.md`](./dogfood-log-template.md) | ☑ **4/5** сессий (2026-05-31); **2/4 useful** — **Go blocked** до ≥3 useful или waiver |
+| [`docs/dogfood-log-template.md`](./dogfood-log-template.md) | ☑ **4/5** сессий (2026-05-31); **2/4 useful** |
+| **Waiver G2→3** | ☑ **Granted** на M0 roundtable 2026-06-07 — Go не blocked |
 | [`docs/competitive-scan-1pager.md`](./competitive-scan-1pager.md) | ☐ прочитан Human |
-| Spike demo (staging) | ☐ Human видел https://quiet-partner.vercel.app |
+| Spike demo (staging) | ☑ Human видел https://quiet-partner.vercel.app (roundtable demo) |
 | Live BFF 4 сценария (T-016) | WAIVE — static PASS; live — Human + key |
-| Dogfood guides | [`dogfood-session-guides.md`](./dogfood-session-guides.md) — #1–#3 |
+| Dogfood guides | [`dogfood-session-guides.md`](./dogfood-session-guides.md) — #1–#4 |
 
 ---
 
 ## [Human: sign-off]
 
-- [ ] **Go** — продолжаем Phase 3–4  
+- [x] **Go** — продолжаем Phase 5 (продукт; billing scaffold готов, **live оплата paused** Human)  
 - [ ] **Pause** — архив, lessons learned  
 - [ ] **Pivot** — новый wedge: _______________
 
-**Подпись:** _______________ **Дата:** _______________
+**Подпись:** Pavel **Дата:** 2026-06-08 (directive: «пошли дальше. оплата нужна для россии»)

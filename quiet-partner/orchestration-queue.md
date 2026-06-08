@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-06-07 (T-044…T-046 **DONE** — waitlist API stub, LS migrate doc, QA Phase 5 prep)
+**Последнее обновление:** 2026-06-08 (billing activation **deferred** Human «пока не подключать»; T-069 → BACKLOG; scaffold T-064…T-068 сохранён)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -90,9 +90,9 @@
 
 ---
 
-## Backlog (post-M0 — activation Human MUST)
+## Backlog (post-M0 — **очередь закрыта 2026-06-08**)
 
-> PM groom 2026-06-07 sprint 3. **T-044…T-046 DONE** (safe OFF-by-default). Live DB / AUTH / Redis / Listmonk — Human MUST. Dogfood G2→3 open (4/5, 2 useful).
+> PM groom 2026-06-07 sprint 3. **T-044…T-046 DONE** (safe OFF-by-default). **Human directive 2026-06-08:** все оставшиеся BACKLOG → **CANCELLED** (scope closed / deferred post-M0). Phase 5 work — вне текущей очереди; см. [`docs/roadmap-phase5.md`](docs/roadmap-phase5.md), [`docs/cpo-report-m0.md`](docs/cpo-report-m0.md).
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Notes |
 |----|--------|------|--------|-----------|-------------|----------|-------|
@@ -100,11 +100,32 @@
 | T-045 | localStorage → server migrate design + env flag | PM + Developer | DONE | P1 | T-034 | `@docs/localstorage-migrate-phase5.md` | `MIGRATE_LOCALSTORAGE_ON_LOGIN=false` |
 | T-046 | QA Phase 5 prep checklist | QA | DONE | P0 | T-035, T-036, T-044 | `@docs/qa-phase5-prep.md` | AUTH/Redis/DB OFF smoke |
 | T-047 | ADR-004 DB host draft (P5-ADR-2 Neon lean) | IT-Architect | DONE | P1 | T-034 | `@knowledge-base/adr-004-db-host-phase5.md` | Draft; Human picks Neon/Supabase |
-| T-048 | PostHog VPS deploy + Vercel keys | DevOps | BACKLOG | P2 | M0 Go | `@docs/posthog-self-host.md` | Human OPTIONAL |
-| T-049 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | BACKLOG | P1 | staging key | `@docs/prompt-regression-T-016.md` | Static PASS done |
-| T-050 | Dogfood session **#5** (+1 useful) **или** waiver G2→3 | Human + PM | BACKLOG | P0 | T-014 | `@docs/dogfood-session-guides.md` | 4/5 done, 2 useful — Human only |
-| T-051 | Drizzle migrate + waitlist `postgres` backend | Developer | DONE | P1 | T-047 | `@lib/db/` `drizzle/` | Drizzle client; waitlist_signups postgres; db:push runbook; noop default; build/lint PASS |
-| T-052 | `POST /api/projects/migrate-from-local` | Developer | BACKLOG | P2 | T-045, AUTH on | `@docs/localstorage-migrate-phase5.md` | BLOCKED |
+| T-048 | PostHog VPS deploy + Vercel keys | DevOps | CANCELLED | P2 | M0 Go | `@docs/posthog-self-host.md` | **Deferred post-M0** — Human OPTIONAL; runbook T-031 готов |
+| T-049 | Live LLM prompt regression (4 scenarios) | Senior PM + QA | CANCELLED | P1 | staging key | `@docs/prompt-regression-T-016.md` | **Deferred post-M0** — static PASS (T-016); live не прогонялся |
+| T-050 | Dogfood session **#5** (+1 useful) **или** waiver G2→3 | Human + PM | CANCELLED | P0 | T-014 | `@docs/dogfood-session-guides.md` | **Waived** — G2→3 на roundtable 2026-06-07; #5 optional |
+| T-051 | Drizzle migrate + waitlist `postgres` backend | Developer | DONE | P1 | T-047 | `@lib/db/` `drizzle/` | Neon HTTP; `db:push`; health postgres; **activation DONE** 2026-06-07 |
+| T-052 | `POST /api/projects/migrate-from-local` | Developer | CANCELLED | P2 | T-045, AUTH on | `@docs/localstorage-migrate-phase5.md` | **Deferred Phase 5** — design T-045 готов; код не реализован |
+| T-053 | Landing SEO meta + OG (`/`, `/waitlist`) | Growth + PM | DONE | P2 | T-023 | `@docs/landing-waitlist-one-pager.md` §SEO | meta/OG; robots; sitemap; build/lint PASS |
+| T-054 | Competitive scan finalize для M0 | PM | DONE | P1 | T-015 | `@docs/competitive-scan-1pager.md` | Финализирован; evidence в M0 memo |
+| T-055 | M0 memo sign-off checkbox (Human only) | PM | DONE | P0 | T-015 | `@docs/m0-go-no-go-memo.md` | Checkbox готов; admin closure 2026-06-08 |
+| T-056 | Auth activation runbook (docs only) | PM | DONE | P1 | T-035 | `@docs/auth-activation-runbook.md` | Env contract + smoke + rollback; AUTH OFF |
+| T-057 | Auth activation QA checklist extension | QA | CANCELLED | P2 | T-056, AUTH on | `@docs/auth-activation-runbook.md` | **Deferred Phase 5** — §P5-A* при AUTH activation |
+| T-058 | Redis prod activation runbook | DevOps | CANCELLED | P2 | T-036 | `@docs/redis-rate-limit-T-036.md` | **Superseded** — activation в T-036 runbook |
+| T-059 | Market research Phase 4 (TAM/SAM/SOM, competitors) | SME + PM | DONE | P1 | T-054 | `@docs/market-research-phase4.md` | M0 Block 0 pre-read; refs competitive-scan |
+| T-060 | Financial model M0 (token cost, break-even, LTV/CAC) | SME + PM | DONE | P1 | T-059 | `@docs/financial-model-m0.md` | Napkin model; +20% API sensitivity |
+| T-061 | GTM roundtable brief (channels, AARRR, 90d hypotheses) | Growth | DONE | P1 | T-019, T-053 | `@docs/gtm-roundtable-brief.md` | Block 2 co-lead with SME |
+| T-062 | M0 roundtable execution (invite + facilitation) | PM + Human | DONE | P0 | T-059…T-061 | `@docs/m0-roundtable-agenda.md` `@docs/m0-roundtable-minutes.md` | Async Muster 2026-06-07; **Go + waiver G2→3**; minutes published |
+| T-063 | Monetization implementation (auth + billing groom) | PM + Growth + Developer | CANCELLED | P1 | M0 Go sign-off | `@docs/m0-roundtable-minutes.md` `@docs/financial-model-m0.md` | Superseded T-064…T-071 (RU YooKassa path) |
+| T-064 | ADR payments Russia (YooKassa primary) | IT-Architect | DONE | P0 | Human Go | `@knowledge-base/adr-003-payments-russia.md` | ADR-005 Accepted 2026-06-08 |
+| T-065 | Billing lib + schema + API stub | Developer | DONE | P0 | T-064 | `@lib/billing/` `@app/api/billing/` | OFF default; build PASS |
+| T-066 | Billing Russia runbook | PM | DONE | P1 | T-064 | `@docs/billing-russia-runbook.md` | Human merchant steps RU |
+| T-067 | M0 Human Go + pm-status v4.1 | PM | DONE | P0 | Human directive | `@docs/m0-go-no-go-memo.md` | «пошли дальше» 2026-06-08 |
+| T-068 | Waitlist RU pricing copy | Developer | DONE | P2 | T-065 | `@app/waitlist/page.tsx` | Pro от 990 ₽/мес (гипотеза) |
+| T-069 | Webhook persist + IP verify (YooKassa) | Developer | BACKLOG | P0 | T-065, db:push | `@app/api/billing/webhook/route.ts` | **Human: пока не подключать** (2026-06-08); scaffold сохранён |
+| T-070 | AUTH activation + checkout UI | Developer | BACKLOG | P1 | T-035, T-069 | `@docs/auth-activation-runbook.md` | `/login` + pay CTA; billing activation blocked on Human |
+| T-071 | YooKassa recurring Pro subscription | Developer | BACKLOG | P2 | T-070 | ADR-005 | Автоплатежи post-MVP; blocked on Human billing go-ahead |
+
+> **Billing activation note:** T-064…T-068 (ADR, scaffold, runbook, pricing copy) **DONE**. Live merchant / webhook / checkout — **paused by Human decision**, not tech. `BILLING_ENABLED=false` until explicit «можно подключать».
 
 ---
 
@@ -662,6 +683,12 @@
 | 2026-06-07 | QA | T-046 **DONE**: `qa-phase5-prep.md`; qa-checklist §Phase 5 prep |
 | 2026-06-07 | IT-Architect | T-047 **DONE**: ADR-004 DB host draft (Neon lean) |
 | 2026-06-07 | Developer | T-051 **DONE**: `lib/db/index.ts` Neon HTTP; waitlist postgres; `drizzle/` + `db:push`; health `database_configured`; noop default |
+| 2026-06-07 | PM | Sprint A: `.env.local` + Vercel — **нет `DATABASE_URL`**; T-051 activation **BLOCKED (env)**; `docs/Human-one-step-database.md` |
+| 2026-06-07 | PM | Sprint B: T-053 READY (SEO); T-054/T-055 DONE; team-assignments + pm-status v2.5; qa-report §Phase 5 regression |
+| 2026-06-07 | PM | **Sprint 5:** T-051 activation DONE (postgres); T-053 SEO DONE; T-056 auth runbook; qa post-postgres PASS; pm-status v2.7 |
+| 2026-06-07 | PM + Muster (SME/Growth/Senior PM/QA) | **T-062 DONE:** M0 roundtable async 2026-06-07; [`m0-roundtable-minutes.md`](docs/m0-roundtable-minutes.md); **Go + waiver G2→3**; monetization $19/mo; T-063 BACKLOG |
+| 2026-06-08 | PM | **Human directive «закрывай все задачи»:** T-048, T-049, T-050, T-052, T-057, T-058, T-063 → **CANCELLED** (deferred post-M0 / waived / superseded). Очередь T-001…T-063 без открытых статусов. |
+| 2026-06-08 | PM | **Human «пока оплату не подключай»:** T-069 READY → **BACKLOG**; T-070/T-071 остаются BACKLOG. Billing scaffold (T-064…T-068) сохранён; activation blocked on Human, not tech. `BILLING_ENABLED=false`. |
 
 ---
 

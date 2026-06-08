@@ -2,7 +2,7 @@
 
 **Владелец:** QA (`@role-qa`)  
 **Проект:** `quiet-partner/`  
-**Обновлено:** 2026-05-30  
+**Обновлено:** 2026-06-07 (T-053 SEO; T-051 postgres activation PASS)  
 **Отчёт smoke:** [`docs/qa-report-phase3.md`](../docs/qa-report-phase3.md)
 
 ---
@@ -136,15 +136,28 @@
 | T-042 | §Export E1–E2 |
 | T-043 | Phase 3–4 full pass + glossary/nav doc pass |
 | T-046 | [`docs/qa-phase5-prep.md`](../docs/qa-phase5-prep.md) §P5-* Phase 5 scaffold |
+| T-053 | §SEO S1–S4 |
 
 ---
 
-## Phase 5 prep (T-046)
+## SEO (T-053)
 
 | # | Проверка | Ожидание |
 |---|----------|----------|
-| P5-A1 | `GET /api/health` | `auth_enabled: false`, `waitlist_backend: noop` |
+| S1 | `/` metadata | `title` + `description` per one-pager §SEO; `robots: noindex` |
+| S2 | `/waitlist` metadata | OG title «Ранний доступ — Тихий напарник»; `index,follow` |
+| S3 | `GET /robots.txt` | Allow `/waitlist`; disallow `/`, `/onboarding`, `/api/` |
+| S4 | `GET /sitemap.xml` | Contains `/waitlist` only |
+
+---
+
+## Phase 5 prep (T-046 / T-051)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| P5-A1 | `GET /api/health` | `auth_enabled: false`; `waitlist_backend: postgres` when activated |
 | P5-W2 | `POST /api/waitlist` | 200 registered; invalid → 400 |
+| P5-D1 | `GET /api/health` | `database_configured: true` (post T-051 activation) |
 | P5-R1 | Rate limit backend | `memory` (Redis OFF) |
 
 Полный список: [`docs/qa-phase5-prep.md`](../docs/qa-phase5-prep.md).

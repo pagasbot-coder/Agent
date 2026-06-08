@@ -2,6 +2,7 @@
 
 **Владелец:** PM (T-014)  
 **Лог:** [`docs/dogfood-log-template.md`](../docs/dogfood-log-template.md)  
+**Гайды #1–#3:** [`docs/dogfood-session-guides.md`](../docs/dogfood-session-guides.md)  
 **Длительность:** 30–45 мин на сессию
 
 > Сессии исполняет Human (Pavel). **OPTIONAL** для спринта; **≥3 useful** нужны для gate G2→3.

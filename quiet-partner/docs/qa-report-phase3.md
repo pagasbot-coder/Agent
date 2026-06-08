@@ -215,13 +215,45 @@
 
 **Вердикт Phase 3–4 impl (без Phase 5):** **PASS** — остаётся Human OPTIONAL: dogfood, M0 sign-off, PostHog VPS.
 
+**Dogfood guides:** [`dogfood-session-guides.md`](./dogfood-session-guides.md) · M0 evidence: [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md)
+
+---
+
+## Glossary & navigator compile (T-037, T-038, T-041) — doc pass 2026-06-07
+
+| ID | Проверка | Статус | Примечание |
+|----|----------|--------|------------|
+| G1–G3 | Dashboard glossary + tooltips | **PASS*** | *code review T-037; manual dogfood §session #2* |
+| N1–N2 | Navigator panel S1–S4 static | **PASS** | T-038 collapsible panel |
+| N3–N4 | Navigator → BFF wiring | **PASS** | T-041; qa-checklist §Navigator |
+| E1–E2 | Export snapshot | **PASS** | T-042 |
+
 ---
 
 ## Рекомендации Human (dogfood only)
 
-1. `npm run dev` → http://localhost:3000 (или свободный порт)
-2. DevTools → удалить `quiet-partner-v1` → **reload** → проверить баннер.
-3. Пройти онбординг до конца → redirect `/`, радар обновился.
-4. `.env.local` без ключа → fallback; с ключом → живой LLM.
-5. Feedback + «Отметить действие» → перезагрузка → счётчики сохранены.
-6. **3–5 dogfood сессий** (T-014) для закрытия G2→3.
+1. `npm run dev` → http://localhost:3000 (или staging)
+2. Следовать [`dogfood-session-guides.md`](./dogfood-session-guides.md) — сессии #1–#3
+3. DevTools → удалить `quiet-partner-v1` → **reload** → проверить баннер (сессия #1 only)
+4. `.env.local` без ключа → fallback; с ключом → живой LLM (сессия #2)
+5. Feedback + «Отметить действие» → перезагрузка → счётчики сохранены
+6. **3–5 dogfood сессий** (T-014) для закрытия G2→3 → log → M0
+
+---
+
+## Phase 5 regression (T-046 / T-051) — 2026-06-07
+
+**Агент:** PM + QA doc pass  
+**Среда:** Postgres/waitlist **ACTIVATED** prod; `AUTH_ENABLED=false`; staging https://quiet-partner.vercel.app  
+**Полный чеклист:** [`qa-phase5-prep.md`](./qa-phase5-prep.md)
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| `AUTH_ENABLED=false` default | **PASS** | `/api/auth/*` 503 when off |
+| `DATABASE_URL` + postgres waitlist | **PASS** | health `database_configured: true`, `waitlist_backend: postgres` |
+| Redis OFF (`REDIS_URL` empty) | **PASS** | in-memory rate limit fallback |
+| T-051 Drizzle + activation | **PASS** | Block A Human DONE; `db:push` + `WAITLIST_BACKEND=postgres` |
+| T-053 SEO (meta/OG/robots/sitemap) | **PASS** | `/waitlist` index; `/` noindex |
+| `npm run build` / `lint` | **PASS** | post T-053 |
+
+**Вердикт Phase 5 scaffold + DB:** **PASS** — auth activation ждёт Human ([`auth-activation-runbook.md`](./auth-activation-runbook.md)).

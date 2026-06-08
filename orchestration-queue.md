@@ -59,7 +59,7 @@
 | T-013 | GitHub push + Vercel deploy | Developer | BLOCKED | P0 | T-012 | `docs/GITHUB-DEPLOY.md` | commit ba47cdc; build OK; блокер: `gh auth login` + `vercel login` (репо на GitHub не создан) |
 | T-017 | iGaming BiJi Phase 2: product-brief Ops Scan + problem interviews | PM | DONE | P0 | — | `iGaming BiJi/knowledge-base/product-brief.md` `iGaming BiJi/knowledge-base/problem-interviews-script.md` | Variant A primary, C fallback; см. `iGaming BiJi/orchestration-queue.md` |
 | T-018 | iGaming BiJi Phase 2: ADR-001 data ingestion + internet research | IT-Architect | DONE | P0 | T-017 | `iGaming BiJi/knowledge-base/adr-001-data-ingestion.md` `iGaming BiJi/knowledge-base/phase2-internet-research.md` | CSV-first + Affilka Reports API v0; T-003 research pack ready |
-| T-019 | **Quiet Partner** — PM-led; G2→3 open | PM | DONE | P1 | — | [`quiet-partner/orchestration-queue.md`](quiet-partner/orchestration-queue.md) | **DONE:** T-001…T-043 Phase 3–4 impl; staging PASS; **Human gate:** dogfood 0/5, M0 unsigned; Phase 5 BLOCKED; prep 2026-06-07: M0 evidence, dogfood guides, BACKLOG T-033…T-047 |
+| T-019 | **Quiet Partner** — PM-led; G2→3 open | PM | DONE | P1 | — | [`quiet-partner/orchestration-queue.md`](quiet-partner/orchestration-queue.md) | **DONE:** T-001…T-051 code; staging PASS; dogfood 4/5 (2 useful); T-051 activation BLOCKED (env); T-053…T-055 groom; Human: `Human-one-step-database.md` |
 
 ---
 

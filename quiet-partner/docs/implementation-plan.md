@@ -413,9 +413,10 @@ Vertical slice: **DomainRadar → Zustand → `/api/advisor/health-commentary` �
 
 ## Ближайшие задачи очереди
 
-1. **T-047** Human — dogfood #5 или waiver G2→3
-2. **T-048** (post-M0) — Drizzle migrate + waitlist `postgres` backend
-3. **T-049** (post-M0) — `MIGRATE_LOCALSTORAGE_ON_LOGIN` route
+1. **Human** — dogfood #5 или waiver G2→3; M0 sign-off
+2. **Human** — auth activation when ready ([`auth-activation-runbook.md`](./auth-activation-runbook.md))
+3. **T-052** — migrate-from-local API (BLOCKED until AUTH on)
+4. **T-057** — auth QA checklist extension (BACKLOG)
 
 ---
 

@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
 
 import { AnalyticsProvider } from "@/components/AnalyticsProvider";
+import { SITE_URL } from "@/lib/site";
 
 import "./globals.css";
 
-const SITE_URL = "https://quiet-partner.vercel.app";
-
+/** Dashboard `/` — noindex until public beta (T-053). */
 export const metadata: Metadata = {
-  title: "Тихий напарник · Quiet Partner",
+  title: "Тихий напарник — здоровье проекта за один экран",
   description:
-    "PMBOK 7 co-pilot: DomainRadar, health commentary, onboarding — без иллюзии сертификации.",
+    "Co-pilot для PM: DomainRadar по 8 доменам PMBOK 7, AI-комментарий без экзамена PMP.",
   metadataBase: new URL(SITE_URL),
+  robots: { index: false, follow: false },
   openGraph: {
-    title: "Тихий напарник · Quiet Partner",
+    title: "Тихий напарник — co-pilot для PM",
     description:
-      "PMBOK 7 co-pilot: DomainRadar, HealthCommentary, onboarding — co-pilot для PM, не сертификация PMI.",
+      "Co-pilot для PM: DomainRadar по 8 доменам PMBOK 7, AI-комментарий без экзамена PMP.",
     url: SITE_URL,
     siteName: "Тихий напарник",
     locale: "ru_RU",
@@ -22,9 +23,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Тихий напарник · Quiet Partner",
+    title: "Тихий напарник — co-pilot для PM",
     description:
-      "PMBOK 7 co-pilot для PM агентств: 8 доменов, AI questions-first, без экзамена PMP.",
+      "DomainRadar + HealthCommentary для PM агентств. Не сертификация PMI — инструмент для реальных проектов.",
   },
 };
 
