@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-06-08 (billing activation **deferred** Human «пока не подключать»; T-069 → BACKLOG; scaffold T-064…T-068 сохранён)
+**Последнее обновление:** 2026-07-21 (эпик «Фокус на сегодня» T-090…T-099 из PRD + правило копирайтера: отчёты на русском)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -22,8 +22,9 @@
 | UI/UX | `muster-ui-ux` | «Role: UI/UX» | `@role-ui-ux` |
 | QA | `muster-qa` | «Role: QA» | `@role-qa` |
 | Growth | `muster-growth-marketer` | «Role: Growth» | `@role-growth-marketer` |
+| **Chief Editor** | `muster-copywriter` | «Role: Copywriter» / «Роль: Копирайтер» | `@role-copywriter` |
 
-Контекст: `@knowledge-base/product-brief.md`, `@knowledge-base/pmbok-domain-playbook.md`, `@docs/implementation-plan.md`, `@docs/technical-specification.md`.
+Контекст: `@knowledge-base/product-brief.md`, `@knowledge-base/pmbok-domain-playbook.md`, `@docs/implementation-plan.md`, `@docs/technical-specification.md`, эпик фокуса: `@docs/prd-focus-today.md`.
 
 ---
 
@@ -126,6 +127,115 @@
 | T-071 | YooKassa recurring Pro subscription | Developer | BACKLOG | P2 | T-070 | ADR-005 | Автоплатежи post-MVP; blocked on Human billing go-ahead |
 
 > **Billing activation note:** T-064…T-068 (ADR, scaffold, runbook, pricing copy) **DONE**. Live merchant / webhook / checkout — **paused by Human decision**, not tech. `BILLING_ENABLED=false` until explicit «можно подключать».
+
+---
+
+## Эпик: Фокус на сегодня (2026-07-21)
+
+> Источник: [`docs/prd-focus-today.md`](docs/prd-focus-today.md) · live Mode Hub на [quiet-partner.vercel.app](https://quiet-partner.vercel.app/) · Growth-прогон: wedge «один фокус на день».  
+> **Правило:** `didactic-doodle` не менять; skills/KB уже в monorepo `Agent`.
+
+| ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
+|----|--------|------|--------|-----------|-------------|-------------------|-----------|
+| T-090 | Зафиксировать PRD «Фокус на сегодня» + DoR | PM | READY | P0 | — | `@docs/prd-focus-today.md` `@knowledge-base/product-brief.md` | |
+| T-091 | UX: карточка фокуса на hub / radar / stages | UI/UX | READY | P0 | T-090 | `@docs/prd-focus-today.md` `@docs/ux-reference-productmap.md` | |
+| T-092 | Модель `focusDay` в project store + persist | Developer | READY | P0 | T-090 | `@lib/store/useProjectStore.ts` `@docs/prd-focus-today.md` | |
+| T-093 | UI карточки фокуса на Mode Hub | Developer | BACKLOG | P0 | T-091, T-092, T-096 | `@components/ModeHub.tsx` | |
+| T-094 | Синхрон фокуса в `/radar` и `/stages` + CTA «Открыть в пульте» | Developer | BACKLOG | P0 | T-093 | `@app/radar/` `@app/stages/` | |
+| T-095 | PostHog: `focus_set`, `focus_opened_in_stages`, `focus_done` | Developer | BACKLOG | P1 | T-094, T-030 | `@lib/analytics/posthog.ts` | |
+| T-096 | RU-микрокопия карточки фокуса (режим «Для UI») | Copywriter | READY | P0 | T-090 | `@docs/prd-focus-today.md` `@role-copywriter` | |
+| T-097 | Waitlist/GTM: усилить «фокус на день» + обновить competitive scan | Growth | READY | P1 | T-090 | `@app/waitlist/page.tsx` `@docs/competitive-scan-1pager.md` | |
+| T-098 | QA: чеклист и smoke сценария фокуса | QA | BACKLOG | P0 | T-094, T-095 | `@knowledge-base/qa-checklist.md` | |
+| T-099 | Dogfood: 3 сессии «понял фокус дня?» + заметки | PM + Human | BACKLOG | P1 | T-098 | `@docs/dogfood-log-template.md` | |
+| T-100 | Редактура PRD/отчёта эпика на русском (для команды) | Copywriter | READY | P2 | T-090 | `@docs/prd-focus-today.md` | |
+
+### Детали задач эпика
+
+#### T-090 — PRD + DoR (PM)
+
+**AC:**
+- [ ] `docs/prd-focus-today.md` согласован с live Mode Hub
+- [ ] Out of scope и метрики явны
+- [ ] Зависимости T-091…T-099 без дыр
+- [ ] Notes: фаза Generation→Delivery
+
+#### T-091 — UX карточки (UI/UX)
+
+**AC:**
+- [ ] Схема размещения: hub (обязательно), radar, stages
+- [ ] Состояния: пусто / из радара / вручную / сделано
+- [ ] Mobile: одна колонка, без каши
+- [ ] Handoff строк → T-096
+
+#### T-092 — Store (Developer)
+
+**AC:**
+- [ ] Тип `focusDay` + persist в project storage
+- [ ] API store: set / clear / markDone
+- [ ] Без утечки в server; build/lint PASS
+
+#### T-093 — Mode Hub UI (Developer)
+
+**AC:**
+- [ ] Карточка на `/` (Mode Hub) по макету T-091
+- [ ] Копирайт из T-096
+- [ ] Ручная установка фокуса
+
+#### T-094 — Синхрон режимов (Developer)
+
+**AC:**
+- [ ] Тот же focus виден в `/radar` и `/stages`
+- [ ] CTA «Открыть в пульте» (deep-link при возможности)
+- [ ] «Обновить с радара» не затирает ручной фокус без подтверждения (или явный UX)
+
+#### T-095 — Analytics (Developer)
+
+**AC:**
+- [ ] События `focus_set`, `focus_opened_in_stages`, `focus_done` (OFF default PostHog ok)
+- [ ] Без PII в props
+
+#### T-096 — Микрокопия (Copywriter)
+
+**AC:**
+- [ ] Режим **«Для UI/Интерфейса»**, язык **русский**
+- [ ] Заголовок, пустое состояние, CTA, «Сделано сегодня», ошибка/подтверждение смены
+- [ ] Грамотные цельные предложения; без канцелярита ИИ
+- [ ] Согласование с UI/UX (T-091)
+
+#### T-097 — Growth (Growth)
+
+**AC:**
+- [ ] Waitlist copy усиливает «один фокус на день» без смены ICP
+- [ ] `competitive-scan-1pager.md`: строка про Mode Hub + фокус
+- [ ] Не позиционировать как work OS / Jira
+
+#### T-098 — QA
+
+**AC:**
+- [ ] Чеклист: set → sync → CTA → done → persist reload
+- [ ] Smoke staging после деплоя
+- [ ] Запись в qa-report или qa-checklist
+
+#### T-099 — Dogfood (PM + Human)
+
+**AC:**
+- [ ] 3 сессии по шаблону dogfood
+- [ ] Вердикт: «понял фокус дня?» да/нет + цитата
+
+#### T-100 — Редактура отчёта (Copywriter)
+
+**AC:**
+- [ ] Вычитать `prd-focus-today.md` **на русском**: ясные предложения, TL;DR, иерархия
+- [ ] Факты и AC не менять
+- [ ] Режим «Для команды»
+
+---
+
+## Журнал (фрагмент)
+
+| Дата | Событие |
+|------|---------|
+| 2026-07-21 | Эпик «Фокус на сегодня» T-090…T-100 из live-прогона PM/Growth. Copywriter: отчёты Human — только русский, грамотные предложения. |
 
 ---
 
