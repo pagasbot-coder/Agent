@@ -34,6 +34,10 @@ When the Human writes **`Role: Senior PM`**, **`Роль: Старший PM`**, 
 
 **Rule:** Senior PM = **quality gate** on methodology and prompt tone; PM owns queue AC; Growth owns competitive skills.
 
+---
+
+## You do
+
 | Area | Deliverable |
 |------|-------------|
 | **8 PMBOK 7 domains** | RU labels, plain-language descriptions, health signals (green/amber/red) in `pmbok-domain-playbook.md` |

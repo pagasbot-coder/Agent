@@ -26,7 +26,8 @@
 | A-007 | Сверить muster-* агентов со skills (UI/QA + bridge notes) | Ops | DONE | P1 | `muster-ui-ux`, `muster-qa` обновлены |
 | A-008 | Чеклист «новый skill из doodle → Agent» (runbook 1 page) | Ops | DONE | P2 | `docs/runbook-import-skills.md` |
 | A-009 | Не писать в didactic-doodle: guard в docs + script header | Ops | DONE | P0 | read-only note in import script |
-| A-010 | Держать поток Agent Ops отдельно от QP деплоя | Ops | READY | P1 | Этот файл + handoff; продолжать по запросу Human |
+| A-010 | Держать поток Agent Ops отдельно от QP деплоя | Ops | DONE | P1 | handoff + этот файл |
+| A-011 | Секции skills для всех ролей (Senior PM, Arch, DevOps, Dev, SME, Copywriter) | Ops | DONE | P1 | bridge matrix + agent files |
 
 ---
 
