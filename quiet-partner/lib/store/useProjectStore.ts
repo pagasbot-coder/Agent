@@ -12,6 +12,17 @@ import {
   type DomainId,
   type DomainStatus,
 } from "@/lib/domains";
+import {
+  getFocusQuestion,
+  getWeekKey,
+  pickWeakestDomain,
+  type FocusWeekState,
+} from "@/lib/focusWeek";
+import type { ProjectPrepChecklist } from "@/lib/onboarding";
+import {
+  buildProjectSnapshot,
+  type ProjectSnapshot,
+} from "@/lib/exportProjectSnapshot";
 
 export type DomainHealth = {
   id: DomainId;
@@ -49,9 +60,39 @@ export type NavigatorContext = {
   userInput: string;
 };
 
+export type { FocusWeekState };
+
+/** T-082 — max 3 stakeholder rows (local only). */
+export type StakeholderLite = {
+  id: string;
+  who: string;
+  expectation: string;
+  lastContactAt?: string;
+  contactStale?: boolean;
+};
+
+/** T-083 — weekly snapshot reference (not full JSON blob). */
+export type WeeklySnapshotRef = {
+  exportedAt: string;
+  overallHealth: number;
+  weakestDomainId: DomainId;
+};
+
+export type RetentionReminder = {
+  nextCheckInAt?: string;
+  lastSnapshotAt?: string;
+  snoozedUntil?: string;
+  dismissedOverdue?: boolean;
+};
+
 type ProjectStore = {
   domains: Record<DomainId, DomainHealth>;
   projectProfile: ProjectProfile;
+  focusWeek: FocusWeekState | null;
+  projectPrepChecklist: ProjectPrepChecklist;
+  stakeholdersLite: StakeholderLite[];
+  weeklySnapshots: WeeklySnapshotRef[];
+  retentionReminder: RetentionReminder;
   auditLog: AuditLogEntry[];
   commentaryFeedback: CommentaryFeedbackCounts;
   /** Session-only navigator scenario for BFF (not persisted). */
@@ -70,11 +111,23 @@ type ProjectStore = {
   hydrateFromOnboarding: (
     scores: Partial<Record<DomainId, number>>,
     profile?: Pick<ProjectProfile, "name" | "deliveryApproach">,
+    prepChecklist?: ProjectPrepChecklist,
   ) => void;
+  setPrepChecklistItem: (
+    id: keyof ProjectPrepChecklist,
+    checked: boolean,
+  ) => void;
+  upsertStakeholderLite: (row: StakeholderLite) => void;
+  removeStakeholderLite: (id: string) => void;
+  recordWeeklySnapshot: () => ProjectSnapshot;
+  snoozeRetentionReminder: (days?: number) => void;
+  dismissRetentionOverdue: () => void;
   setScore: (id: DomainId, value: number) => void;
   recordCommentaryFeedback: (kind: "useful" | "not_useful") => void;
   setNavigatorContext: (context: NavigatorContext) => void;
   clearNavigatorContext: () => void;
+  ensureFocusWeek: () => void;
+  markFocusDone: () => void;
 };
 
 function clampScore(value: number): number {
@@ -104,6 +157,11 @@ export const useProjectStore = create<ProjectStore>()(
   persist(
     (set, get) => ({
       domains: buildInitialDomains(MOCK_DOMAIN_SCORES),
+      focusWeek: null,
+      projectPrepChecklist: {},
+      stakeholdersLite: [],
+      weeklySnapshots: [],
+      retentionReminder: {},
       projectProfile: {
         name: "Пилотный проект",
         deliveryApproach: "hybrid",
@@ -183,7 +241,7 @@ export const useProjectStore = create<ProjectStore>()(
       getRedDomains: () =>
         get().getDomainList().filter((d) => d.status === "red"),
 
-      hydrateFromOnboarding: (scores, profile) => {
+      hydrateFromOnboarding: (scores, profile, prepChecklist) => {
         set((state) => {
           const next = { ...state.domains };
           for (const [id, value] of Object.entries(scores) as [
@@ -201,9 +259,91 @@ export const useProjectStore = create<ProjectStore>()(
               ...profile,
               updatedAt: new Date().toISOString(),
             },
+            projectPrepChecklist: prepChecklist ?? state.projectPrepChecklist,
           };
         });
         get().logAction("onboarding_hydrate", "Scores from onboarding wizard");
+      },
+
+      setPrepChecklistItem: (id, checked) => {
+        set((state) => ({
+          projectPrepChecklist: {
+            ...state.projectPrepChecklist,
+            [id]: checked,
+          },
+        }));
+      },
+
+      upsertStakeholderLite: (row) => {
+        set((state) => {
+          const existing = state.stakeholdersLite.find((s) => s.id === row.id);
+          const next =
+            existing ?
+              state.stakeholdersLite.map((s) => (s.id === row.id ? row : s))
+            : state.stakeholdersLite.length < 3 ?
+              [...state.stakeholdersLite, row]
+            : state.stakeholdersLite;
+          return { stakeholdersLite: next };
+        });
+        get().logAction("stakeholder_lite_save", row.who.slice(0, 40));
+      },
+
+      removeStakeholderLite: (id) => {
+        set((state) => ({
+          stakeholdersLite: state.stakeholdersLite.filter((s) => s.id !== id),
+        }));
+      },
+
+      recordWeeklySnapshot: () => {
+        const snapshot = buildProjectSnapshot(
+          get().domains,
+          get().projectProfile,
+          get().commentaryFeedback,
+        );
+        const scores = Object.fromEntries(
+          DOMAIN_IDS.map((id) => [id, get().domains[id].value]),
+        ) as Record<DomainId, number>;
+        const weakestDomainId = pickWeakestDomain(scores);
+        const ref: WeeklySnapshotRef = {
+          exportedAt: snapshot.exportedAt,
+          overallHealth: get().getOverallHealth(),
+          weakestDomainId,
+        };
+        const nextCheckIn = new Date();
+        nextCheckIn.setDate(nextCheckIn.getDate() + 7);
+
+        set((state) => ({
+          weeklySnapshots: [ref, ...state.weeklySnapshots].slice(0, 12),
+          retentionReminder: {
+            ...state.retentionReminder,
+            lastSnapshotAt: snapshot.exportedAt,
+            nextCheckInAt: nextCheckIn.toISOString(),
+            dismissedOverdue: false,
+          },
+        }));
+        get().logAction("weekly_snapshot", `overall ${ref.overallHealth}`);
+        return snapshot;
+      },
+
+      snoozeRetentionReminder: (days = 7) => {
+        const snoozedUntil = new Date();
+        snoozedUntil.setDate(snoozedUntil.getDate() + days);
+        set((state) => ({
+          retentionReminder: {
+            ...state.retentionReminder,
+            snoozedUntil: snoozedUntil.toISOString(),
+            dismissedOverdue: true,
+          },
+        }));
+      },
+
+      dismissRetentionOverdue: () => {
+        set((state) => ({
+          retentionReminder: {
+            ...state.retentionReminder,
+            dismissedOverdue: true,
+          },
+        }));
       },
 
       recordCommentaryFeedback: (kind) => {
@@ -240,6 +380,49 @@ export const useProjectStore = create<ProjectStore>()(
       clearNavigatorContext: () => {
         set({ navigatorContext: null });
       },
+
+      ensureFocusWeek: () => {
+        const currentKey = getWeekKey();
+        const existing = get().focusWeek;
+        if (existing?.weekKey === currentKey) return;
+
+        const scores = Object.fromEntries(
+          DOMAIN_IDS.map((id) => [id, get().domains[id].value]),
+        ) as Record<DomainId, number>;
+        const domainId = pickWeakestDomain(scores);
+
+        set({
+          focusWeek: {
+            weekKey: currentKey,
+            domainId,
+            questionRu: getFocusQuestion(domainId),
+          },
+        });
+      },
+
+      markFocusDone: () => {
+        const focus = get().focusWeek;
+        if (!focus || focus.markedDoneAt) return;
+
+        const domain = get().domains[focus.domainId];
+        const bumped = clampScore(domain.value + 1);
+
+        set((state) => ({
+          focusWeek: {
+            ...focus,
+            markedDoneAt: new Date().toISOString(),
+          },
+          domains: {
+            ...state.domains,
+            [focus.domainId]: buildDomainHealth(focus.domainId, bumped),
+          },
+        }));
+
+        get().logAction(
+          "focus_week_done",
+          `Фокус недели (${focus.domainId}): отметил «сделал»`,
+        );
+      },
     }),
     {
       name: PROJECT_PERSIST_KEY,
@@ -247,6 +430,11 @@ export const useProjectStore = create<ProjectStore>()(
         domains: state.domains,
         projectProfile: state.projectProfile,
         commentaryFeedback: state.commentaryFeedback,
+        focusWeek: state.focusWeek,
+        projectPrepChecklist: state.projectPrepChecklist,
+        stakeholdersLite: state.stakeholdersLite,
+        weeklySnapshots: state.weeklySnapshots,
+        retentionReminder: state.retentionReminder,
       }),
     },
   ),

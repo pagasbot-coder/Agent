@@ -1,5 +1,5 @@
-import { DashboardShell } from "@/components/DashboardShell";
+import { ModeHub } from "@/components/ModeHub";
 
 export default function Home() {
-  return <DashboardShell />;
+  return <ModeHub />;
 }

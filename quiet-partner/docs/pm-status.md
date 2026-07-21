@@ -1,78 +1,51 @@
 # PM Status — Тихий напарник (Quiet Partner)
 
-**Дата:** 2026-06-08 (v4.2 — **Phase 5 started**; Human Go «пошли дальше»; **billing activation deferred**)  
+**Дата:** 2026-06-13 (v5.4 — Human shift: billing + unit cost; GTM post deferred)  
 **Владелец:** PM (muster-pm)  
-**План:** [`implementation-plan.md`](./implementation-plan.md) v1.1 + Phase 4→5 transition  
-**Очередь:** [`orchestration-queue.md`](../orchestration-queue.md) — Phase 5 billing RU (T-064…T-071)  
+**План:** [`implementation-plan.md`](./implementation-plan.md) v1.1 + [`implementation-plan-phase-book.md`](./implementation-plan-phase-book.md) (Alferov track)  
+**ТЗ book:** [`technical-specification-book-features.md`](./technical-specification-book-features.md)  
+**Очередь:** [`orchestration-queue.md`](../orchestration-queue.md) — **T-080…T-083 DONE** · **T-089 DONE**  
 **Раздача:** [`team-assignments.md`](./team-assignments.md)  
 **Governance:** [`pm-governance.md`](./pm-governance.md)  
-**ТЗ для Human (канон):** [`human-requirements-tz.md`](./human-requirements-tz.md)
+**ТЗ для Human (канон):** [`human-requirements-tz.md`](./human-requirements-tz.md)  
+**Unit cost:** [`user-unit-economics-active-user.md`](./user-unit-economics-active-user.md)  
+**Billing plan:** [`billing-activation-plan-2026-06-13.md`](./billing-activation-plan-2026-06-13.md)  
+**Daily log:** [`pm-daily-log-2026-06-13.md`](./pm-daily-log-2026-06-13.md)
 
-> **Ритм контроля:** PM обновляет этот документ **еженедельно** и на каждом phase gate (G0→1 … G4→5). **Следующий review:** при старте Phase 5 (вне текущей очереди).
+> **Ритм контроля:** PM обновляет этот документ **еженедельно** и на каждом phase gate (G0→1 … G4→5). **Следующий review:** 2026-06-20 (еженедельный).  
+> **Human directive 2026-06-13 (вечер):** **GTM LinkedIn post — NOT now**; **попробовать подключить YooKassa** (plan first); **понять cost активного пользователя** → T-089 + billing activation plan.
 
 ---
 
-## Режим PM-led (2026-05-30)
+## Режим PM-led (2026-06-13)
 
-Операционный контроль у PM ([`pm-governance.md`](./pm-governance.md)). Human — M0 sign-off, auth activation, budget/prod.  
-**Staging:** https://quiet-partner.vercel.app (T-018 DONE; T-022 staging smoke **PASS**).  
-**Postgres/waitlist:** **ACTIVATED** (T-051 Block A DONE).  
-**M0 roundtable:** **DONE** 2026-06-07 — [`m0-roundtable-minutes.md`](./m0-roundtable-minutes.md) (internal Muster).  
-**CPO report (канон):** [`cpo-report-m0.md`](./cpo-report-m0.md) — executive summary для решения Go/Pause/Pivot.
+**Режим: billing exploration + unit economics** — book features **live** на prod; G-Book-P3 **PASS**. **DeepSeek** balance $0 → fallback RU (T-086 **DEFERRED**). **GTM posting deferred** by Human. **Billing:** plan готов; код **не включаем** до «можно подключать» после прочтения плана.
+
+**Prod:** https://quiet-partner.vercel.app (book features + offline co-pilot UX).  
+**Postgres/waitlist:** **ACTIVATED** (T-051 DONE).  
+**M0 roundtable:** **DONE** 2026-06-07 — Go + waiver G2→3.  
+**Billing:** **exploration** — Human 2026-06-13; `BILLING_ENABLED=false`.
+
+---
+
+## Show & tell triggers (когда ping Human)
+
+| # | Trigger | Артефакт / условие | Ping? | Статус |
+|---|---------|-------------------|-------|--------|
+| 1 | **GTM drafts ready** | [`gtm-sprint1-drafts-T-073.md`](./gtm-sprint1-drafts-T-073.md) | ✅ DONE | **Posting DEFERRED** Human 2026-06-13 |
+| 2 | **Unit economics doc** | [`user-unit-economics-active-user.md`](./user-unit-economics-active-user.md) | ✅ DONE | **Show Pavel** — ~0,3–2 ₽/мес API |
+| 3 | **Billing activation plan** | [`billing-activation-plan-2026-06-13.md`](./billing-activation-plan-2026-06-13.md) | ✅ DONE | **Approve → T-069 READY** |
+| 4 | **T-081…T-083 shipped** | Book features prod | ✅ DONE | Show Pavel locally |
+| 5 | **T-076 live PASS** | [`prompt-regression-T-016.md`](./prompt-regression-T-016.md) §T-076 | ⬜ DEFERRED | T-086 Deferred |
+| 6 | **Book dogfood guide** | [`dogfood-book-features-guide.md`](./dogfood-book-features-guide.md) | ✅ DONE | Human 15-min walkthrough |
+| 7 | **First waitlist signup** | Postgres row #1 | ⬜ waiting | Ping when live |
+| 8 | **G-Book-P3 prod smoke** | qa-report §G-Book-P3 | ✅ PASS | — |
 
 ---
 
 ## TL;DR
 
-**Human Go** (2026-06-08, «пошли дальше»). **Phase 5 стартовал:** YooKassa ADR + billing scaffold (`lib/billing/`, `/api/billing/*`, schema) — **OFF** (`BILLING_ENABLED=false`). **Human directive 2026-06-08:** «пока оплату не подключай» — merchant YooKassa и `BILLING_ENABLED=true` **не делаем**; scaffold и runbook остаются для будущего включения. Phase 0–4 закрыты; MVP live. PMF не доказан (2/4 useful, waiver). **T-069…T-071** — BACKLOG до явного решения Human. Runbook: [`billing-russia-runbook.md`](./billing-russia-runbook.md).
-
----
-
-## Закрытие очереди — 2026-06-08
-
-| ID | Было | Стало | Причина |
-|----|------|-------|---------|
-| T-048 | BACKLOG | **CANCELLED** | PostHog VPS — deferred post-M0; runbook T-031 готов |
-| T-049 | BACKLOG | **CANCELLED** | Live LLM regression — deferred; static PASS (T-016) |
-| T-050 | BACKLOG | **CANCELLED** | Dogfood #5 — waived на roundtable; G2→3 не blocked |
-| T-052 | BACKLOG | **CANCELLED** | migrate-from-local API — deferred Phase 5; design T-045 готов |
-| T-057 | BACKLOG | **CANCELLED** | Auth QA extension — deferred до AUTH activation |
-| T-058 | BACKLOG | **CANCELLED** | Redis runbook — superseded `redis-rate-limit-T-036.md` |
-| T-063 | BACKLOG | **CANCELLED** | Monetization — deferred post-M0; auth/billing не shipped |
-
-**Итого:** 7 задач закрыты административно. **0** BACKLOG / READY / IN_PROGRESS / BLOCKED в [`orchestration-queue.md`](../orchestration-queue.md).
-
----
-
-## M0 Roundtable Journal — 2026-06-07
-
-**Участники:** Pavel (Human), muster-pm, muster-senior-pm, muster-sme, muster-growth-marketer, muster-qa · коллеги PM/РП TBD  
-**Длительность:** 90 мин (async Muster)  
-**Demo URL:** https://quiet-partner.vercel.app — **OK**
-
-### Решения (binding)
-
-| # | Решение | Owner | Статус |
-|---|---------|-------|--------|
-| 1 | M0: **Go** + waiver G2→3 | Human (sign-off) | Roundtable DONE; memo checkbox ⬜ |
-| 2 | Monetization: options (не pre-decision $19) | Growth + PM | **Deferred** — T-063 CANCELLED |
-| 3 | Free tier: radar + capped AI | Architect + Dev | **Deferred** Phase 5 |
-| 4 | Auth + billing groom | PM | **Deferred** — вне очереди |
-| 5 | Owner monetization: Growth + PM | Growth + PM | On hold post-M0 |
-
-**CPO report (канон):** [`cpo-report-m0.md`](./cpo-report-m0.md) · **Internal minutes:** [`m0-roundtable-minutes.md`](./m0-roundtable-minutes.md)
-
----
-
-## План vs факт (фазы 0–4)
-
-| Фаза | План (календарь) | План % | Факт % | Факт / комментарий |
-|------|------------------|--------|--------|---------------------|
-| **0** Discovery | 02.06–13.06.2026 (2 нед) | 0% на 30.05 | **100%** | T-002, playbook, scan/memo; M0 roundtable DONE; очередь закрыта |
-| **1** Foundation | 16.06–27.06.2026 (2 нед) | 0% | **~95%** | T-001, T-004, design tokens v1 (T-021) |
-| **2** Spike | 30.06–18.07.2026 (3 нед) | 0% | **~95%** | T-005…T-007, T-012, T-016 static DONE |
-| **3** Onboarding + beta | 21.07–08.08.2026 (3 нед) | 0% | **~80%** | T-008…T-013, T-018, T-022 DONE; dogfood 4/5 (2 useful, waived) |
-| **4** Growth | 11.08–05.09.2026 (4 нед) | 0% | **~99%** | T-017…T-053 DONE; waitlist postgres live; SEO live |
+**Human P0 сдвинулся:** не GTM post, а **billing plan + unit cost**. API **~0,3–2 ₽/мес** на активного WAU — маржа Pro **990 ₽** по LLM не под угрозой. YooKassa: план активации готов; **T-069 BACKLOG** до approve. GTM drafts лежат готовыми. Book track live; DeepSeek $0 → fallback ok.
 
 ---
 
@@ -80,31 +53,86 @@
 
 | Gate | Критерии (plan) | Статус |
 |------|-----------------|--------|
-| **G0→1** | ICP + desk research + competitive scan + playbook v0 **или** waive | **~99%** — M0 roundtable DONE; **Human Go sign-off** ⬜ (не блокирует закрытие очереди) |
+| **G0→1** | ICP + desk research + competitive scan + playbook v0 | **✅ PASS** |
 | **G1→2** | ADR-001 approved; secrets pattern | **✅ PASS** |
-| **G2→3** | Spike reviewed; commentary useful **≥3/5** dogfood **или waiver** | **🔶 WAIVED** — roundtable 2026-06-07; dogfood 4/5, 2 useful |
-| G3→4 | QA PASS; 👍 ≥50% | Не достигнут |
-| G4→5 | Unit economics; Phase 5 scope | **Deferred** — Phase 5 вне очереди |
+| **G2→3** | Spike reviewed; commentary useful ≥3/5 **или waiver** | **🔶 WAIVED** |
+| **G3→4** | QA PASS; 👍 ≥50% | **Не достигнут** |
+| **G4→5** | Unit economics; Phase 5 scope | **🔶 Partial** — T-089 unit cost DONE |
+| **Post-M0** | GTM traction; waitlist KPI | **🟡 IN PROGRESS** — posting **deferred** |
+| **G-Book-P3** | T-081 QA + T-082/T-083 + prod smoke | **✅ PASS** |
 
 ---
 
-## Вопросы к Human (не блокируют агентов)
+## Вопросы к Human (Pavel)
 
-| # | Вопрос | Артефакт | Статус |
-|---|--------|----------|--------|
-| 1 | M0 **Go / Pause / Pivot** sign-off | [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md) | ⬜ Checkbox; admin closure 2026-06-08 |
-| 2 | Auth activation (когда готов) | [`auth-activation-runbook.md`](./auth-activation-runbook.md) | Deferred Phase 5 |
-| 3 | Коллеги PM/РП (workshop circle) | [`m0-roundtable-invite-list.md`](./m0-roundtable-invite-list.md) | Optional |
+| # | Вопрос | Статус | Блокирует? |
+|---|--------|--------|------------|
+| 1 | **Approve billing plan** → «можно подключать» test YooKassa? | ⬜ **NEW P0** | T-069 READY |
+| 2 | **GTM posting LinkedIn #1** | **Deferred** 2026-06-13 | Нет |
+| 3 | Auth activation | ⬜ Deferred | T-070 |
+| 4 | **DeepSeek top-up** (T-086) | **Deferred** | Нет — fallback ok |
+| 5 | Dogfood T-087 15 min | ⬜ guide ready | Нет |
+| 6 | PostHog VPS (T-075) | ⬜ OPTIONAL | Нет |
+| 7 | Цена Pro 990 ₽ — подтвердить для checkout | ⬜ гипотеза | T-070 copy |
 
 ---
 
-## Риски (top 3 активных)
+## Phase post-book: next 2 weeks (2026-06-13 → 2026-06-27)
 
-| ID | Риск | Статус | Комментарий PM |
-|----|------|--------|----------------|
-| **R8** | Dogfood bias | **Mitigated** | Waiver G2→3; T-050 CANCELLED (waived) |
-| **R7** | LLM variance | **Active / Medium** | T-049 CANCELLED deferred; static PASS |
-| **R2** | API cost | **Mitigated / Medium** | T-029 guardrails; per-user budget — Phase 5 |
+### Приоритеты (Human vs team) — **обновлено 2026-06-13**
+
+| P | Кто | Задача | Gate / outcome |
+|---|-----|--------|----------------|
+| **P0** | **Human** | Прочитать billing plan + unit economics; решить test merchant | T-069 → READY |
+| **P1** | **Human** | YooKassa test shop + env keys (не в чат) | Webhook smoke |
+| **P2** | **Human** | T-087 15-min book dogfood | 1 useful + log row |
+| **DEFERRED** | **Human** | GTM LinkedIn post #1 | Traction позже |
+| **DEFERRED** | **Human** | T-086 DeepSeek top-up | Live S1–S4 |
+| **P3** | DevOps | T-075 PostHog VPS | OPTIONAL |
+| **DONE** | PM | T-089 unit economics | [`user-unit-economics-active-user.md`](./user-unit-economics-active-user.md) |
+
+### Gates (2 нед)
+
+| Gate | Критерий | Дата review |
+|------|----------|-------------|
+| **Billing plan** | Human approve → T-069 READY | **2026-06-20** |
+| **G-Book-0 cont.** | ≥2 GTM канала live | **deferred** — post not now |
+| **G-Book-Stop check** | CR &lt;5% **и** signups &lt;3 | 2026-06-27 |
+
+---
+
+## WBS — 2 недели (сдвиг приоритетов)
+
+| Роль | Задача | Статус |
+|------|--------|--------|
+| **PM** | T-089 unit economics | **✅ DONE** |
+| **PM** | Billing activation plan | **✅ DONE** |
+| **Human** | Approve billing plan + merchant test | ⬜ **P0** |
+| **Developer** | T-069 webhook (после READY) | ⬜ BACKLOG |
+| **Human** | GTM post (T-073) | **DEFERRED** |
+| **Human** | T-087 book dogfood | ⬜ guide ready |
+| **Growth** | W25 waitlist snapshot | ⬜ после постов (deferred) |
+| **QA** | G-Book-P3 prod smoke | **✅ PASS** |
+
+---
+
+## Что агенты делают дальше
+
+1. **Human** — approve [`billing-activation-plan-2026-06-13.md`](./billing-activation-plan-2026-06-13.md); при готовности — test merchant YooKassa.
+2. **PM** — после approve: T-069 **READY** в очереди.
+3. **Developer** — T-069 только после READY + scaffold audit/recover.
+4. **GTM posting** — **не сейчас** (Human 2026-06-13).
+5. **T-086** — DEFERRED until Human «решаем DeepSeek».
+
+---
+
+## READY tasks
+
+| ID | Задача | Кто | Notes |
+|----|--------|-----|-------|
+| **T-087** | Book dogfood 15 min | Human | [`dogfood-book-features-guide.md`](./dogfood-book-features-guide.md) |
+| **T-075** | PostHog VPS | DevOps | OPTIONAL |
+| **T-069** | YooKassa webhook | Developer | **BACKLOG** — plan gate |
 
 ---
 
@@ -112,6 +140,7 @@
 
 | Дата | Автор | Изменение |
 |------|-------|-----------|
-| 2026-06-07 | PM + Muster | **v3.0** — **T-062 DONE**; M0 roundtable minutes; Go + waiver; T-063 BACKLOG |
-| 2026-06-08 | PM | **v4.0** — Human «закрывай все задачи»; T-048…T-063 CANCELLED; очередь **0 open** |
-| 2026-06-08 | PM | **v4.2** — Human «пока оплату не подключай»; billing activation deferred; T-069 → BACKLOG; `BILLING_ENABLED=false` |
+| 2026-06-13 | PM | **v5.4** — Human: no GTM post; billing exploration; T-089 + billing plan |
+| 2026-06-13 | PM + Dev + QA (agent EOD) | **v5.2** — T-088 prep; onboarding-spec v1.1; W25 template |
+| 2026-06-13 | Human (Pavel) | **v5.1** — T-086 DEFERRED; fallback co-pilot ok |
+| 2026-06-13 | PM + QA | **v5.0** — G-Book-P3 PASS; T-086 root cause $0 balance |

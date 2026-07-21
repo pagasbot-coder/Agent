@@ -1,7 +1,7 @@
 # Roadmap — Тихий напарник
 
-**Обновлено:** 2026-06-07  
-**План:** [`implementation-plan.md`](./implementation-plan.md) · **ТЗ:** [`technical-specification.md`](./technical-specification.md) · **Phase 5:** [`roadmap-phase5.md`](./roadmap-phase5.md) (**BLOCKED** до M0)
+**Обновлено:** 2026-06-13  
+**План:** [`implementation-plan.md`](./implementation-plan.md) · **Book track:** [`implementation-plan-phase-book.md`](./implementation-plan-phase-book.md) · **ТЗ:** [`technical-specification.md`](./technical-specification.md) · [`technical-specification-book-features.md`](./technical-specification-book-features.md) · **Phase 5:** [`roadmap-phase5.md`](./roadmap-phase5.md)
 
 ---
 
@@ -49,11 +49,30 @@
 - [x] ADR-004 DB host draft Neon lean (T-047)
 - [x] Drizzle client + waitlist postgres backend OFF-by-default (T-051) — [`drizzle/README.md`](../drizzle/README.md)
 
-## Далее (после M0 Go — Human)
+## Сейчас (post-M0 — GTM + validation)
+
+- [ ] **T-073** GTM sprint 1 — 2 канала, UTM, copy tests — [`gtm-roundtable-brief.md`](./gtm-roundtable-brief.md)
+- [ ] **T-074** Waitlist metrics spec + weekly snapshot — **READY**
+- [ ] **T-078** Staging smoke regression — **READY**
+- [ ] T-075 PostHog VPS (OPTIONAL) · T-076 live prompt regression (OPTIONAL)
+
+## Phase Book (Alferov) — **DONE** 2026-06-13
+
+**Book track закрыт:** Human **waived G-Book-P2**; autonomous sprint доставил T-080…T-083 на prod; **G-Book-P3 smoke PASS** (qa-report). Фичи: фокус недели, 4-step onboarding + чек-лист проработки, stakeholder lite, weekly snapshot + reminder — см. [`implementation-plan-phase-book.md`](./implementation-plan-phase-book.md), [`technical-specification-book-features.md`](./technical-specification-book-features.md).
+
+- [x] **T-080** «Фокус недели» — dashboard card
+- [x] **T-081** Onboarding checklist — step 3 of 4
+- [x] **T-082** Stakeholder map lite
+- [x] **T-083** Weekly snapshot + reminder
+
+**Post-book phase (сейчас):** traction + validation без live LLM — **Human P0** GTM post (T-073 drafts), **15-min book dogfood** (T-087), Growth **W25 waitlist snapshot** (T-074); DeepSeek top-up **DEFERRED** (fallback co-pilot ok); billing **paused**. Следующий product gate — G-Book-0 cont. (≥2 GTM канала) review **2026-06-20**; stop-check CR/signups **2026-06-27** ([`pm-status.md`](./pm-status.md) v5.3).
+
+## Далее (Human OPTIONAL / Phase 5)
 
 - Human: Neon `DATABASE_URL` + `npm run db:push` + `WAITLIST_BACKEND=postgres` — см. [`roadmap-phase5.md`](./roadmap-phase5.md)
 - PostHog live on VPS + Vercel keys (Human OPTIONAL)
 - Live LLM prompt regression (Human + `.env.local`)
+- Billing activation T-069…T-071 — **paused** until Human «можно подключать»
 
 ## Не сейчас
 

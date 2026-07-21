@@ -5,11 +5,11 @@ import { SITE_URL } from "@/lib/site";
 
 import "./globals.css";
 
-/** Dashboard `/` — noindex until public beta (T-053). */
+/** Hub `/` — noindex until public beta (T-053). Radar: `/radar`, pulpit: `/stages`. */
 export const metadata: Metadata = {
-  title: "Тихий напарник — здоровье проекта за один экран",
+  title: "Тихий напарник — пульт этапов и радар доменов",
   description:
-    "Co-pilot для PM: DomainRadar по 8 доменам PMBOK 7, AI-комментарий без экзамена PMP.",
+    "Co-pilot для PM: пульт этапов 0–6 и DomainRadar по 8 доменам PMBOK 7. Без экзамена PMP.",
   metadataBase: new URL(SITE_URL),
   robots: { index: false, follow: false },
   openGraph: {

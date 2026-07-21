@@ -58,18 +58,18 @@ PRD и разбивка по ролям уже в git. Нужна реализа
 
 ---
 
-## Стартовый промпт (скопировать в своего агента)
+## Стартовый промпт (скопировать агенту на деплое)
 
 ```text
 Role: Developer (и по очереди PM/UI/Copywriter/Growth/QA).
 Проект: quiet-partner. Читай @quiet-partner/orchestration-queue.md эпик «Фокус на сегодня»
 и @quiet-partner/docs/prd-focus-today.md @quiet-partner/docs/handoff-focus-today-agent.md
-
 1) Возьми READY: T-092 (store), параллельно зафиксируй T-090 DoR.
 2) Не трогай didactic-doodle и не занимайся Muster/skills.
 3) После UI (T-093–T-094) — деплой на Vercel staging и отдай QA T-098.
 4) Отчёты Human — на русском, ясными предложениями.
 5) Обновляй статусы в quiet-partner/orchestration-queue.md.
+Эпик T-090…T-100 остаётся за ним.
 ```
 
 ---

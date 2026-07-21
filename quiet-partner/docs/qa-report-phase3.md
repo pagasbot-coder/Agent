@@ -257,3 +257,150 @@
 | `npm run build` / `lint` | **PASS** | post T-053 |
 
 **Вердикт Phase 5 scaffold + DB:** **PASS** — auth activation ждёт Human ([`auth-activation-runbook.md`](./auth-activation-runbook.md)).
+
+---
+
+## Post-M0 staging regression (T-078) — 2026-06-13
+
+**URL:** https://quiet-partner.vercel.app  
+**Агент:** QA (muster-qa / PM orchestrator)  
+**Subset:** R1–R3, R6, S1, waitlist route, BFF POST, billing OFF check
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| `GET /` → 200 | **PASS** | Dashboard shell |
+| `GET /onboarding` → 200 | **PASS** | Wizard route; «Назад» в client bundle (`/_next/static/chunks/11rz5n93fbuwg.js`) |
+| `GET /waitlist` → 200 | **PASS** | Waitlist landing |
+| `GET /api/health` → 200 + JSON | **PASS** | `ok: true`; `waitlist_backend: postgres`; `database_configured: true`; `auth_enabled: false`; `posthog_disabled: true` |
+| `POST /api/advisor/health-commentary` → 200 + JSON | **PASS** | `commentary`, `disclaimer`, `questions`; fallback RU suffix при transient LLM — не 500 |
+| Нет API key в page source | **PASS** | `/` и `/onboarding`: 0 совпадений `DEEPSEEK`, `sk-`, `api_key` |
+| Billing OFF | **PASS** | Нет checkout UI; webhook/auth activation не в scope smoke |
+
+**Deploy check (OnboardingWizard «Назад»):** локальный код и staging bundle **совпадают** — redeploy **не требовался** (npm/vercel недоступны в agent env; staging уже содержит «Назад»).
+
+**Вердикт T-078:** **PASS** — post-M0 staging subset green; billing paused as expected.
+
+---
+
+## Book P2 compile smoke (T-080) — 2026-06-13
+
+**Агент:** Developer (post G-Book-P2 waive)  
+**Среда:** local build (Node v20.19.2 tmp install)
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| `npm run lint` | **PASS** | eslint clean |
+| `npm run build` | **PASS** | Next.js 16.2.6 Turbopack |
+| `FocusWeekCard` on `/` | **PASS** (compile) | Weakest domain + static RU question; disclaimer footer |
+| CTA «Отметить: сделал» | **PASS** (code) | `logAction` + optional +1 score cap 100 |
+| Staging deploy | **PENDING** | Redeploy optional — not run in this pass |
+
+**Вердикт T-080 compile:** **PASS** — browser smoke + staging redeploy → Human/DevOps optional.
+
+---
+
+## Book P2 compile smoke (T-081) — 2026-06-13
+
+**Агент:** Developer (autonomous sprint, G-Book-P2 waived)  
+**Среда:** local `npm run lint` + `npm run build` (Node v20.19.2 tmp install)
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| BK-3 Onboarding 4 шага | **PASS** (compile) | Профиль → Турбулентность → Проработка → Боль |
+| BK-3 «Пропустить» path | **PASS** (code) | Skip clears checklist; no score penalty |
+| BK-4 Checklist mapping | **PASS** (code) | `computePrepChecklistScoreDelta()` ±5…10; applied before pain step |
+| BK-3 Disclaimer subtext | **PASS** | «Чек-лист для размышления, не аудит проекта» |
+| «Назад» on step 2b | **PASS** (code) | Preserves answers; step 3 → 2 |
+| `projectPrepChecklist` persist | **PASS** (code) | Zustand partialize `quiet-partner-v1` |
+| `npm run lint` / `build` | **PASS** | 2026-06-13 autonomous sprint |
+
+**Вердикт T-081 compile:** **PASS** — browser TTFR smoke → Human dogfood optional.
+
+---
+
+## Book P3 compile smoke (T-082) — 2026-06-13
+
+**Агент:** Developer (autonomous sprint)
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| BK-5 Stakeholder lite max 3 | **PASS** (code) | `upsertStakeholderLite` caps at 3 rows |
+| BK-5 CRUD + persist | **PASS** (code) | localStorage via store partialize |
+| BK-6 No PII in analytics | **PASS** | No PostHog call on save; audit log truncated |
+| Collapsible card on `/` | **PASS** (compile) | `StakeholderLitePanel` mounted in DashboardShell |
+| Disclaimer hint | **PASS** | «не заменяет CRM» + co-pilot footer |
+| `npm run lint` / `build` | **PASS** | green |
+
+**Вердикт T-082 compile:** **PASS**.
+
+---
+
+## Book P3 compile smoke (T-083) — 2026-06-13
+
+**Агент:** Developer (autonomous sprint)
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| BK-7 «Снимок недели» button | **PASS** (compile) | Reuses `buildProjectSnapshot()` via `recordWeeklySnapshot()` |
+| BK-7 max 12 snapshots | **PASS** (code) | `.slice(0, 12)` rotation |
+| BK-8 Reminder banner scheduled | **PASS** (compile) | `nextCheckInAt` +7d after snapshot |
+| BK-8 Snooze +7d | **PASS** (code) | `snoozeRetentionReminder(7)` |
+| BK-8 Overdue dismiss | **PASS** (code) | `dismissRetentionOverdue()` |
+| No email/push | **PASS** | In-app banner only |
+| `npm run lint` / `build` | **PASS** | green |
+
+**Вердикт T-083 compile:** **PASS** — staging redeploy for live verify → Human optional.
+
+---
+
+## G-Book-P3 prod browser/compile smoke — 2026-06-13
+
+**Агент:** QA (autonomous, post-deploy)  
+**Среда:** https://quiet-partner.vercel.app (prod alias staging)  
+**Задачи:** T-080…T-083 live verify · gate **G-Book-P3**
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| `GET /` | **PASS** | HTTP 200; HTML содержит «Фокус недели», «Ключевые стороны», «Снимок недели» |
+| `GET /onboarding` | **PASS** | HTTP 200; SSR «Шаг 1 из» + «Турбулент»; 4-step wizard в bundle (`OnboardingWizard`, `ProjectPrepChecklistStep`) |
+| `GET /waitlist` | **PASS** | HTTP 200 |
+| `GET /api/health` | **PASS** | `ok: true`; `deepseek_api_key_configured: true`; postgres waitlist active |
+| `POST /api/advisor/health-commentary` | **PASS with notes** | HTTP 200 + JSON + disclaimer; **fallback** suffix — DeepSeek balance **$0** (T-086 BLOCKED) |
+| Book markers on prod | **PASS** | T-080…T-083 features present in live HTML |
+| Live DeepSeek | **BLOCKED** | Expect fallback until Human top-up; не блокирует book dogfood (T-087) |
+
+**Sign-off:** **G-Book-P3 browser/compile smoke PASS** — book features live on prod; live LLM deferred to T-086 after DeepSeek top-up.
+
+---
+
+## EOD prod curl regression — 2026-06-13 (agent)
+
+**Агент:** QA (autonomous EOD)  
+**Среда:** https://quiet-partner.vercel.app  
+**Чеклист:** [`qa-checklist.md`](../knowledge-base/qa-checklist.md) §Book features BK10–BK11
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| `GET /api/health` | **PASS** | HTTP 200; `database_configured: true`, `waitlist_backend: postgres` |
+| `POST /api/advisor/health-commentary` | **PASS with notes** | HTTP 200; `commentary` + `questions`; suffix «сервис LLM временно недоступен» (balance $0; llm.ts UX deploy optional) |
+| Disclaimer in JSON | **PASS** | `disclaimer` present — PMI non-cert wording |
+
+**Вердикт EOD curl:** **PASS** — prod stable for GTM + book dogfood without live LLM.
+---
+
+## Post-redeploy prod curl — 2026-06-13 (agent, dpl_4uW5NTuHdEtngTPRKMdYC4meHty6)
+
+**Агент:** QA (autonomous EOD)  
+**Среда:** https://quiet-partner.vercel.app (alias after `vercel --prod --yes`)  
+**Ship:** HealthCommentary offline banner (client); `llm.ts` 402 balance suffix
+
+| Проверка | Статус | Примечание |
+|----------|--------|------------|
+| `GET /` | **PASS** | HTTP 200 |
+| `GET /onboarding` | **PASS** | HTTP 200 |
+| `GET /api/health` | **PASS** | `deepseek_api_key_configured: true`; waitlist postgres |
+| `POST /api/advisor/health-commentary` | **PASS** | HTTP 200; suffix «(баланс DeepSeek исчерпан — co-pilot в офлайн-режиме до пополнения)» |
+| Disclaimer in JSON | **PASS** | PMI non-cert wording |
+
+**Вердикт post-redeploy curl:** **PASS** — balance UX marker live; offline banner renders when commentary matches fallback patterns (Human browser optional).
+

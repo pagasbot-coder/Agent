@@ -150,9 +150,27 @@ export async function generateHealthCommentary(
         req.domainScores,
         req.userSituation,
       );
+      let suffix = "(сервис LLM временно недоступен)";
+      if (res.status === 402) {
+        suffix =
+          "(баланс DeepSeek исчерпан — co-pilot в офлайн-режиме до пополнения)";
+      } else {
+        try {
+          const errText = (await res.text()).toLowerCase();
+          if (
+            errText.includes("insufficient balance") ||
+            errText.includes("balance") && errText.includes("$0")
+          ) {
+            suffix =
+              "(баланс DeepSeek исчерпан — co-pilot в офлайн-режиме до пополнения)";
+          }
+        } catch {
+          /* ignore parse errors */
+        }
+      }
       return {
         ...fallback,
-        commentary: `${fallback.commentary} (сервис LLM временно недоступен)`,
+        commentary: `${fallback.commentary} ${suffix}`,
       };
     }
 

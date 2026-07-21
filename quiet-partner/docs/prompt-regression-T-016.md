@@ -77,26 +77,91 @@
 
 ## Сводная таблица (T-016 AC)
 
-| Scenario ID | Static regression | Live BFF | Notes |
-|-------------|-------------------|----------|-------|
-| S1 | **PASS** | N/A | generic/harmful — live only |
-| S2 | **PASS** | N/A | |
-| S3 | **PASS** | N/A | |
-| S4 | **PASS** (after rule 7) | N/A | |
+| Scenario ID | Static regression | Live BFF (T-076 staging) | Notes |
+|-------------|-------------------|--------------------------|-------|
+| S1 | **PASS** | **BLOCKED** (fallback) | provider error 2026-06-13 |
+| S2 | **PASS** | **BLOCKED** (fallback) | |
+| S3 | **PASS** | **BLOCKED** (fallback) | |
+| S4 | **PASS** (after rule 7) | **BLOCKED** (fallback) | |
 
 **Senior PM sign-off (static):** prompt regression **PASS** для правил; live — открыто.  
 **QA cross-check:** disclaimer на каждом ответе API/UI — **PASS** (`lib/domains.ts` → `HealthCommentary`).
 
 ---
 
-## Live test (Human)
+## Live test — T-076 (staging, 2026-06-13)
 
-**Статус:** не выполнялся в этой сессии.
+**Роли:** Senior PM + QA · **Задача:** T-076 · **URL:** https://quiet-partner.vercel.app/api/advisor/health-commentary
+
+| Проверка | Результат |
+|----------|-----------|
+| `GET /api/health` → `deepseek_api_key_configured` | **true** (ключ задан в Vercel) |
+| POST S1–S4 с `userSituation` + `navigatorScenarioId` | HTTP **200** + JSON |
+| Live DeepSeek response | **BLOCKED** — все 4 сценария вернули fallback suffix `(сервис LLM временно недоступен)` |
+| Root cause (2026-06-13) | **DeepSeek account balance $0** — ключ валиден (`health` → `true`); rotate key **не** первый шаг |
+| Disclaimer в каждом ответе | **PASS** — `DEFAULT_DISCLAIMER` присутствует |
+| `questions[]` в ответе | **PASS** — 2–3 вопроса (fallback template) |
+
+**Вердикт T-076 (live):** **BLOCKED** — provider error (ключ сконфигурирован, но DeepSeek API не ответил OK). Static T-016 **PASS** не отменяется. QA: disclaimer + HTTP contract **PASS**; сценарная регрессия LLM — **не пройдена**.
+
+### Прогон S1–S4 (staging curl)
+
+| Scenario | userSituation (эталон) | HTTP | Live LLM | Fallback suffix | Senior PM notes |
+|----------|------------------------|------|----------|-----------------|-----------------|
+| **S1** | Два спонсора тянут архитектуру… | 200 | **FAIL** | да | Fallback не проверяет trade-offs / v1-v2; generic questions |
+| **S2** | Заказчик хочет новую фичу… | 200 | **FAIL** | да | Нет вопроса про demo / gold plating |
+| **S3** | Команда опаздывает. | 200 | **FAIL** | да | Нет cycle time vs ощущение |
+| **S4** | Все домены выше 70, но не спокоен. | 200 | **FAIL** | да | Не обесценивает частично (fallback ok), но нет weekly check-in |
+
+**Пример тела запроса (S1):**
+
+```bash
+curl -s -X POST https://quiet-partner.vercel.app/api/advisor/health-commentary \
+  -H "Content-Type: application/json" \
+  -d '{
+    "domainScores":{"D1":35,"D2":55,"D3":60,"D4":45,"D5":65,"D6":50,"D7":60,"D8":38},
+    "deliveryApproach":"hybrid",
+    "locale":"ru",
+    "projectMeta":{"name":"Regression S1","phase":"исполнение"},
+    "userSituation":"Два спонсора тянут архитектуру в разные стороны, сроки горят.",
+    "navigatorScenarioId":"S1"
+  }'
+```
+
+**Human unblock (T-086):** пополнить баланс DeepSeek (platform.deepseek.com) — **root cause: $0 balance**, не invalid key. Ключ в Vercel OK; redeploy не нужен. После top-up повторить curl S1–S4; ожидание: **без** fallback suffix. Rotate key — только если top-up не помог.
+
+### PM re-verify (2026-06-13, ~19:42 UTC)
+
+| Check | Result |
+|-------|--------|
+| `GET /api/health` → `deepseek_api_key_configured` | **true** |
+| `GET /` HTML contains «Фокус недели» | **yes** (book features live) |
+| POST S1 (full body + `navigatorScenarioId`) | HTTP **200**; commentary contains `(сервис LLM временно недоступен)` |
+| Disclaimer | **PASS** |
+| Latency | ~1.1s (fallback path) |
+
+**Вердикт unchanged:** live LLM **BLOCKED** → **T-086** (Human: DeepSeek top-up, balance $0).
+
+### Root cause confirmed (2026-06-13, PM)
+
+| Finding | Detail |
+|---------|--------|
+| `DEEPSEEK_API_KEY` in Vercel | **Valid** — `GET /api/health` → `deepseek_api_key_configured: true` |
+| DeepSeek API response | **402 / insufficient balance** — account balance **$0** |
+| Key rotation required? | **No** (first step) — top-up billing account |
+| App behavior | Fallback + disclaimer **PASS** — product usable without live LLM |
+| Code note | `lib/advisor/llm.ts` — HTTP 402 → friendlier suffix «баланс исчерпан» (deploy optional) |
+
+---
+
+## Live test (Human) — локальный прогон
+
+**Статус (2026-05-30):** не выполнялся в первой сессии T-016.
 
 | Проверка | Результат |
 |----------|-----------|
 | `quiet-partner/.env.local` | **отсутствует** |
-| `DEEPSEEK_API_KEY` | **не задан** (значение не читалось) |
+| `DEEPSEEK_API_KEY` (local) | **не задан** |
 
 **Рекомендуемый прогон Human:**
 

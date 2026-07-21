@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { DomainGlossary } from "@/components/DomainGlossary";
+import { ProjectPrepChecklistStep } from "@/components/ProjectPrepChecklistStep";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,15 +23,21 @@ import {
   PAIN_OPTIONS,
   TURBULENCE_QUESTIONS,
   type PainOption,
+  type ProjectPrepChecklist,
   type TurbulenceAnswers,
 } from "@/lib/onboarding";
 import { useProjectStore } from "@/lib/store/useProjectStore";
 import { cn } from "@/lib/utils";
 
-const TOTAL_STEPS = 3;
-const STEP_LABELS = ["Профиль", "Турбулентность", "Боль"] as const;
+const TOTAL_STEPS = 4;
+const STEP_LABELS = [
+  "Профиль",
+  "Турбулентность",
+  "Проработка",
+  "Боль",
+] as const;
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 const DEFAULT_TURBULENCE: TurbulenceAnswers = {
   requirements: 3,
@@ -38,7 +45,7 @@ const DEFAULT_TURBULENCE: TurbulenceAnswers = {
   stakeholders: 3,
 };
 
-/** Three-step onboarding wizard → Zustand hydrate + dashboard redirect. */
+/** Four-step onboarding wizard → Zustand hydrate + dashboard redirect. */
 export function OnboardingWizard() {
   const router = useRouter();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -50,6 +57,8 @@ export function OnboardingWizard() {
     useState<DeliveryApproach>("hybrid");
   const [turbulence, setTurbulence] =
     useState<TurbulenceAnswers>(DEFAULT_TURBULENCE);
+  const [prepChecklist, setPrepChecklist] = useState<ProjectPrepChecklist>({});
+  const [prepSkipped, setPrepSkipped] = useState(false);
   const [pain, setPain] = useState<PainOption>("schedule");
 
   useEffect(() => {
@@ -61,27 +70,61 @@ export function OnboardingWizard() {
     focusable?.focus();
   }, [step]);
 
+  const handlePrepChange = useCallback(
+    (id: keyof ProjectPrepChecklist, checked: boolean) => {
+      setPrepChecklist((prev) => ({ ...prev, [id]: checked }));
+      if (checked) setPrepSkipped(false);
+    },
+    [],
+  );
+
   const handleFinish = useCallback(() => {
     const trimmedName = projectName.trim() || "Мой проект";
-    const scores = computeDomainScoresFromOnboarding({ turbulence, pain });
+    const checklist = prepSkipped ? {} : prepChecklist;
+    const scores = computeDomainScoresFromOnboarding({
+      turbulence,
+      prepChecklist: checklist,
+      pain,
+    });
     const domainCountRed = Object.values(scores).filter(
       (value) => deriveDomainStatus(value) === "red",
     ).length;
     trackOnboardingComplete(
       buildAnalyticsContext(deliveryApproach, domainCountRed, "onboarding"),
     );
-    hydrateFromOnboarding(scores, { name: trimmedName, deliveryApproach });
-    router.push("/");
+    hydrateFromOnboarding(
+      scores,
+      { name: trimmedName, deliveryApproach },
+      checklist,
+    );
+    router.push("/radar");
   }, [
     deliveryApproach,
     hydrateFromOnboarding,
     pain,
+    prepChecklist,
+    prepSkipped,
     projectName,
     router,
     turbulence,
   ]);
 
   const canProceedStep1 = projectName.trim().length > 0;
+
+  /** Step 1 → hub; steps 2–4 → previous wizard step (answers preserved). */
+  const handleBack = useCallback(() => {
+    if (step > 1) {
+      setStep((s) => (s - 1) as Step);
+      return;
+    }
+    router.push("/");
+  }, [router, step]);
+
+  const handleSkipPrep = useCallback(() => {
+    setPrepSkipped(true);
+    setPrepChecklist({});
+    setStep(4);
+  }, []);
 
   return (
     <div className="mx-auto flex min-h-full max-w-lg flex-col px-4 py-10 sm:px-6">
@@ -93,7 +136,7 @@ export function OnboardingWizard() {
           Тихий напарник
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Три коротких шага — меньше 3 минут.
+          Четыре коротких шага — меньше 3 минут.
         </p>
       </header>
 
@@ -242,6 +285,23 @@ export function OnboardingWizard() {
         {step === 3 && (
           <>
             <CardHeader>
+              <CardTitle>Проработать проект</CardTitle>
+              <CardDescription>
+                Быстрая проверка «правильных вещей» перед радаром.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ProjectPrepChecklistStep
+                checklist={prepChecklist}
+                onChange={handlePrepChange}
+              />
+            </CardContent>
+          </>
+        )}
+
+        {step === 4 && (
+          <>
+            <CardHeader>
               <CardTitle>Главная боль</CardTitle>
               <CardDescription>
                 Выберите одну зону — мы усилим сигнал на радаре.
@@ -274,27 +334,26 @@ export function OnboardingWizard() {
         )}
 
         <CardFooter className="justify-between gap-3">
-          {step > 1 ? (
-            <Button
-              variant="outline"
-              onClick={() => setStep((s) => (s - 1) as Step)}
-            >
-              Назад
-            </Button>
-          ) : (
-            <span />
-          )}
+          <Button variant="outline" onClick={handleBack}>
+            Назад
+          </Button>
 
-          {step < TOTAL_STEPS ? (
-            <Button
-              onClick={() => setStep((s) => (s + 1) as Step)}
-              disabled={step === 1 && !canProceedStep1}
-            >
-              Далее
-            </Button>
-          ) : (
-            <Button onClick={handleFinish}>Показать радар</Button>
-          )}
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            {step === 3 && (
+              <Button type="button" variant="ghost" onClick={handleSkipPrep}>
+                Пропустить
+              </Button>
+            )}
+
+            {step < TOTAL_STEPS ?
+              <Button
+                onClick={() => setStep((s) => (s + 1) as Step)}
+                disabled={step === 1 && !canProceedStep1}
+              >
+                Далее
+              </Button>
+            : <Button onClick={handleFinish}>Показать радар</Button>}
+          </div>
         </CardFooter>
       </Card>
 

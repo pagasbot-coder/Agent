@@ -21,6 +21,13 @@ import { useProjectStore } from "@/lib/store/useProjectStore";
 import type { HealthCommentaryResponse } from "@/lib/advisor/types";
 import { cn } from "@/lib/utils";
 
+/** Detect offline/fallback commentary suffix from BFF (no live LLM). */
+function isOfflineCoPilotCommentary(text: string): boolean {
+  return /(локальный режим|лимит токенов|временно недоступен|офлайн-режиме|исчерпан)/i.test(
+    text,
+  );
+}
+
 type FetchState =
   | { status: "idle" }
   | { status: "loading" }
@@ -197,8 +204,18 @@ export function HealthCommentary() {
         }
       </CardContent>
 
-      <CardFooter className="flex-col items-start gap-1">
-        <p className="text-xs text-muted-foreground">
+      <CardFooter className="flex-col items-start gap-2">
+        {state.status === "success" &&
+          isOfflineCoPilotCommentary(state.data.commentary) && (
+            <p
+              className="w-full rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs text-amber-900"
+              role="status"
+            >
+              Co-pilot в офлайн-режиме — ниже статические вопросы по сигналам радара, не
+              live LLM.
+            </p>
+          )}
+        <p className="text-xs leading-relaxed text-muted-foreground">
           {state.status === "success" ?
             state.data.disclaimer
           : DEFAULT_DISCLAIMER}

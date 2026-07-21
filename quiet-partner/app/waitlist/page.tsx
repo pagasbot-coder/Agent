@@ -162,9 +162,9 @@ export default function WaitlistPage() {
                   >
                     Посмотреть demo
                   </a>
-                  <Link href="/">
+                  <Link href="/radar">
                     <Button variant="outline" size="sm">
-                      Открыть приложение
+                      Открыть радар
                     </Button>
                   </Link>
                 </div>

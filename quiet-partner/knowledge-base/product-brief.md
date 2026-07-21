@@ -11,6 +11,11 @@
 
 **Тихий напарник** — web co-pilot для PM и лидов проектов: визуальный **DomainRadar** по 8 доменам PMBOK 7, короткий **HealthCommentary** от LLM и лёгкий **onboarding**. Продукт помогает *думать* о здоровье проекта, а не выдаёт сертификат или «галочку PMBOK».
 
+**Book track (2026-06-13):** фокус недели, чек-лист проработки в onboarding, stakeholder lite, снимок недели — live на prod ([`technical-specification-book-features.md`](../docs/technical-specification-book-features.md)).
+
+**Справочник жизненного цикла (19 июля 2026, RU v1.1):** [`project-lifecycle-playbook.md`](./project-lifecycle-playbook.md).  
+**Личный контур ProjectM (20 июля 2026):** шпаргалки + реестры на рабочем столе — см. [`../docs/kruglyy-stol-projectm-restry.md`](../docs/kruglyy-stol-projectm-restry.md); индекс — [`INDEX.md`](./INDEX.md).
+
 ---
 
 ## Vision (12 мес)

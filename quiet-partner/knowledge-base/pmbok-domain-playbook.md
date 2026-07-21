@@ -7,6 +7,8 @@
 > Продукт использует **8 performance domains** PMBOK 7 как *линзы*, не как exam syllabus.  
 > Co-pilot задаёт вопросы; не выставляет «оценку соответствия PMI».
 
+**Связанный справочник (жизненный цикл + маркетинг):** [`project-lifecycle-playbook.md`](./project-lifecycle-playbook.md) — этапы 0–6, документы, инструменты, рубежи перехода, спецразделы (агентство / брендинг / внутренний маркетинг), вопросы помощника Q01–Q16. Области ниже — линзы здоровья на любом этапе.
+
 ---
 
 ## Domain index (RU labels)
@@ -157,3 +159,5 @@ Senior PM maintains this table; Developer implements as store defaults only afte
 |------|--------|--------|
 | 2026-05-30 | Developer (bootstrap) | Draft v0 all 8 domains + tailoring matrix |
 | 2026-05-30 | Senior PM | v1: пороги 70/40; navigator-scenarios.md; sync с ТЗ |
+| 2026-07-19 | Senior PM | Ссылка → `project-lifecycle-playbook.md` (жизненный цикл + маркетинг) |
+| 2026-07-19 | Шеф-редактор | Формулировка ссылки обновлена под RU-редакцию v1.1 |

@@ -14,9 +14,10 @@
 | **Платформа** | Vercel (managed preview/production) |
 | **Проект** | `quiet-partner` (team `erp-db-spb-s-projects`) |
 | **Production alias** | https://quiet-partner.vercel.app |
-| **Последний deploy** | 2026-05-30 — `vercel --prod --yes` (T-040…T-043 sprint 4; commit `141e12f`) |
-| **Build локально** | `npm run build` — PASS |
-| **Live LLM на staging** | Нужен `DEEPSEEK_API_KEY` в Vercel → **Human OPTIONAL** (без ключа — fallback RU) |
+| **Последний deploy** | **2026-06-13** — `vercel --prod --yes` (T-080…T-083 book track) |
+| **Build локально** | `npm run build` + `npm run lint` — **PASS** |
+| **Book track prod** | **LIVE** — 4-step onboarding «Проработка», «Фокус недели», stakeholder lite, weekly snapshot |
+| **Live LLM на staging** | `DEEPSEEK_API_KEY` в Vercel — **configured** (Production + Preview) |
 
 `vercel.json` **не обязателен** для Next.js 16: Vercel определяет framework автоматически (`next build`).
 

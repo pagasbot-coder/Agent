@@ -2,7 +2,7 @@
 
 **Владелец:** QA (`@role-qa`)  
 **Проект:** `quiet-partner/`  
-**Обновлено:** 2026-06-07 (T-053 SEO; T-051 postgres activation PASS)  
+**Обновлено:** 2026-06-13 (T-080…T-083 book features; G-Book-P3 prod smoke)  
 **Отчёт smoke:** [`docs/qa-report-phase3.md`](../docs/qa-report-phase3.md)
 
 ---
@@ -23,7 +23,7 @@
 | # | Проверка | Ожидание |
 |---|----------|----------|
 | R1 | `GET /` | Dashboard: радар + комментарий + disclaimer |
-| R2 | `GET /onboarding` | 3 шага, RU copy, прогресс 1/3…3/3 |
+| R2 | `GET /onboarding` | **4 шага**, RU copy, прогресс 1/4…4/4 |
 | R3 | `POST /api/advisor/health-commentary` | JSON body: `domainScores`, `deliveryApproach`; 200 + `commentary` + `disclaimer` |
 | R6 | `GET /api/health` | HTTP 200, JSON `{ ok: true, service, checks }`; `checks.cost_guardrails` — counters без секретов |
 | R4 | После онбординга | Redirect на `/`, persist `localStorage` ключ `quiet-partner-v1` |
@@ -59,10 +59,12 @@
 
 | # | Проверка | Ожидание |
 |---|----------|----------|
-| O1 | 3 шага | Профиль → турбулентность → боль |
-| O2 | `hydrateFromOnboarding` | Scores + имя/подход в store |
-| O3 | Redirect | После шага 3 → `/` |
+| O1 | 4 шага | Профиль → турбулентность → **проработка** → боль |
+| O2 | `hydrateFromOnboarding` | Scores + имя/подход + prep bonuses в store |
+| O3 | Redirect | После шага 4 → `/` |
 | O4 | Ссылка с dashboard | «Настроить проект» в header |
+| O5 | Шаг 3 prep checklist | 7 чекбоксов; «Пропустить»; `computePrepChecklistScoreDelta` |
+| O6 | «Назад» | Шаги 2–4 возвращают без потери ввода |
 
 ---
 
@@ -103,7 +105,7 @@
 | # | Проверка | Ожидание |
 |---|----------|----------|
 | G1 | Dashboard «8 доменов PMBOK 7» | `<details>`/кнопка раскрывает RU labels + plain hints, не D1–D8 |
-| G2 | Onboarding шаг 3 | Тот же глоссарий; labels совпадают с радаром |
+| G2 | Onboarding шаг 4 (боль) | Тот же глоссарий; labels совпадают с радаром |
 | G3 | Radar pills `title` | Tooltip с hint из glossary |
 | N1 | «Навигатор неопределённости» | S1–S4: ввод + ожидания; collapsible |
 | N2 | Сценарии vs `navigator-scenarios.md` | Тексты не расходятся с knowledge-base |
@@ -137,6 +139,8 @@
 | T-043 | Phase 3–4 full pass + glossary/nav doc pass |
 | T-046 | [`docs/qa-phase5-prep.md`](../docs/qa-phase5-prep.md) §P5-* Phase 5 scaffold |
 | T-053 | §SEO S1–S4 |
+| T-080…T-083 | §Book features BK1–BK11 |
+| T-078 | Post-M0 staging subset + prod curl BK10–BK11 |
 
 ---
 
@@ -179,6 +183,35 @@
 |---|----------|----------|
 | N3 | «Спросить напарника» | Sets active scenario; commentary card refetches |
 | N4 | BFF body | `userSituation` + `navigatorScenarioId` S1–S4 only; no email in payload |
+
+---
+
+## Book features — Phase Book (T-080…T-083)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| BK1 | **Фокус недели** (T-080) | Dashboard card: weakest domain + static question; «Отметить: сделал»; disclaimer в footer |
+| BK2 | Focus refresh | `ensureFocusWeek()` при смене недели; вопрос из `lib/focusWeek.ts` |
+| BK3 | **Prep checklist** (T-081) | Onboarding step 3/4: 7 items из `PREP_CHECKLIST_ITEMS`; skip ok |
+| BK4 | Prep → scores | Отмеченные пункты повышают домены per `PREP_CHECKLIST_DELTAS` |
+| BK5 | **Stakeholder lite** (T-082) | Collapsible card; max 3 rows; who + expectation; stale hint >14d |
+| BK6 | Stakeholder CRUD | Add / edit / remove; persist в store |
+| BK7 | **Weekly snapshot** (T-083) | «Записать снимок недели» в export section; `recordWeeklySnapshot()` |
+| BK8 | Return reminder | Banner ~7d после snapshot; snooze + dismiss; link `/onboarding` |
+| BK9 | Export includes book | JSON snapshot: `focusWeek`, `stakeholdersLite`, `retentionReminder` |
+| BK10 | Prod markers | Live HTML содержит «Фокус недели», prep step, stakeholders (curl/grep) |
+| BK11 | BFF fallback ok | Book dogfood **не требует** live LLM; disclaimer в HealthCommentary footer |
+
+**Smoke (prod curl):**
+
+```bash
+curl -sS https://quiet-partner.vercel.app/api/health
+curl -sS -X POST https://quiet-partner.vercel.app/api/advisor/health-commentary \
+  -H "Content-Type: application/json" \
+  -d '{"domainScores":{"D1":50,"D2":60,"D3":70,"D4":30,"D5":65,"D6":55,"D7":70,"D8":40},"deliveryApproach":"hybrid"}'
+```
+
+Ожидание: HTTP 200; BFF `commentary` + `disclaimer`; fallback suffix допустим при balance $0.
 
 ---
 

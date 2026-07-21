@@ -5,9 +5,12 @@ import { useSyncExternalStore } from "react";
 
 import { DomainGlossary } from "@/components/DomainGlossary";
 import { DomainRadar } from "@/components/DomainRadar";
+import { FocusWeekCard } from "@/components/FocusWeekCard";
 import { HealthCommentary } from "@/components/HealthCommentary";
 import { NavigatorScenariosPanel } from "@/components/NavigatorScenariosPanel";
 import { ProjectExportButton } from "@/components/ProjectExportButton";
+import { StakeholderLitePanel } from "@/components/StakeholderLitePanel";
+import { WeeklySnapshotReminder } from "@/components/WeeklySnapshotReminder";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DISCLAIMER } from "@/lib/domains";
 import { usePersistHydrated } from "@/lib/store/usePersistHydrated";
@@ -61,6 +64,16 @@ export function DashboardShell() {
             {phase ? ` · ${phase}` : ""} · подход: {approachLabel}
           </p>
           <div className="flex flex-wrap items-center gap-3">
+            <Link href="/">
+              <Button variant="ghost" size="sm">
+                Режимы
+              </Button>
+            </Link>
+            <Link href="/stages">
+              <Button variant="ghost" size="sm">
+                Пульт этапов
+              </Button>
+            </Link>
             <Link href="/onboarding">
               <Button variant="outline" size="sm">
                 Настроить проект
@@ -94,22 +107,37 @@ export function DashboardShell() {
             </Link>
           </div>
         )}
+        <WeeklySnapshotReminder />
         <div className="grid gap-6 lg:grid-cols-5 lg:gap-8">
           <section
             className="rounded-xl border border-border/80 bg-card p-6 shadow-sm lg:col-span-3"
             aria-label="Радар доменов"
           >
             <DomainRadar />
+            <div className="mt-6 lg:hidden" aria-label="Фокус недели">
+              <FocusWeekCard />
+            </div>
           </section>
           <section className="lg:col-span-2" aria-label="Комментарий напарника">
             <HealthCommentary />
           </section>
         </div>
 
+        <section
+          className="mt-6 hidden lg:block"
+          aria-label="Фокус недели"
+        >
+          <FocusWeekCard />
+        </section>
+
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <DomainGlossary variant="compact" />
           <NavigatorScenariosPanel />
         </div>
+
+        <section className="mt-8" aria-label="Ключевые стороны">
+          <StakeholderLitePanel />
+        </section>
 
         <section
           className="mt-8 rounded-xl border border-border/80 bg-card p-4 shadow-sm"

@@ -14,6 +14,8 @@ export type AnalyticsEvent =
   | "feedback_positive"
   | "feedback_negative"
   | "action_logged"
+  | "focus_week_view"
+  | "focus_week_done"
   | "landing_view"
   | "waitlist_submit";
 
@@ -107,6 +109,14 @@ export function trackFeedbackNegative(props?: AnalyticsProperties): void {
 
 export function trackActionLogged(props?: AnalyticsProperties): void {
   capture("action_logged", props);
+}
+
+export function trackFocusWeekView(props?: AnalyticsProperties): void {
+  capture("focus_week_view", props);
+}
+
+export function trackFocusWeekDone(props?: AnalyticsProperties): void {
+  capture("focus_week_done", props);
 }
 
 export function trackLandingView(props?: AnalyticsProperties): void {
