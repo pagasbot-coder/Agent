@@ -309,28 +309,34 @@ export function StagesShell() {
                       </Button>
                     </div>
                   </div>
-                  <div className="overflow-x-auto">
+                  <div className="overflow-x-auto rounded-lg border border-border">
                     <table className="w-max min-w-full border-collapse text-sm">
                       <thead>
                         <tr>
                           {REGISTERS[activeReg].columns.map((c) => (
                             <th
                               key={c.key}
-                              className="border border-border bg-muted/40 px-2 py-1.5 text-left text-xs font-medium whitespace-nowrap"
+                              className={cn(
+                                "sticky top-0 z-[1] border-b border-border bg-muted/80 px-2 py-2 text-left text-xs font-medium backdrop-blur-sm",
+                                c.multiline ? "min-w-[14rem]" : "whitespace-nowrap",
+                              )}
                             >
                               {c.label}
                             </th>
                           ))}
-                          <th className="border border-border bg-muted/40 px-2 py-1.5" />
+                          <th className="sticky top-0 z-[1] border-b border-border bg-muted/80 px-2 py-2" />
                         </tr>
                       </thead>
                       <tbody>
                         {rows.map((row, ri) => (
-                          <tr key={ri}>
+                          <tr key={ri} className="odd:bg-background even:bg-muted/20">
                             {REGISTERS[activeReg].columns.map((c) => (
                               <td
                                 key={c.key}
-                                className="border border-border p-1 align-top"
+                                className={cn(
+                                  "border-b border-border p-1.5 align-top",
+                                  c.multiline && "min-w-[14rem] max-w-[22rem]",
+                                )}
                               >
                                 {c.type === "select" ? (
                                   <select
@@ -338,7 +344,7 @@ export function StagesShell() {
                                     onChange={(e) =>
                                       updateCell(ri, c.key, e.target.value)
                                     }
-                                    className="h-8 w-full min-w-[4.5rem] rounded border-0 bg-transparent px-1 text-sm outline-none focus:ring-1 focus:ring-ring"
+                                    className="h-9 w-full min-w-[5rem] rounded-md border border-input bg-background px-2 text-sm outline-none focus:ring-1 focus:ring-ring"
                                   >
                                     <option value="" />
                                     {c.options?.map((o) => (
@@ -347,22 +353,31 @@ export function StagesShell() {
                                       </option>
                                     ))}
                                   </select>
+                                ) : c.multiline ? (
+                                  <textarea
+                                    value={row[c.key] ?? ""}
+                                    onChange={(e) =>
+                                      updateCell(ri, c.key, e.target.value)
+                                    }
+                                    rows={3}
+                                    className="min-h-[4.5rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
+                                  />
                                 ) : (
                                   <input
                                     value={row[c.key] ?? ""}
                                     onChange={(e) =>
                                       updateCell(ri, c.key, e.target.value)
                                     }
-                                    className="h-8 w-full min-w-[6rem] rounded border-0 bg-transparent px-1 text-sm outline-none focus:ring-1 focus:ring-ring"
+                                    className="h-9 w-full min-w-[6rem] rounded-md border border-input bg-background px-2 text-sm outline-none focus:ring-1 focus:ring-ring"
                                   />
                                 )}
                               </td>
                             ))}
-                            <td className="border border-border p-1 text-center">
+                            <td className="border-b border-border p-1.5 text-center align-top">
                               <button
                                 type="button"
                                 onClick={() => delRow(ri)}
-                                className="px-2 text-muted-foreground hover:text-destructive"
+                                className="px-2 py-1 text-muted-foreground hover:text-destructive"
                                 title="Удалить"
                                 aria-label="Удалить строку"
                               >

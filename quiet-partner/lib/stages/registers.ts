@@ -5,6 +5,8 @@ export type ColumnDef = {
   label: string;
   type?: "select";
   options?: string[];
+  /** Long text — textarea + wrap (readable in pulpit). */
+  multiline?: boolean;
 };
 
 export type RegisterDef = {
@@ -31,19 +33,19 @@ export const REGISTERS: Record<string, RegisterDef> = {
     title: "Стороны",
     columns: [
       { key: "name", label: "Имя" },
-      { key: "role", label: "Роль на проекте" },
-      { key: "fn", label: "Функция / что делает" },
+      { key: "role", label: "Роль на проекте", multiline: true },
+      { key: "fn", label: "Функция / что делает", multiline: true },
       {
         key: "influence",
         label: "Влияние",
         type: "select",
         options: ["В", "С", "Н"],
       },
-      { key: "interest", label: "Интерес" },
+      { key: "interest", label: "Интерес", multiline: true },
       { key: "channel", label: "Канал" },
-      { key: "need", label: "Что нужно от него" },
-      { key: "silence", label: "Риск молчания" },
-      { key: "note", label: "Примечание" },
+      { key: "need", label: "Что нужно от него", multiline: true },
+      { key: "silence", label: "Риск молчания", multiline: true },
+      { key: "note", label: "Примечание", multiline: true },
     ],
     header: `# Реестр: заинтересованные стороны
 
@@ -65,7 +67,7 @@ export const REGISTERS: Record<string, RegisterDef> = {
     path: "reestry/02-riski.md",
     title: "Риски",
     columns: [
-      { key: "event", label: "Событие" },
+      { key: "event", label: "Событие", multiline: true },
       {
         key: "prob",
         label: "Вер.",
@@ -79,7 +81,7 @@ export const REGISTERS: Record<string, RegisterDef> = {
         options: ["В", "С", "Н"],
       },
       { key: "owner", label: "Владелец" },
-      { key: "mitigation", label: "Мера до события" },
+      { key: "mitigation", label: "Мера до события", multiline: true },
       {
         key: "status",
         label: "Статус",
@@ -100,12 +102,12 @@ export const REGISTERS: Record<string, RegisterDef> = {
     path: "reestry/03-byudzhet.md",
     title: "Бюджет",
     columns: [
-      { key: "item", label: "Статья" },
+      { key: "item", label: "Статья", multiline: true },
       { key: "plan", label: "План" },
       { key: "fact", label: "Факт" },
       { key: "forecast", label: "Прогноз" },
       { key: "delta", label: "Δ" },
-      { key: "note", label: "Комментарий" },
+      { key: "note", label: "Комментарий", multiline: true },
     ],
     header: `# Реестр: бюджет (план — факт — прогноз)
 
@@ -120,11 +122,11 @@ export const REGISTERS: Record<string, RegisterDef> = {
     title: "Решения",
     columns: [
       { key: "date", label: "Дата" },
-      { key: "decision", label: "Решение" },
-      { key: "why", label: "Почему" },
+      { key: "decision", label: "Решение", multiline: true },
+      { key: "why", label: "Почему", multiline: true },
       { key: "whoA", label: "Кто решил (A)" },
       { key: "whoR", label: "Кто исполняет" },
-      { key: "rejected", label: "Что отвергли" },
+      { key: "rejected", label: "Что отвергли", multiline: true },
       { key: "link", label: "Связь" },
       {
         key: "status",
@@ -144,19 +146,19 @@ export const REGISTERS: Record<string, RegisterDef> = {
     path: "reestry/05-ne-znaem.md",
     title: "Не знаем",
     columns: [
-      { key: "q", label: "Вопрос" },
-      { key: "why", label: "Зачем" },
+      { key: "q", label: "Вопрос", multiline: true },
+      { key: "why", label: "Зачем", multiline: true },
       { key: "owner", label: "Владелец ответа" },
       { key: "due", label: "Срок" },
-      { key: "ifNot", label: "Если не ответим" },
-      { key: "hyp", label: "Гипотеза" },
+      { key: "ifNot", label: "Если не ответим", multiline: true },
+      { key: "hyp", label: "Гипотеза", multiline: true },
       {
         key: "status",
         label: "Статус",
         type: "select",
         options: ["открыт", "закрыт", "устарел"],
       },
-      { key: "closed", label: "Закрыто чем" },
+      { key: "closed", label: "Закрыто чем", multiline: true },
     ],
     header: `# Реестр: открытые вопросы («не знаем»)
 
@@ -170,18 +172,18 @@ export const REGISTERS: Record<string, RegisterDef> = {
     path: "reestry/06-vekhi.md",
     title: "Вехи",
     columns: [
-      { key: "name", label: "Веха" },
+      { key: "name", label: "Веха", multiline: true },
       { key: "date", label: "Дата цели" },
-      { key: "dod", label: "Критерий готовности" },
+      { key: "dod", label: "Критерий готовности", multiline: true },
       { key: "owner", label: "Владелец" },
-      { key: "dep", label: "Зависимость" },
+      { key: "dep", label: "Зависимость", multiline: true },
       {
         key: "status",
         label: "Статус",
         type: "select",
         options: ["не начато", "в работе", "на приёмке", "принято", "сдвиг"],
       },
-      { key: "shift", label: "Сдвиг / причина" },
+      { key: "shift", label: "Сдвиг / причина", multiline: true },
       {
         key: "money",
         label: "Деньги?",

@@ -150,6 +150,7 @@
 | T-098 | QA: чеклист и smoke сценария фокуса | QA | BACKLOG | P0 | T-094, T-095 | `@knowledge-base/qa-checklist.md` | |
 | T-099 | Dogfood: 3 сессии «понял фокус дня?» + заметки | PM + Human | BACKLOG | P1 | T-098 | `@docs/dogfood-log-template.md` | |
 | T-100 | Редактура PRD/отчёта эпика на русском (для команды) | Copywriter | READY | P2 | T-090 | `@docs/prd-focus-today.md` | |
+| T-101 | UX реестров пульта: длинный текст читаем (карточки / wrap) | UI/UX + Developer | READY | P0 | — | `@components/stages/StagesShell.tsx` `@lib/stages/registers.ts` | Human 22.07: однострочные input нечитаемы; v1 textarea+wrap DONE в коде — добить мобильные карточки |
 
 ### Детали задач эпика
 
