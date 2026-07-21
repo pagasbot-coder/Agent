@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (эпик моста Пульт↔Напарник T-103…T-111; scope READY)
+**Последнее обновление:** 2026-07-22 (мост: Human Go «A с баннером»; T-104/105/109/111 READY)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -268,7 +268,7 @@
 
 > Источник: [`docs/prd-stages-radar-bridge.md`](docs/prd-stages-radar-bridge.md) · канон круглого стола этап B: [`kruglyy-stol-projectm-qp-obedinenie.md`](docs/kruglyy-stol-projectm-qp-obedinenie.md)  
 > **Принцип:** оба режима **автономны**; связь явная «Подтянуть в напарника» → имя проекта + **оценка** на `/radar`. Не комбайн UI.  
-> **Human Go:** режим оценки A (сразу apply scores) vs B (превью) — по умолчанию **A** в PRD §3.
+> **Human Go:** режим оценки **A с баннером** (2026-07-22) — apply scores по CTA + баннер «из пульта, можно поправить»; B (превью) отклонён.
 
 ### Порядок
 
@@ -297,7 +297,7 @@
 - [x] PRD: автономия + связь + «оценка на радаре»
 - [x] Out of scope и канон v1 явны
 - [x] Очередь T-104…T-111 с порядком
-- [x] Режим оценки A/B зафиксирован (default A; Human может сменить)
+- [x] Режим оценки A/B зафиксирован → **A с баннером** (Human Go 2026-07-22)
 
 #### T-104 — ADR (IT-Architect)
 
@@ -376,6 +376,7 @@
 | 2026-07-22 | **T-098 DONE:** prod smoke — `/` `/radar` `/stages` `/waitlist` 200; waitlist wedge; chunk «Фокус на сегодня» + «Открыть в пульте». |
 | 2026-07-22 | **PM контроль:** порядок эпика OK; `pm-status` v6.0; **T-099 IN_PROGRESS** (Human); billing/GTM на паузе; гайд `dogfood-focus-today-guide.md`. |
 | 2026-07-22 | **Эпик моста T-103…T-111:** [`docs/prd-stages-radar-bridge.md`](docs/prd-stages-radar-bridge.md) — автономия режимов + pull в напарника с оценкой; T-103 DONE; T-104/105/109/111 READY. |
+| 2026-07-22 | **Human Go мост:** режим **A с баннером** (apply по CTA + баннер/правка; без тихого синка; B отклонён). Next: T-104 Architect ∥ T-105 Senior PM ∥ T-109/T-111. |
 
 ---
 
