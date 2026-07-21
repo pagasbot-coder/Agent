@@ -213,6 +213,23 @@ curl -sS https://quiet-partner.vercel.app/waitlist | rg -n 'один фокус 
 
 ---
 
+## Мост Пульт ↔ Напарник (T-110) — ADR-006
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| BR1 | Автономия `/stages` | Работает без pull; реестры в `qp-stages-*` |
+| BR2 | Автономия `/radar` | Работает без bridge; баннера нет |
+| BR3 | CTA | «Подтянуть в напарника» на `/stages` |
+| BR4 | Pull | Имя проекта + scores на `/radar`; баннер «из пульта» |
+| BR5 | Overwrite | Confirm если другое имя в напарнике |
+| BR6 | Demo | «Тестовый прогон» + чекбокс → оба контура |
+| BR7 | Focus | После pull focusDay с радара обновляется |
+| BR8 | Disclaimer | Баннер / UI — co-pilot, не cert |
+
+**Smoke:** на `/stages` есть «Подтянуть в напарника»; chunk содержит строку баннера.
+
+---
+
 ## Book features — Phase Book (T-080…T-083)
 
 | # | Проверка | Ожидание |

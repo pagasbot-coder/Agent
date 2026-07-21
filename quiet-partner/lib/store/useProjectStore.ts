@@ -29,6 +29,11 @@ import {
   buildProjectSnapshot,
   type ProjectSnapshot,
 } from "@/lib/exportProjectSnapshot";
+import type {
+  StagesBridgeLink,
+  StagesRadarSnapshot,
+} from "@/lib/stages/bridge";
+import { bridgeNeedsOverwriteConfirm } from "@/lib/stages/bridge";
 
 export type DomainHealth = {
   id: DomainId;
@@ -98,6 +103,8 @@ type ProjectStore = {
   focusWeek: FocusWeekState | null;
   /** Daily «фокус на сегодня» — hub / radar / stages (T-092). */
   focusDay: FocusDayState | null;
+  /** Link after pull from `/stages` (ADR-006). */
+  stagesBridge: StagesBridgeLink | null;
   projectPrepChecklist: ProjectPrepChecklist;
   stakeholdersLite: StakeholderLite[];
   weeklySnapshots: WeeklySnapshotRef[];
@@ -141,6 +148,14 @@ type ProjectStore = {
   setFocusManual: (title: string, linkedStageId?: number) => void;
   markFocusDayDone: () => void;
   clearFocusDay: () => void;
+  /** True if applying snapshot would overwrite another project. */
+  needsStagesOverwriteConfirm: (snapshot: StagesRadarSnapshot) => boolean;
+  /** Apply pulpit snapshot → name, phase, scores, bridge link (A + banner). */
+  applyStagesBridge: (
+    snapshot: StagesRadarSnapshot,
+    opts?: { refreshFocusFromRadar?: boolean },
+  ) => void;
+  clearStagesBridge: () => void;
 };
 
 function clampScore(value: number): number {
@@ -172,6 +187,7 @@ export const useProjectStore = create<ProjectStore>()(
       domains: buildInitialDomains(MOCK_DOMAIN_SCORES),
       focusWeek: null,
       focusDay: null,
+      stagesBridge: null,
       projectPrepChecklist: {},
       stakeholdersLite: [],
       weeklySnapshots: [],
@@ -477,6 +493,52 @@ export const useProjectStore = create<ProjectStore>()(
         set({ focusDay: null });
         get().logAction("focus_day_clear");
       },
+
+      needsStagesOverwriteConfirm: (snapshot) => {
+        const { projectProfile, stagesBridge } = get();
+        return bridgeNeedsOverwriteConfirm(snapshot, {
+          name: projectProfile.name,
+          bridge: stagesBridge,
+        });
+      },
+
+      applyStagesBridge: (snapshot, opts) => {
+        const scores = snapshot.suggestedScores;
+        const domains = buildInitialDomains(scores);
+        const linkedAt = new Date().toISOString();
+        const bridge: StagesBridgeLink = {
+          projectKey: snapshot.projectKey,
+          projectName: snapshot.project.name,
+          stageId: snapshot.project.stageId,
+          stageName: snapshot.project.stageName,
+          linkedAt,
+          stagesUpdatedAt: snapshot.stagesUpdatedAt,
+          source: "stages",
+        };
+        set((state) => ({
+          domains,
+          stagesBridge: bridge,
+          projectProfile: {
+            ...state.projectProfile,
+            name: snapshot.project.name,
+            phase: snapshot.project.stageName,
+            updatedAt: linkedAt,
+          },
+          commentaryTrigger: state.commentaryTrigger + 1,
+        }));
+        get().logAction(
+          "bridge_pull_to_radar",
+          `stage ${snapshot.project.stageId}; rows ${snapshot.registerRowCount}`,
+        );
+        if (opts?.refreshFocusFromRadar !== false) {
+          get().setFocusFromRadar(snapshot.project.stageId);
+        }
+      },
+
+      clearStagesBridge: () => {
+        set({ stagesBridge: null });
+        get().logAction("bridge_clear");
+      },
     }),
     {
       name: PROJECT_PERSIST_KEY,
@@ -486,6 +548,7 @@ export const useProjectStore = create<ProjectStore>()(
         commentaryFeedback: state.commentaryFeedback,
         focusWeek: state.focusWeek,
         focusDay: state.focusDay,
+        stagesBridge: state.stagesBridge,
         projectPrepChecklist: state.projectPrepChecklist,
         stakeholdersLite: state.stakeholdersLite,
         weeklySnapshots: state.weeklySnapshots,

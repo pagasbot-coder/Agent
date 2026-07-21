@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (мост: Human Go «A с баннером»; T-104/105/109/111 READY)
+**Последнее обновление:** 2026-07-22 (мост T-103…T-111 DONE — A с баннером в коде)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -280,14 +280,14 @@
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
 |----|--------|------|--------|-----------|-------------|-------------------|-----------|
 | T-103 | Scope/PRD моста Пульт↔Напарник + DoR | PM | DONE | P0 | — | `@docs/prd-stages-radar-bridge.md` | Автономия режимов; one-way pull; оценка на радаре; out of scope |
-| T-104 | ADR: контракт `stagesRadarBridge` v1 + канон данных | IT-Architect | READY | P0 | T-103 | `@docs/prd-stages-radar-bridge.md` `@knowledge-base/architecture.md` | JSON schema; no silent sync; persist keys |
-| T-105 | Правила: реестры пульта → suggested domain scores | Senior PM | READY | P0 | T-103 | `@knowledge-base/pmbok-domain-playbook.md` | Таблица сигналов → D1…D8; не cert; disclaimer |
-| T-106 | Модель link + snapshot + apply scores в project store | Developer | BACKLOG | P0 | T-104, T-105 | `@lib/stages/` `@lib/store/useProjectStore.ts` | После ADR+rules → READY |
-| T-107 | UI: CTA «Подтянуть в напарника» + баннер/оценка на `/radar` | Developer | BACKLOG | P0 | T-106, T-109 | `@components/stages/StagesShell.tsx` `@components/DashboardShell.tsx` | Confirm overwrite; deep-link `/radar` |
-| T-108 | «Тестовый прогон» наполняет пульт **и** оценку напарника | Developer | BACKLOG | P1 | T-106 | `@lib/stages/demoTestRun.ts` | Опциональный чекбокс / вторая кнопка |
-| T-109 | UX: мост без слияния режимов (схема + states) | UI/UX | READY | P0 | T-103 | `@docs/prd-stages-radar-bridge.md` | Placement CTA; banner; empty/linked/stale |
-| T-110 | QA: автономия + pull → оценка visible | QA | BACKLOG | P0 | T-107, T-108 | `@knowledge-base/qa-checklist.md` | После UI |
-| T-111 | RU-микрокопия моста (Для UI) | Copywriter | READY | P1 | T-103, T-109 | `@docs/prd-stages-radar-bridge.md` | CTA, confirm, banner, disclaimer |
+| T-104 | ADR: контракт `stagesRadarBridge` v1 + канон данных | IT-Architect | DONE | P0 | T-103 | `@knowledge-base/adr-006-stages-radar-bridge.md` | ADR-006 Accepted |
+| T-105 | Правила: реестры пульта → suggested domain scores | Senior PM | DONE | P0 | T-103 | `@docs/bridge-score-mapping.md` `@lib/stages/suggestScores.ts` | baseline 62; clamp 15–95 |
+| T-106 | Модель link + snapshot + apply scores в project store | Developer | DONE | P0 | T-104, T-105 | `@lib/stages/bridge.ts` `@lib/store/useProjectStore.ts` | `applyStagesBridge` + persist |
+| T-107 | UI: CTA «Подтянуть в напарника» + баннер/оценка на `/radar` | Developer | DONE | P0 | T-106, T-109 | `@components/stages/StagesShell.tsx` `@components/StagesBridgeBanner.tsx` | CTA + banner A |
+| T-108 | «Тестовый прогон» наполняет пульт **и** оценку напарника | Developer | DONE | P1 | T-106 | `@components/stages/StagesShell.tsx` | чекбокс default on |
+| T-109 | UX: мост без слияния режимов (схема + states) | UI/UX | DONE | P0 | T-103 | `@docs/ux-stages-radar-bridge.md` | placement + states |
+| T-110 | QA: автономия + pull → оценка visible | QA | READY | P0 | T-107, T-108 | `@knowledge-base/qa-checklist.md` | smoke после deploy |
+| T-111 | RU-микрокопия моста (Для UI) | Copywriter | DONE | P1 | T-103, T-109 | `@docs/bridge-microcopy.md` | CTA, confirm, banner |
 
 ### Детали задач моста
 
@@ -377,6 +377,7 @@
 | 2026-07-22 | **PM контроль:** порядок эпика OK; `pm-status` v6.0; **T-099 IN_PROGRESS** (Human); billing/GTM на паузе; гайд `dogfood-focus-today-guide.md`. |
 | 2026-07-22 | **Эпик моста T-103…T-111:** [`docs/prd-stages-radar-bridge.md`](docs/prd-stages-radar-bridge.md) — автономия режимов + pull в напарника с оценкой; T-103 DONE; T-104/105/109/111 READY. |
 | 2026-07-22 | **Human Go мост:** режим **A с баннером** (apply по CTA + баннер/правка; без тихого синка; B отклонён). Next: T-104 Architect ∥ T-105 Senior PM ∥ T-109/T-111. |
+| 2026-07-22 | **Мост ship:** T-104…T-109, T-111 DONE — CTA «Подтянуть в напарника», banner на `/radar`, демо→оба; next T-110 QA + deploy. |
 
 ---
 

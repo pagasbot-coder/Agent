@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FocusDayCard } from "@/components/FocusDayCard";
+import { capture } from "@/lib/analytics/posthog";
 import { cn } from "@/lib/utils";
+import {
+  buildStagesSnapshot,
+  ensureStagesProjectKey,
+} from "@/lib/stages/bridge";
 import {
   CHEATSHEETS,
   emptyRow,
@@ -19,10 +25,12 @@ import {
   DEMO_STAGE_ID,
   DEMO_TEST_RUN,
 } from "@/lib/stages/demoTestRun";
+import { useProjectStore } from "@/lib/store/useProjectStore";
 
 const LS_STAGE = "qp-stages-stage";
 const LS_NAME = "qp-stages-name";
 const LS_CACHE = "qp-stages-cache";
+const LS_PROJECT_KEY = "qp-stages-project-key";
 
 type Cache = Record<string, RegisterRow[]>;
 
@@ -69,6 +77,11 @@ function downloadText(filename: string, text: string) {
 
 /** Stage pulpit: rail 0–6 + register tables in localStorage (client-only). */
 export function StagesShell() {
+  const router = useRouter();
+  const applyStagesBridge = useProjectStore((s) => s.applyStagesBridge);
+  const needsStagesOverwriteConfirm = useProjectStore(
+    (s) => s.needsStagesOverwriteConfirm,
+  );
   const [stageId, setStageId] = useState(readStage);
   const [projectName, setProjectName] = useState(readName);
   const [cache, setCache] = useState<Cache>(readCache);
@@ -76,6 +89,7 @@ export function StagesShell() {
     null,
   );
   const [status, setStatus] = useState("Данные хранятся в этом браузере.");
+  const [demoAlsoRadar, setDemoAlsoRadar] = useState(true);
 
   const stage = STAGES[stageId] ?? STAGES[0];
 
@@ -163,15 +177,90 @@ export function StagesShell() {
     ) {
       return;
     }
-    persistCache({ ...DEMO_TEST_RUN });
+    const nextCache = { ...DEMO_TEST_RUN };
+    persistCache(nextCache);
     setProjectName(DEMO_PROJECT_NAME);
     localStorage.setItem(LS_NAME, DEMO_PROJECT_NAME);
     setStageId(DEMO_STAGE_ID);
     localStorage.setItem(LS_STAGE, String(DEMO_STAGE_ID));
     setActiveRegOverride(null);
+
+    if (demoAlsoRadar) {
+      const projectKey = ensureStagesProjectKey(
+        localStorage.getItem(LS_PROJECT_KEY),
+      );
+      localStorage.setItem(LS_PROJECT_KEY, projectKey);
+      const snapshot = buildStagesSnapshot({
+        projectName: DEMO_PROJECT_NAME,
+        stageId: DEMO_STAGE_ID,
+        cache: nextCache,
+        projectKey,
+      });
+      if (
+        needsStagesOverwriteConfirm(snapshot) &&
+        !window.confirm(
+          "В напарнике уже другой проект. Заменить имя и оценку данными из пульта?",
+        )
+      ) {
+        setStatus(
+          "Загружен «Тестовый прогон» в пульт (оценка в напарнике не тронута).",
+        );
+        return;
+      }
+      applyStagesBridge(snapshot);
+      capture("bridge_pull_to_radar", {
+        stage_id: DEMO_STAGE_ID,
+        register_count: snapshot.registerRowCount,
+        from_demo: true,
+      });
+      capture("bridge_scores_applied", {
+        stage_id: DEMO_STAGE_ID,
+        register_count: snapshot.registerRowCount,
+      });
+      setStatus(
+        "«Тестовый прогон» в пульте и оценка в напарнике — открой радар.",
+      );
+      router.push("/radar?from=stages");
+      return;
+    }
+
     setStatus(
       "Загружен «Тестовый прогон» — лендинг «Северный Мотор», этап Исполнение.",
     );
+  };
+
+  const pullToRadar = () => {
+    const projectKey = ensureStagesProjectKey(
+      localStorage.getItem(LS_PROJECT_KEY),
+    );
+    localStorage.setItem(LS_PROJECT_KEY, projectKey);
+    const snapshot = buildStagesSnapshot({
+      projectName,
+      stageId,
+      cache,
+      projectKey,
+    });
+    const overwrite = needsStagesOverwriteConfirm(snapshot);
+    if (
+      overwrite &&
+      !window.confirm(
+        "В напарнике уже другой проект. Заменить имя и оценку данными из пульта?",
+      )
+    ) {
+      return;
+    }
+    applyStagesBridge(snapshot);
+    capture("bridge_pull_to_radar", {
+      stage_id: stageId,
+      register_count: snapshot.registerRowCount,
+      overwrite,
+    });
+    capture("bridge_scores_applied", {
+      stage_id: stageId,
+      register_count: snapshot.registerRowCount,
+    });
+    setStatus("Оценка подтянута в Тихого напарника");
+    router.push("/radar?from=stages");
   };
 
   return (
@@ -218,8 +307,29 @@ export function StagesShell() {
             >
               Загрузить «Тестовый прогон»
             </Button>
+            <Button
+              type="button"
+              size="sm"
+              className="mb-0.5"
+              onClick={pullToRadar}
+            >
+              Подтянуть в напарника
+            </Button>
+            <label className="mb-0.5 flex max-w-xs cursor-pointer items-start gap-2 text-xs text-muted-foreground">
+              <input
+                type="checkbox"
+                className="mt-0.5"
+                checked={demoAlsoRadar}
+                onChange={(e) => setDemoAlsoRadar(e.target.checked)}
+              />
+              <span>Также подтянуть оценку в напарника (с демо)</span>
+            </label>
             <p className="pb-1.5 text-xs text-muted-foreground">{status}</p>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Имя проекта и оценка доменов появятся на радаре после «Подтянуть в
+            напарника».
+          </p>
           <div className="flex flex-wrap gap-2">
             {CHEATSHEETS.map((c) => (
               <Link

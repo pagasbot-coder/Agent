@@ -10,6 +10,7 @@ import { FocusWeekCard } from "@/components/FocusWeekCard";
 import { HealthCommentary } from "@/components/HealthCommentary";
 import { NavigatorScenariosPanel } from "@/components/NavigatorScenariosPanel";
 import { ProjectExportButton } from "@/components/ProjectExportButton";
+import { StagesBridgeBanner } from "@/components/StagesBridgeBanner";
 import { StakeholderLitePanel } from "@/components/StakeholderLitePanel";
 import { WeeklySnapshotReminder } from "@/components/WeeklySnapshotReminder";
 import { Button } from "@/components/ui/button";
@@ -94,6 +95,7 @@ export function DashboardShell() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <StagesBridgeBanner className="mb-6" />
         <FocusDayCard variant="compact" className="mb-6" />
         {showOnboardingBanner && (
           <div

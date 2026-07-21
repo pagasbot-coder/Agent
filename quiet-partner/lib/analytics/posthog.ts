@@ -19,6 +19,8 @@ export type AnalyticsEvent =
   | "focus_set"
   | "focus_opened_in_stages"
   | "focus_done"
+  | "bridge_pull_to_radar"
+  | "bridge_scores_applied"
   | "landing_view"
   | "waitlist_submit";
 
@@ -141,4 +143,12 @@ export function trackLandingView(props?: AnalyticsProperties): void {
 
 export function trackWaitlistSubmit(props?: AnalyticsProperties): void {
   capture("waitlist_submit", props);
+}
+
+export function trackBridgePullToRadar(props?: AnalyticsProperties): void {
+  capture("bridge_pull_to_radar", props);
+}
+
+export function trackBridgeScoresApplied(props?: AnalyticsProperties): void {
+  capture("bridge_scores_applied", props);
 }
