@@ -19,16 +19,16 @@ const DEMO_URL = "https://quiet-partner.vercel.app";
 
 const VALUE_BULLETS = [
   {
+    title: "Один фокус на день",
+    text: "На Mode Hub — карточка «Фокус на сегодня»: подсказка с радара или свой приоритет. Не бэклог на спринт и не work OS — одна точка внимания, когда ведёте несколько проектов.",
+  },
+  {
     title: "8 доменов — одна картина",
     text: "Stakeholders, команда, delivery, неопределённость и ещё четыре домена PMBOK 7 на DomainRadar: зелёный / жёлтый / красный без табличного ада.",
   },
   {
-    title: "AI сначала спрашивает",
-    text: "HealthCommentary не выдаёт «галочку compliance» — 1–3 plain-language вопроса, чтобы вы сами нашли, что горит (questions-first).",
-  },
-  {
-    title: "Не PMI cert — реальный проект",
-    text: "Мы не тренажёр экзамена и не замена PMO. Co-pilot для мышления, не сертификация PMBOK — disclaimer на каждом экране.",
+    title: "Не PMI cert — co-pilot",
+    text: "Не тренажёр экзамена и не замена PMO. AI сначала спрашивает (1–3 вопроса), а не выдаёт «галочку compliance». Co-pilot для мышления — не сертификация PMBOK.",
   },
 ] as const;
 
@@ -105,21 +105,20 @@ export default function WaitlistPage() {
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         <section className="space-y-4">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Один экран — здоровье проекта. Без экзамена PMP.
+            Один экран здоровья — один фокус на день. Без экзамена PMP.
           </h1>
           <p className="text-sm text-muted-foreground sm:text-base">
             <span className="font-medium text-foreground">Тихий напарник</span>{" "}
             — co-pilot для PM в агентстве и SMB: DomainRadar по 8 доменам PMBOK
-            7, короткий HealthCommentary от AI и 1–3 уточняющих вопроса. Не ещё
-            один Jira и не тренажёр сертификации — инструмент, чтобы понять,{" "}
-            <span className="text-foreground">
-              куда направить внимание сегодня
-            </span>
-            , когда ведёте 2–8 проектов параллельно.
+            7, короткий HealthCommentary и на Mode Hub карточка «Фокус на
+            сегодня». Не ещё один Jira и не тренажёр сертификации — инструмент,
+            чтобы выбрать{" "}
+            <span className="text-foreground">один приоритет на день</span>,
+            когда ведёте 2–8 проектов параллельно.
           </p>
           <p className="text-sm italic text-muted-foreground">
             Для Ани из PM-агентства: «всё жёлтое, нет приоритета» → один фокус
-            на день.
+            на день с радара или своими словами.
           </p>
         </section>
 

@@ -4,7 +4,8 @@
 
 ## TL;DR
 
-Рынок PM-tools переполнен **таск-трекерами** и **exam prep**. Wedge «Тихий напарника»: **8 доменов + один вопрос от AI**, без Jira-клона. Риск — commoditization AI-советников (Notion, Atlassian).
+Рынок PM-tools переполнен **таск-трекерами** и **exam prep**. Wedge «Тихий напарника»: **8 доменов + один вопрос от AI**, без Jira-клона. Риск — commoditization AI-советников (Notion, Atlassian).  
+**2026-07:** Mode Hub + «Фокус на сегодня» усиливают wedge **«один фокус на день»** (не work OS / не Jira).
 
 ---
 
