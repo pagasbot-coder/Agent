@@ -151,6 +151,7 @@
 | T-099 | Dogfood: 3 сессии «понял фокус дня?» + заметки | PM + Human | BACKLOG | P1 | T-098 | `@docs/dogfood-log-template.md` | |
 | T-100 | Редактура PRD/отчёта эпика на русском (для команды) | Copywriter | READY | P2 | T-090 | `@docs/prd-focus-today.md` | |
 | T-101 | UX реестров пульта: длинный текст читаем (карточки / wrap) | UI/UX + Developer | READY | P0 | — | `@components/stages/StagesShell.tsx` `@lib/stages/registers.ts` | Human 22.07: однострочные input нечитаемы; v1 textarea+wrap DONE в коде — добить мобильные карточки |
+| T-102 | Сверка FocusWeek/ModeHub/book-доков с очередью (что DONE / отложить / завести) | Developer + PM | READY | P0 | — | `@docs/handoff-focus-today-agent.md` §B–C | Handoff v2; не дублировать код уже в main |
 
 ### Детали задач эпика
 
@@ -232,6 +233,15 @@
 - [ ] Факты и AC не менять
 - [ ] Режим «Для команды»
 
+#### T-101 — Инвентаризация локального WIP (Developer + PM)
+
+**AC:**
+- [ ] Список файлов QP вне `origin/main` (status/stash)
+- [ ] Сверка с T-090…T-100 и существующими `ModeHub` / `FocusWeekCard` / stages
+- [ ] Book/ProjectM (T-073…T-088 и docs): в очередь или «отложено»
+- [ ] Отчёт Human на русском: что деплоить первым
+- [ ] См. `@docs/handoff-focus-today-agent.md` §B–C
+
 ---
 
 ## Журнал (фрагмент)
@@ -240,6 +250,7 @@
 |------|---------|
 | 2026-07-21 | Эпик «Фокус на сегодня» T-090…T-100 из live-прогона PM/Growth. Copywriter: отчёты Human — только русский, грамотные предложения. |
 | 2026-07-21 | Handoff продукта → агент деплоя: `docs/handoff-focus-today-agent.md`. Поток Agent Ops: `knowledge-base/agent-ops-stream.md` (роли/skills отдельно от QP кода). |
+| 2026-07-21 | Handoff v2: полный scope QP + локальный WIP + **T-101** инвентаризация. Эпик T-090…T-100 сохранён. |
 
 ---
 
