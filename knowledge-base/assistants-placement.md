@@ -10,7 +10,9 @@
 | Что | Куда | В git? |
 |-----|------|--------|
 | Тон, язык, личные привычки | Cursor **User Rules** | Нет (аккаунт) |
-| PM-скиллы, PDF-книги, продуктовая KB | **`pagasbot-coder/product-copilot`** | Да |
+| Источник ProductMap skills + `.productmap` | проект **`didactic-doodle`** (или `product-copilot`) | Да (там) |
+| Skills + `.productmap` **в команде Muster** | импорт в **`Agent`** (`import-didactic-skills.sh`) | Да |
+| Bridge `/prd-writer`, competitor-* | **`Agent`** `.agents/skills/` + [`skills-muster-bridge.md`](./skills-muster-bridge.md) | Да |
 | Muster-роли, orchestration, vibecoder | **`pagasbot-coder/Agent`** | Да |
 | Универсальные skills.sh (TDD, frontend…) | `npx skills add … -g` **или** репо, где реально нужны | По желанию |
 
