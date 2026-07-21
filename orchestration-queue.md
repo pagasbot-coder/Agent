@@ -5,7 +5,7 @@
 
 **Проект:** Muster monorepo + Banya-Digital ERP  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-05-30 (Banya-Digital PROJECT HOLD)
+**Последнее обновление:** 2026-07-21 (assistants placement: User Rules / product-copilot / Agent)
 
 > **Очередь приложения (канон):** [`banya-digital/orchestration-queue.md`](banya-digital/orchestration-queue.md) — Phase 3 задачи **T-009…T-014** (auth, CRM CRUD, finance input, inventory, checklists, pilot reglement).
 
@@ -177,3 +177,11 @@
 2. **Работа:** использовать `@knowledge-base/*` и правила роли; не брать чужие `IN_PROGRESS`.
 3. **Финиш:** статус → `DONE`, заполнить колонку «Итог / PR», при необходимости обновить `knowledge-base/` и `docs/roadmap.md`.
 4. **Блокер:** статус → `BLOCKED`, описать причину в «Notes» задачи.
+
+---
+
+## Журнал
+
+| Дата | Событие |
+|------|---------|
+| 2026-07-21 | Политика ассистентов: User Rules / `product-copilot` / `Agent`. KB `assistants-placement.md`, скрипт `scripts/migrate-local-cursor-assistants.sh`. Фактический copy с Mac — Human (Cloud Agent не видит `~/.cursor` и private `product-copilot`). |
