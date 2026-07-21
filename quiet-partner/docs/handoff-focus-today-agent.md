@@ -1,94 +1,116 @@
-# Handoff: эпик «Фокус на сегодня» → агент продукта / деплоя
+# Handoff: весь продуктовый Quiet Partner → агент продукта / деплоя
 
-**Кому:** Cloud Agent / Developer, который сейчас занимается **деплоем Quiet Partner**  
-**От кого:** агент оркестрации (Muster / skills / роли) · ветка `cursor/assistants-placement-aaf3`  
-**Дата:** 2026-07-21  
-**Язык отчётов Human:** русский (см. `@role-copywriter`)
+**Кому:** Cloud Agent / Developer на **деплое и коде Quiet Partner**  
+**От кого:** Agent Ops (Muster / skills)  
+**Дата:** 2026-07-21 (v2 — полный scope)  
+**Язык отчётов Human:** русский, грамотные предложения (`@role-copywriter`)
 
 ---
 
 ## TL;DR
 
-1. Продуктовая работа по фиче **«Фокус на сегодня»** продолжается **у тебя** (не в чате оркестрации агентов).
-2. Канон: [`prd-focus-today.md`](./prd-focus-today.md) + очередь **T-090…T-100** в [`../orchestration-queue.md`](../orchestration-queue.md).
-3. Live: https://quiet-partner.vercel.app/ (Mode Hub: `/stages` + `/radar` + `/waitlist`).
-4. Репозиторий `didactic-doodle` **не трогать** — только читать при необходимости; skills уже импортированы в monorepo `Agent`.
+1. Тебе принадлежит **весь код и деплой Quiet Partner**, не только «фокус».
+2. На `main` уже есть Mode Hub, `/stages`, `/radar`, `FocusWeekCard`, book-доки — **сверь с T-090…T-100**, не пиши с нуля.
+3. Эпик **T-090…T-100** («Фокус на сегодня») + **T-101** (UX реестров пульта) + **T-102** (сверка WIP / book-доков с очередью).
+4. `didactic-doodle` и Muster/skills — **не твой** scope.
 
 ---
 
-## Контекст
+## A. Эпик «Фокус на сегодня» (в git)
 
-На проде есть два режима без общего «фокуса дня». Waitlist обещает Ане «один фокус на день».  
-PRD и разбивка по ролям уже в git. Нужна реализация + деплой + QA.
+Канон: [`prd-focus-today.md`](./prd-focus-today.md) · очередь [`../orchestration-queue.md`](../orchestration-queue.md)
 
----
+| ID | Роль | Статус | Суть |
+|----|------|--------|------|
+| T-090 | PM | READY | DoR по PRD |
+| T-091 | UI/UX | READY | Схема карточки фокуса |
+| T-092 | Developer | READY | `focusDay` в store — **сверить с `lib/focusWeek.ts` / FocusWeekCard** |
+| T-093 | Developer | BACKLOG | UI на Mode Hub — **ModeHub.tsx уже в main** |
+| T-094 | Developer | BACKLOG | Синхрон radar/stages + CTA |
+| T-095 | Developer | BACKLOG | PostHog events |
+| T-096 | Copywriter | READY | RU-микрокопия |
+| T-097 | Growth | READY | Waitlist + competitive scan |
+| T-098 | QA | BACKLOG | Smoke |
+| T-099 | PM + Human | BACKLOG | Dogfood ×3 |
+| T-100 | Copywriter | READY | Вычитка PRD |
 
-## Твой scope (продукт)
-
-| ID | Роль | Что сделать | Статус старта |
-|----|------|-------------|---------------|
-| T-090 | PM | Закрыть DoR по PRD (файл уже есть) | READY |
-| T-091 | UI/UX | Схема карточки hub/radar/stages | READY |
-| T-092 | Developer | `focusDay` в Zustand persist | READY |
-| T-093 | Developer | UI на Mode Hub | BACKLOG ← 091, 092, 096 |
-| T-094 | Developer | Синхрон `/radar` + `/stages` + CTA | BACKLOG |
-| T-095 | Developer | PostHog events | BACKLOG |
-| T-096 | Copywriter | RU-микрокопия UI | READY |
-| T-097 | Growth | Waitlist + competitive scan | READY |
-| T-098 | QA | Smoke фокуса | BACKLOG |
-| T-099 | PM + Human | Dogfood ×3 | BACKLOG |
-| T-100 | Copywriter | Вычитка PRD по-русски | READY |
-
-**Параллельный старт:** T-090, T-091, T-092, T-096, T-097, T-100.  
-После деплоя UI — T-098, затем T-099.
-
-### Технические якоря
-
-- Store: `lib/store/useProjectStore.ts`
-- Hub: `components/ModeHub.tsx` (или актуальный entry `/`)
-- Radar / stages: `app/radar/`, `app/stages/`
-- Analytics: `lib/analytics/posthog.ts` (OFF by default ok)
-- Staging: https://quiet-partner.vercel.app · runbook `docs/deploy-staging.md`
-
-### Не в scope этого handoff
-
-- Биллинг YooKassa (T-069…T-071 — Human pause)
-- Правки Muster-ролей, skills, `.productmap` import — **другой агент**
-- Запись в `didactic-doodle`
+Live: https://quiet-partner.vercel.app/ · deploy: `docs/deploy-staging.md`
 
 ---
 
-## Стартовый промпт (скопировать агенту на деплое)
+## B. Уже в main (продуктовый агент уже пушил) — не дублировать
+
+| Что | Путь |
+|-----|------|
+| Mode Hub | `components/ModeHub.tsx`, `app/page.tsx` |
+| Пульт этапов | `app/stages/`, `components/stages/`, `lib/stages/` |
+| Радар-роут | `app/radar/` |
+| Focus week UI | `components/FocusWeekCard.tsx`, `lib/focusWeek.ts` |
+| Weekly snapshot | `components/WeeklySnapshotReminder.tsx` |
+| ProjectM content | `content/projectm/` |
+| Book / GTM docs | `docs/book-p2-dev-handoff-T-080-T-081.md`, `ux-book-features-…`, `gtm-sprint1-drafts-T-073.md`, `waitlist-metrics-spec-T-074.md`, `git-hygiene-T-088.md`, … |
+| Lifecycle playbook | `knowledge-base/project-lifecycle-playbook.md` |
+
+---
+
+## C. Задачи вне фокуса (тоже твои)
+
+| ID | Суть | Статус |
+|----|------|--------|
+| **T-101** | UX реестров пульта: длинный текст читаем (мобильные карточки) | READY · продукт уже начал |
+| **T-102** | Сверка book/FocusWeek/stages с очередью: что DONE, что отложить, что завести T-0xx | READY |
+| T-069…T-071 | Billing YooKassa | BACKLOG — **не трогать** без Human «можно» |
+
+Book/ProjectM (T-073…T-088 в доках) — **не все ID были в эпике фокуса**. T-102 как раз про это.
+
+---
+
+## D. Порядок работы
+
+1. **T-102** — сверка: FocusWeek vs T-090…T-094; book-доки → очередь или «отложено».  
+2. **T-101** — добить UX реестров (уже в работе у продукта).  
+3. T-090 / T-096 / T-097 / T-100 (docs).  
+4. T-092–T-094 **на базе существующего** FocusWeek/ModeHub.  
+5. Деплой Vercel + **T-098**.  
+6. T-099 dogfood.
+
+---
+
+## E. Стартовый промпт (v2)
 
 ```text
-Role: Developer (и по очереди PM/UI/Copywriter/Growth/QA).
-Проект: quiet-partner. Читай @quiet-partner/orchestration-queue.md эпик «Фокус на сегодня»
-и @quiet-partner/docs/prd-focus-today.md @quiet-partner/docs/handoff-focus-today-agent.md
-1) Возьми READY: T-092 (store), параллельно зафиксируй T-090 DoR.
-2) Не трогай didactic-doodle и не занимайся Muster/skills.
-3) После UI (T-093–T-094) — деплой на Vercel staging и отдай QA T-098.
-4) Отчёты Human — на русском, ясными предложениями.
-5) Обновляй статусы в quiet-partner/orchestration-queue.md.
-Эпик T-090…T-100 остаётся за ним.
+Role: Developer + PM.
+Проект quiet-partner. Читай:
+@quiet-partner/docs/handoff-focus-today-agent.md
+@quiet-partner/docs/prd-focus-today.md
+@quiet-partner/orchestration-queue.md
+
+Важно: ModeHub, stages, radar, FocusWeekCard УЖЕ в main — не пиши с нуля.
+1) T-102 — сверка FocusWeek/book-доков с T-090…T-100 и статусами.
+2) T-101 — UX реестров пульта (мобильные карточки).
+3) Эпик фокуса T-090…T-100 — довести поверх существующего кода.
+4) Деплой Vercel после UI. Billing T-069…T-071 не трогать без Human.
+5) Не трогай didactic-doodle и Muster/skills.
+6) Отчёты Human — на русском, ясными предложениями.
+7) Обновляй quiet-partner/orchestration-queue.md.
 ```
 
 ---
 
-## Разделение агентов
+## F. Разделение агентов
 
-| Поток | Кто | Очередь / docs |
-|-------|-----|----------------|
-| **Продукт QP + деплой** | **Ты** | `quiet-partner/orchestration-queue.md` T-090… |
-| **Muster-роли, skills, импорт, оркестрация** | Агент assistants-placement | `knowledge-base/agent-ops-stream.md`, root queue |
+| Поток | Кто | Scope |
+|-------|-----|--------|
+| **Продукт QP + Vercel** | **Ты** | `quiet-partner/` · T-090…T-102 · book после T-102 |
+| **Muster / skills / роли** | Agent Ops | `.cursor/`, `.agents/skills`, import `.productmap` |
 
-Не дублируй `IN_PROGRESS` на одном `T-0xx` в двух чатах.
+Не дублируй `IN_PROGRESS` на одном ID в двух чатах.
 
 ---
 
-## Definition of Done эпика (продукт)
+## G. Definition of Done (минимум)
 
-- [ ] Фокус ставится, виден на hub / radar / stages, переживает reload
-- [ ] CTA в пульт работает
-- [ ] PostHog-события заведены (могут быть OFF)
-- [ ] Staging smoke PASS
-- [ ] Очередь обновлена; краткий итог по-русски для Human
+- [ ] T-102 отчёт: что уже в коде vs очередь  
+- [ ] T-101 UX реестров — прогресс или DONE  
+- [ ] Фокус T-090…T-098: на staging или явно отложено  
+- [ ] Очередь обновлена; отчёт Human на русском  
