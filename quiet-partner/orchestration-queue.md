@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (PM контроль: порядок OK; T-099 IN_PROGRESS Human)
+**Последнее обновление:** 2026-07-22 (эпик моста Пульт↔Напарник T-103…T-111; scope READY)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -24,7 +24,7 @@
 | Growth | `muster-growth-marketer` | «Role: Growth» | `@role-growth-marketer` |
 | **Chief Editor** | `muster-copywriter` | «Role: Copywriter» / «Роль: Копирайтер» | `@role-copywriter` |
 
-Контекст: `@knowledge-base/product-brief.md`, `@knowledge-base/pmbok-domain-playbook.md`, `@docs/implementation-plan.md`, `@docs/technical-specification.md`, эпик фокуса: `@docs/prd-focus-today.md`.
+Контекст: `@knowledge-base/product-brief.md`, `@knowledge-base/pmbok-domain-playbook.md`, `@docs/implementation-plan.md`, `@docs/technical-specification.md`, эпик фокуса: `@docs/prd-focus-today.md`, эпик моста: `@docs/prd-stages-radar-bridge.md`.
 
 ---
 
@@ -264,6 +264,103 @@
 
 ---
 
+## Эпик: Мост Пульт ↔ Тихий напарник (2026-07-22)
+
+> Источник: [`docs/prd-stages-radar-bridge.md`](docs/prd-stages-radar-bridge.md) · канон круглого стола этап B: [`kruglyy-stol-projectm-qp-obedinenie.md`](docs/kruglyy-stol-projectm-qp-obedinenie.md)  
+> **Принцип:** оба режима **автономны**; связь явная «Подтянуть в напарника» → имя проекта + **оценка** на `/radar`. Не комбайн UI.  
+> **Human Go:** режим оценки A (сразу apply scores) vs B (превью) — по умолчанию **A** в PRD §3.
+
+### Порядок
+
+1. T-103 DoR/scope (PM)  
+2. Параллельно T-104 ADR · T-105 маппинг оценки · T-109 UX · T-111 copy  
+3. T-106 модель + apply → T-107 CTA/баннер → T-108 демо оба контура  
+4. T-110 QA  
+
+| ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
+|----|--------|------|--------|-----------|-------------|-------------------|-----------|
+| T-103 | Scope/PRD моста Пульт↔Напарник + DoR | PM | DONE | P0 | — | `@docs/prd-stages-radar-bridge.md` | Автономия режимов; one-way pull; оценка на радаре; out of scope |
+| T-104 | ADR: контракт `stagesRadarBridge` v1 + канон данных | IT-Architect | READY | P0 | T-103 | `@docs/prd-stages-radar-bridge.md` `@knowledge-base/architecture.md` | JSON schema; no silent sync; persist keys |
+| T-105 | Правила: реестры пульта → suggested domain scores | Senior PM | READY | P0 | T-103 | `@knowledge-base/pmbok-domain-playbook.md` | Таблица сигналов → D1…D8; не cert; disclaimer |
+| T-106 | Модель link + snapshot + apply scores в project store | Developer | BACKLOG | P0 | T-104, T-105 | `@lib/stages/` `@lib/store/useProjectStore.ts` | После ADR+rules → READY |
+| T-107 | UI: CTA «Подтянуть в напарника» + баннер/оценка на `/radar` | Developer | BACKLOG | P0 | T-106, T-109 | `@components/stages/StagesShell.tsx` `@components/DashboardShell.tsx` | Confirm overwrite; deep-link `/radar` |
+| T-108 | «Тестовый прогон» наполняет пульт **и** оценку напарника | Developer | BACKLOG | P1 | T-106 | `@lib/stages/demoTestRun.ts` | Опциональный чекбокс / вторая кнопка |
+| T-109 | UX: мост без слияния режимов (схема + states) | UI/UX | READY | P0 | T-103 | `@docs/prd-stages-radar-bridge.md` | Placement CTA; banner; empty/linked/stale |
+| T-110 | QA: автономия + pull → оценка visible | QA | BACKLOG | P0 | T-107, T-108 | `@knowledge-base/qa-checklist.md` | После UI |
+| T-111 | RU-микрокопия моста (Для UI) | Copywriter | READY | P1 | T-103, T-109 | `@docs/prd-stages-radar-bridge.md` | CTA, confirm, banner, disclaimer |
+
+### Детали задач моста
+
+#### T-103 — Scope (PM)
+
+**AC:**
+- [x] PRD: автономия + связь + «оценка на радаре»
+- [x] Out of scope и канон v1 явны
+- [x] Очередь T-104…T-111 с порядком
+- [x] Режим оценки A/B зафиксирован (default A; Human может сменить)
+
+#### T-104 — ADR (IT-Architect)
+
+**AC:**
+- [ ] `stagesRadarBridge` v1 schema в ADR / architecture
+- [ ] Канон: операционка = stages; scores = radar store после apply
+- [ ] Нет обязательного FS Access / server sync в v1
+- [ ] Совместимость с существующим `exportProjectSnapshot`
+
+#### T-105 — Маппинг оценки (Senior PM)
+
+**AC:**
+- [ ] Документ правил RU: сигнал реестра → домен + направление score
+- [ ] Baseline / clamp 0–100; красные зоны осознанны
+- [ ] Явно: suggested ≠ audit / ≠ PMI cert
+- [ ] Handoff → Developer T-106 (`suggestScoresFromRegisters`)
+
+#### T-106 — Store bridge (Developer)
+
+**AC:**
+- [ ] `pullStagesToRadar(snapshot)` / link metadata в persist
+- [ ] Apply suggested scores + project name/stage
+- [ ] Confirm если имя/scores уже другие
+- [ ] Unit-friendly pure functions для маппинга
+
+#### T-107 — UI bridge (Developer)
+
+**AC:**
+- [ ] CTA на `/stages` по макету T-109 + copy T-111
+- [ ] После pull: `/radar` с баннером «проект из пульта»
+- [ ] Радар показывает применённую оценку
+- [ ] Режимы по отдельности без CTA всё ещё работают
+
+#### T-108 — Demo dual-fill (Developer)
+
+**AC:**
+- [ ] Тестовый прогон может заполнить stages + bridge apply
+- [ ] На радаре видно «Тестовый прогон» + ненулевая/осмысленная оценка
+- [ ] Можно отказаться (только пульт) — автономия
+
+#### T-109 — UX (UI/UX)
+
+**AC:**
+- [ ] Схема CTA на stages; banner на radar; states empty/linked/stale/conflict
+- [ ] Не третья плитка на Mode Hub
+- [ ] Handoff → T-111 / T-107
+
+#### T-110 — QA
+
+**AC:**
+- [ ] Только stages / только radar — без регресса
+- [ ] Pull → имя + scores на radar; commentary refetch ok
+- [ ] Demo dual path; UTF-8; disclaimer
+
+#### T-111 — Copy (Copywriter)
+
+**AC:**
+- [ ] Строки: CTA, confirm overwrite, banner linked/stale, toast applied
+- [ ] Без «объединили в один продукт»; акцент «связь» / «подтянуть»
+- [ ] Disclaimer co-pilot
+
+---
+
 ## Журнал (фрагмент)
 
 | Дата | Событие |
@@ -278,6 +375,7 @@
 | 2026-07-22 | **T-102 DONE:** [`docs/t-102-wip-inventory.md`](docs/t-102-wip-inventory.md) — QP working tree clean vs origin; focus epic shipped; book T-073…T-088 не заводить заново; next Human **T-099**. |
 | 2026-07-22 | **T-098 DONE:** prod smoke — `/` `/radar` `/stages` `/waitlist` 200; waitlist wedge; chunk «Фокус на сегодня» + «Открыть в пульте». |
 | 2026-07-22 | **PM контроль:** порядок эпика OK; `pm-status` v6.0; **T-099 IN_PROGRESS** (Human); billing/GTM на паузе; гайд `dogfood-focus-today-guide.md`. |
+| 2026-07-22 | **Эпик моста T-103…T-111:** [`docs/prd-stages-radar-bridge.md`](docs/prd-stages-radar-bridge.md) — автономия режимов + pull в напарника с оценкой; T-103 DONE; T-104/105/109/111 READY. |
 
 ---
 

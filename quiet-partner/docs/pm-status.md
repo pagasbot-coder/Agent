@@ -25,10 +25,17 @@
 | T-099 | **IN_PROGRESS** | Ждёт Human ×3 · гайд готов |
 | T-100…T-102 | DONE | PRD, мобильные реестры, inventory |
 
-### Единственный P0 сейчас
+### Новый эпик (не смешивать с фокусом)
 
-**T-099 dogfood** — Pavel, 3× ~10 мин по [`dogfood-focus-today-guide.md`](./dogfood-focus-today-guide.md).  
-Без этого эпик формально не закрыт (success metric PRD: «понял, что делать сегодня»).
+**Мост Пульт ↔ Напарник** — [`prd-stages-radar-bridge.md`](./prd-stages-radar-bridge.md) · T-103…T-111.  
+Режимы остаются сами по себе; связь = «Подтянуть в напарника» → оценка на радаре.  
+**READY сейчас:** T-104 Architect · T-105 Senior PM · T-109 UI/UX · T-111 Copy.  
+**Human:** подтверди режим оценки **A** (сразу apply) или **B** (превью) — default A.
+
+### Единственный P0 dogfood фокуса
+
+**T-099** — Pavel, 3× ~10 мин по [`dogfood-focus-today-guide.md`](./dogfood-focus-today-guide.md).  
+Код моста не стартует, пока Architect/Senior PM не закроют T-104/T-105 (можно параллелить docs).
 
 ### Не брать в работу (пауза Human)
 
@@ -97,7 +104,8 @@
 
 | # | Вопрос | Статус | Блокирует? |
 |---|--------|--------|------------|
-| **0** | **T-099: 3 dogfood «понял фокус дня?»** | ⬜ **P0 NOW** | Закрытие эпика |
+| **0** | **T-099: 3 dogfood «понял фокус дня?»** | ⬜ **P0 NOW** | Закрытие эпика фокуса |
+| **0b** | Мост: оценка **A** (сразу) или **B** (превью)? | ⬜ default **A** | T-106/T-107 |
 | 1 | **Approve billing plan** → «можно подключать» test YooKassa? | ⬜ пауза | T-069 READY |
 | 2 | **GTM posting LinkedIn #1** | **Deferred** 2026-06-13 | Нет |
 | 3 | Auth activation | ⬜ Deferred | T-070 |
@@ -157,6 +165,10 @@
 | ID | Задача | Кто | Notes |
 |----|--------|-----|-------|
 | **T-099** | Focus dogfood ×3 | Human + PM | [`dogfood-focus-today-guide.md`](./dogfood-focus-today-guide.md) |
+| **T-104** | ADR bridge snapshot | IT-Architect | [`prd-stages-radar-bridge.md`](./prd-stages-radar-bridge.md) |
+| **T-105** | Правила scores из реестров | Senior PM | playbook |
+| **T-109** | UX моста | UI/UX | без слияния режимов |
+| **T-111** | Copy моста | Copywriter | ∥ T-109 |
 | **T-087** | Book dogfood 15 min | Human | после T-099 |
 | **T-069** | YooKassa webhook | Developer | **BACKLOG** — Human pause |
 | **T-075** | PostHog VPS | DevOps | OPTIONAL |
