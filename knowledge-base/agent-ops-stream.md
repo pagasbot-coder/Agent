@@ -28,6 +28,7 @@
 | A-009 | Не писать в didactic-doodle: guard в docs + script header | Ops | DONE | P0 | read-only note in import script |
 | A-010 | Держать поток Agent Ops отдельно от QP деплоя | Ops | DONE | P1 | handoff + этот файл |
 | A-011 | Секции skills для всех ролей (Senior PM, Arch, DevOps, Dev, SME, Copywriter) | Ops | DONE | P1 | bridge matrix + agent files |
+| A-012 | Merge PR #1 → main (deploy Agent Ops) | Ops | DONE | P0 | `7532681` 2026-07-21 |
 
 ---
 
