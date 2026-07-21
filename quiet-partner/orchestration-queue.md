@@ -133,7 +133,9 @@
 ## Эпик: Фокус на сегодня (2026-07-21)
 
 > Источник: [`docs/prd-focus-today.md`](docs/prd-focus-today.md) · live Mode Hub на [quiet-partner.vercel.app](https://quiet-partner.vercel.app/) · Growth-прогон: wedge «один фокус на день».  
-> **Правило:** `didactic-doodle` не менять; skills/KB уже в monorepo `Agent`.
+> **Правило:** `didactic-doodle` не менять; skills/KB уже в monorepo `Agent`.  
+> **Владелец исполнения:** агент **продукта/деплоя** — см. [`docs/handoff-focus-today-agent.md`](docs/handoff-focus-today-agent.md).  
+> Агент оркестрации ролей **не** берёт T-090…T-100 в код.
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
 |----|--------|------|--------|-----------|-------------|-------------------|-----------|
@@ -236,6 +238,7 @@
 | Дата | Событие |
 |------|---------|
 | 2026-07-21 | Эпик «Фокус на сегодня» T-090…T-100 из live-прогона PM/Growth. Copywriter: отчёты Human — только русский, грамотные предложения. |
+| 2026-07-21 | Handoff продукта → агент деплоя: `docs/handoff-focus-today-agent.md`. Поток Agent Ops: `knowledge-base/agent-ops-stream.md` (роли/skills отдельно от QP кода). |
 
 ---
 

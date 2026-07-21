@@ -20,6 +20,7 @@
 |----------|------------------|
 | [assistants-placement.md](./assistants-placement.md) | Куда класть ассистентов: User Rules / `product-copilot` / этот `Agent`; миграция с ПК |
 | [skills-muster-bridge.md](./skills-muster-bridge.md) | Мост didactic-doodle skills (`/prd-writer`, competitor-*) ↔ Muster PM/Growth + `.productmap` |
+| [agent-ops-stream.md](./agent-ops-stream.md) | Поток Agent Ops vs продукт QP; handoff деплою; задачи A-00x |
 | [context-engineering-productmap.md](./context-engineering-productmap.md) | Настройка rules/skills/KB, anti-stuffing, repo-first, friction loop — **не UX** |
 | [public-ai-orchestration-synthesis.md](./public-ai-orchestration-synthesis.md) | Кросс-синтез ProductMap + Conducting.ai (публичное only): TASK loop, maturity model, org roles, paywall map |
 
@@ -86,4 +87,4 @@
 | QA | `qa-checklist.md` + AC задачи в queue |
 | Growth / CMO | `marketing-brief.md` + `growth-playbook.md` |
 | SME | `industry-brief-template.md` → industry-brief продукта |
-| Agent ops | `assistants-placement.md` + `context-engineering-productmap.md` + этот INDEX |
+| Agent ops | `agent-ops-stream.md` + `assistants-placement.md` + `skills-muster-bridge.md` + этот INDEX |
