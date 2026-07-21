@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (эпик фокуса T-090…T-102 кроме dogfood; next Human T-099)
+**Последнее обновление:** 2026-07-22 (PM контроль: порядок OK; T-099 IN_PROGRESS Human)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -142,7 +142,8 @@
 1. T-090 DoR → параллельно T-091 / T-096 / T-092  
 2. T-093 hub UI → T-094 sync radar/stages  
 3. T-095 analytics → T-098 QA → T-099 dogfood  
-4. Параллельно: T-097 Growth, T-100 редактура, T-101 мобильные карточки реестров
+4. Параллельно: T-097 Growth, T-100 редактура, T-101 мобильные карточки, T-102 inventory  
+5. T-099 dogfood (Human) — закрытие эпика
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
 |----|--------|------|--------|-----------|-------------|-------------------|-----------|
@@ -155,7 +156,7 @@
 | T-096 | RU-микрокопия карточки фокуса (режим «Для UI») | Copywriter | DONE | P0 | T-090 | `@docs/prd-focus-today.md` `@role-copywriter` | `@docs/focus-today-microcopy.md` — заголовок, empty, CTA, ручной ввод, confirm замены, done, disclaimer |
 | T-097 | Waitlist/GTM: усилить «фокус на день» + обновить competitive scan | Growth | DONE | P1 | T-090 | `@app/waitlist/page.tsx` `@docs/competitive-scan-1pager.md` | Waitlist RU: H1/sub/bullet «один фокус на день» + Mode Hub; scan TL;DR +1 строка; ICP/disclaimer без Jira-OS |
 | T-098 | QA: чеклист и smoke сценария фокуса | QA | DONE | P0 | T-094, T-095 | `@knowledge-base/qa-checklist.md` | FT1–FT11; prod 200 `/` `/radar` `/stages` `/waitlist`; waitlist wedge live; chunk «Фокус на сегодня» |
-| T-099 | Dogfood: 3 сессии «понял фокус дня?» + заметки | PM + Human | READY | P1 | T-098 | `@docs/dogfood-log-template.md` | ждёт Human ×3 |
+| T-099 | Dogfood: 3 сессии «понял фокус дня?» + заметки | PM + Human | IN_PROGRESS | P0 | T-098 | `@docs/dogfood-focus-today-guide.md` `@docs/pm-status.md` | PM: гайд готов; ждёт Human ×3 |
 | T-100 | Редактура PRD/отчёта эпика на русском (для команды) | Copywriter | DONE | P2 | T-090 | `@docs/prd-focus-today.md` | TL;DR + статус-срез очереди; факты без сдвига |
 | T-101 | UX реестров пульта: длинный текст читаем (карточки / wrap) | UI/UX + Developer | DONE | P0 | — | `@components/stages/StagesShell.tsx` `@lib/stages/registers.ts` | textarea+wrap + мобильные карточки (`md:hidden` / table `md+`) |
 | T-102 | Сверка FocusWeek/ModeHub/book-доков с очередью (что DONE / отложить / завести) | Developer + PM | DONE | P0 | — | `@docs/handoff-focus-today-agent.md` §B–C | [`docs/t-102-wip-inventory.md`](docs/t-102-wip-inventory.md) — main clean; book T-073…T-088 не переоткрывать; next T-099 |
@@ -165,10 +166,10 @@
 #### T-090 — PRD + DoR (PM)
 
 **AC:**
-- [ ] `docs/prd-focus-today.md` согласован с live Mode Hub
-- [ ] Out of scope и метрики явны
-- [ ] Зависимости T-091…T-099 без дыр
-- [ ] Notes: фаза Generation→Delivery
+- [x] `docs/prd-focus-today.md` согласован с live Mode Hub
+- [x] Out of scope и метрики явны
+- [x] Зависимости T-091…T-099 без дыр
+- [x] Notes: фаза Generation→Delivery
 
 #### T-091 — UX карточки (UI/UX)
 
@@ -232,8 +233,9 @@
 #### T-099 — Dogfood (PM + Human)
 
 **AC:**
-- [ ] 3 сессии по шаблону dogfood
+- [ ] 3 сессии по [`docs/dogfood-focus-today-guide.md`](docs/dogfood-focus-today-guide.md)
 - [ ] Вердикт: «понял фокус дня?» да/нет + цитата
+- [x] PM: гайд + `pm-status` v6.0 + claim IN_PROGRESS
 
 #### T-100 — Редактура отчёта (Copywriter)
 
@@ -275,6 +277,7 @@
 | 2026-07-22 | Push `feat focus card` + T-097 waitlist; T-100 PRD редактура; T-101 мобильные карточки реестров; T-098 чеклист FT1–FT11 — smoke после deploy. |
 | 2026-07-22 | **T-102 DONE:** [`docs/t-102-wip-inventory.md`](docs/t-102-wip-inventory.md) — QP working tree clean vs origin; focus epic shipped; book T-073…T-088 не заводить заново; next Human **T-099**. |
 | 2026-07-22 | **T-098 DONE:** prod smoke — `/` `/radar` `/stages` `/waitlist` 200; waitlist wedge; chunk «Фокус на сегодня» + «Открыть в пульте». |
+| 2026-07-22 | **PM контроль:** порядок эпика OK; `pm-status` v6.0; **T-099 IN_PROGRESS** (Human); billing/GTM на паузе; гайд `dogfood-focus-today-guide.md`. |
 
 ---
 

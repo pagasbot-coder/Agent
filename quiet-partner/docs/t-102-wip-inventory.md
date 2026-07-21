@@ -8,7 +8,7 @@
 
 ## TL;DR
 
-Эпик **фокуса дня** (T-090…T-097, T-100, T-101) уже в `main` и на проде. Деплоить ничего нового не нужно. Дальше: **T-098** smoke → **T-099** dogfood (Human). Book/ProjectM (T-073…T-088) **не заводить заново** — код и доки есть; Human-хвосты оставить BACKLOG/DEFERRED.
+Эпик **фокуса дня** (T-090…T-098, T-100…T-102) в `main` и на проде. **Open:** T-099 dogfood (Human). Book/ProjectM (T-073…T-088) **не заводить заново**.
 
 ---
 
@@ -48,8 +48,8 @@ Live: [quiet-partner.vercel.app](https://quiet-partner.vercel.app/)
 | ID | Статус (queue) | Комментарий |
 |----|----------------|-------------|
 | T-090…T-097 | DONE | PRD, UX, store, UI, analytics, copy, Growth |
-| T-098 | IN_PROGRESS | FT1–FT11 в qa-checklist; smoke после prod |
-| T-099 | BACKLOG | 3 dogfood-сессии — **следующий шаг Human** |
+| T-098 | DONE | FT1–FT11 + prod smoke |
+| T-099 | IN_PROGRESS | 3 dogfood — **Human**; гайд `dogfood-focus-today-guide.md` |
 | T-100 | DONE | редактура PRD |
 | T-101 | DONE | мобильные карточки реестров |
 | T-102 | DONE | этот отчёт |
