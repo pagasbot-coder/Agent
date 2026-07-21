@@ -1,39 +1,102 @@
 ---
 name: prd-writer
-description: Write PRDs with ProductMap templates and Muster queue handoff. Use for /prd-writer, PRD, requirements, speclet. Prefer when Role PM / muster-pm.
-disable-model-invocation: false
+description: Generate comprehensive product requirements documents. Use when starting a new feature or product initiative and need structured documentation.
+argument-hint: [feature name]
 ---
 
-# PRD Writer — Muster bridge
+## Domain Context
 
-> Full skill body is imported from `didactic-doodle` via `scripts/import-didactic-skills.sh`.  
-> Until import: follow this bridge + `.productmap` templates.
+This skill implements a proven product management framework. The approach combines best practices from industry leaders and is designed for practical application in day-to-day PM work.
 
-## When to use
+## Input Requirements
 
-- Human runs `/prd-writer` or asks for PRD / requirements / AI-PRD.
-- Active role: **PM** (`muster-pm` / `Role: PM`).
+- Context about your product, feature, or problem
+- Relevant data, research, or constraints (recommended but optional)
+- Clear articulation of what you're trying to achieve
 
-## Mandatory context
 
-1. `@knowledge-base/skills-muster-bridge.md`
-2. `@.productmap/INDEX.md` if present → templates:
-   - `.productmap/09_templates/prd-template.md`
-   - `.productmap/09_templates/ai-prd-template.md`
-   - `.productmap/04_delivery/backlog-requirements/`
-3. `@orchestration-queue.md` — куда лягут AC после PRD
-4. Product brief of the active subproject (`quiet-partner/…` or root `knowledge-base/product-brief.md`)
+# PRD Writer
 
-## Workflow
+## When to Use
+- Starting a new feature or product initiative
+- Need to document requirements for the engineering team
+- Stakeholders need a detailed project overview
+- Before beginning design or development work
+- To align cross-functional teams on scope and goals
 
-1. **Ask first** (if missing): feature/initiative name; product + audience + problem; constraints (time, stack, out of scope, metrics).
-2. Draft PRD from ProductMap template (RU unless Human asks EN).
-3. Extract **Acceptance Criteria** in Muster style (checkboxes).
-4. Propose queue task `T-0xx` for Developer/UI with role, P0/P1, `@` refs — **do not** implement app code.
-5. Note Product Map phase (Generation / Delivery) in task Notes.
+## What This Skill Does
+Creates structured, comprehensive PRDs covering problem statement, proposed solution, requirements, success metrics, and implementation details.
 
-## Hard limits
+## Instructions
+Help me write a comprehensive PRD for [feature name]. Include:
 
-- No application code (Muster PM rule).
-- No login to productmap.io — only git `.productmap/`.
-- After import, if `.agents/skills/prd-writer/SKILL.md` is longer/richer than this file, **prefer the imported file** and still finish with Muster queue handoff.
+1. Problem Statement
+- Current situation
+- User pain points
+- Business impact
+
+2. Proposed Solution
+- Overview of the approach
+- User stories
+- Success metrics
+
+3. Requirements
+- Functional requirements
+- Technical requirements
+- Design requirements
+
+4. Implementation
+- Dependencies
+- Timeline estimate
+- Resources needed
+
+5. Risks and Mitigations
+
+Your context:
+[Add product context, feature details, and constraints here]
+
+## Best Practices
+- Be specific about the problem and user pain points
+- Include quantitative success metrics
+- Define scope clearly (what's in scope and out of scope)
+- Consider technical constraints upfront
+- Add detailed user stories for key flows
+- Include acceptance criteria
+
+## Refining This Skill
+
+After delivering a PRD, watch for user feedback or extra context that would improve **future** runs — not just the current document.
+
+**Update this file when the user provides:**
+- Output preferences (format, tone, level of detail, required/optional sections)
+- Team or org conventions (naming, success-metric style, approval workflow)
+- Product-domain defaults (personas, tech stack, compliance constraints)
+- Corrections to recurring mistakes ("always include X", "never assume Y")
+- Examples of PRDs they liked or rejected, with reasons
+
+**Do not add to the skill:**
+- Feature-specific details that won't generalize to other PRDs
+- One-off context for a single initiative
+- Temporary or time-bound constraints
+
+**How to refine:**
+1. Confirm the feedback is reusable across future PRDs (ask briefly if unclear).
+2. Edit `.agents/skills/prd-writer/SKILL.md` — fold learnings into the relevant section (Instructions, Best Practices, or a new subsection) rather than appending a changelog.
+3. Keep additions concise; remove or merge outdated guidance if it conflicts.
+4. Tell the user what was updated and why, so they can correct it.
+
+**Examples of good refinements:**
+- User wants every PRD to include an "Out of scope" subsection → add to Instructions
+- User's team uses RICE for prioritization → add to Best Practices
+- User prefers shorter PRDs for small features → add a conditional note under Instructions
+
+## Example
+**Input:** Building a notification center for SaaS app, target users are power users who miss important updates
+**Output:** Full PRD with problem statement, user stories, functional/technical requirements, success metrics (reduce missed notifications by 40%), timeline, and risk assessment
+
+
+## Further Reading
+
+- [Prd Templates](https://pmprompt.com/blog/prd-templates)
+- [How To Write Prd Using Ai](https://pmprompt.com/blog/how-to-write-prd-using-ai)
+- [Prd Examples](https://pmprompt.com/blog/prd-examples)
