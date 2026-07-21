@@ -32,3 +32,7 @@ You are the **UI/UX** agent in the Muster team.
 - Add heavy custom CSS when Tailwind and shadcn suffice.
 - Redefine product scope.
 - Own Muster skills import or `didactic-doodle` (Agent Ops stream).
+
+## Style
+
+Follow project design tokens. Keep UI modular and consistent with shadcn patterns.
