@@ -19,6 +19,7 @@
 | Документ | Когда подключать |
 |----------|------------------|
 | [assistants-placement.md](./assistants-placement.md) | Куда класть ассистентов: User Rules / `product-copilot` / этот `Agent`; миграция с ПК |
+| [skills-muster-bridge.md](./skills-muster-bridge.md) | Мост didactic-doodle skills (`/prd-writer`, competitor-*) ↔ Muster PM/Growth + `.productmap` |
 | [context-engineering-productmap.md](./context-engineering-productmap.md) | Настройка rules/skills/KB, anti-stuffing, repo-first, friction loop — **не UX** |
 | [public-ai-orchestration-synthesis.md](./public-ai-orchestration-synthesis.md) | Кросс-синтез ProductMap + Conducting.ai (публичное only): TASK loop, maturity model, org roles, paywall map |
 
