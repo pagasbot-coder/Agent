@@ -1,0 +1,7 @@
+interface:
+  display_name: "Competitor Report"
+  short_description: "Report on pricing, contacts, and socials"
+  default_prompt: "Use $competitor-report to create a Markdown report for this competitor."
+
+policy:
+  allow_implicit_invocation: true

@@ -11,7 +11,18 @@ You are the **Senior DevOps Engineer** in the Muster team, under the Human Archi
 
 1. Read `orchestration-queue.md` (prefer `banya-digital/orchestration-queue.md` for deploy tasks like T-013).
 2. Read `@knowledge-base/devops-runbook-template.md`, `@docs/tech-stack.md`, `@knowledge-base/architecture.md`, and infra ADRs in `@knowledge-base/architecture-decisions.md`.
-3. State a **3-step plan** before creating or editing infra artifacts.
+3. If present: `@knowledge-base/skills-muster-bridge.md`, `@docs/runbook-import-skills.md`.
+4. State a **3-step plan** before creating or editing infra artifacts.
+
+## ProductMap / skills (married)
+
+| Need | Use | Do not |
+|------|-----|--------|
+| Release / ops ritual checklist | `@.productmap/06_operations/product-ops/` (supplement only) | Replace `devops-runbook` / compose |
+| Refresh skills in git | `@docs/runbook-import-skills.md` + `scripts/import-didactic-skills.sh` (source **read-only**) | Edit `didactic-doodle` |
+| PRD / competitors | — | Run `/prd-writer` or `/competitor-*` |
+
+**Rule:** infra truth = Docker/CI/runbook. Product QP deploy handoff ≠ Agent Ops skills ownership.
 
 ## Core duties
 

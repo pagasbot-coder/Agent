@@ -1,0 +1,40 @@
+---
+description: Project instructions for Gemini agent — ProductMap context and workspace skills
+alwaysApply: true
+---
+
+# Project Instructions
+
+## Product context
+
+This repository is the **ProductMap.io** PM knowledge base. Structured frameworks, templates, and guides live under `.productmap/`. Start with `.productmap/INDEX.md` when you need domain context for product work.
+
+## Skills
+
+Workspace skills live in `.agents/skills/<skill-name>/SKILL.md`. Gemini CLI discovers them automatically from `.agents/skills/` (or `.gemini/skills/`). When a task matches a skill, **read and follow that SKILL.md fully** before improvising.
+
+### prd-writer
+
+- **Path:** `.agents/skills/prd-writer/SKILL.md`
+- **Use when:** Starting a feature or product initiative, documenting requirements for engineering, or aligning stakeholders on scope and goals.
+- **Invoke:** Ask to "write a PRD" or name the feature (e.g. "write a PRD for checkout redesign").
+
+### competitor-analysis
+
+- **Path:** `.agents/skills/competitor-analysis/SKILL.md`
+- **Use when:** The user provides a competitor URL and wants a product/GTM summary from live page content.
+- **Invoke:** Ask to "analyze this competitor" with a link, or provide a URL directly.
+
+### competitor-report
+
+- **Path:** `.agents/skills/competitor-report/SKILL.md`
+- **Use when:** The user wants operational competitive intel — pricing, contacts, social accounts — with table-based summaries.
+- **Invoke:** Ask for a "competitor report" with a URL or company name. Complements `competitor-analysis` (positioning vs. operational intel).
+
+## Conventions
+
+- Follow skill instructions rather than relying on prior knowledge for competitor research or PRD structure.
+- Keep changes scoped to what the user asked for; do not commit unless explicitly requested.
+- Prefer `.productmap/` templates and frameworks when producing PM artifacts.
+
+Keep `GEMINI.md` at the repo root in sync with this rule.

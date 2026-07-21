@@ -1,0 +1,7 @@
+interface:
+  display_name: "Competitor Analysis"
+  short_description: "Analyze competitor positioning from a URL"
+  default_prompt: "Use $competitor-analysis to analyze this competitor website."
+
+policy:
+  allow_implicit_invocation: true
