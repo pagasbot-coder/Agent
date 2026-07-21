@@ -2,7 +2,7 @@
 
 **Кому:** Cloud Agent / Developer на **деплое и коде Quiet Partner**  
 **От кого:** Agent Ops (Muster / skills)  
-**Дата:** 2026-07-21 (v2 — полный scope)  
+**Дата:** 2026-07-21 (v2 — полный scope) · **статусы §A: 2026-07-22**  
 **Язык отчётов Human:** русский, грамотные предложения (`@role-copywriter`)
 
 ---
@@ -10,29 +10,31 @@
 ## TL;DR
 
 1. Тебе принадлежит **весь код и деплой Quiet Partner**, не только «фокус».
-2. На `main` уже есть Mode Hub, `/stages`, `/radar`, `FocusWeekCard`, book-доки — **сверь с T-090…T-100**, не пиши с нуля.
-3. Эпик **T-090…T-100** («Фокус на сегодня») + **T-101** (UX реестров пульта) + **T-102** (сверка WIP / book-доков с очередью).
+2. На `main` уже есть Mode Hub, `/stages`, `/radar`, `FocusWeekCard`, book-доки — **сверь с T-090…T-102**, не пиши с нуля.
+3. Эпик **T-090…T-100** («Фокус на сегодня») + **T-101** (UX реестров) + **T-102** (inventory) — см. очередь.
 4. `didactic-doodle` и Muster/skills — **не твой** scope.
 
 ---
 
 ## A. Эпик «Фокус на сегодня» (в git)
 
-Канон: [`prd-focus-today.md`](./prd-focus-today.md) · очередь [`../orchestration-queue.md`](../orchestration-queue.md)
+Канон: [`prd-focus-today.md`](./prd-focus-today.md) · **актуальные статусы — только** [`../orchestration-queue.md`](../orchestration-queue.md) (эта таблица — снимок 2026-07-22).
 
 | ID | Роль | Статус | Суть |
 |----|------|--------|------|
-| T-090 | PM | READY | DoR по PRD |
-| T-091 | UI/UX | READY | Схема карточки фокуса |
-| T-092 | Developer | READY | `focusDay` в store — **сверить с `lib/focusWeek.ts` / FocusWeekCard** |
-| T-093 | Developer | BACKLOG | UI на Mode Hub — **ModeHub.tsx уже в main** |
-| T-094 | Developer | BACKLOG | Синхрон radar/stages + CTA |
-| T-095 | Developer | BACKLOG | PostHog events |
-| T-096 | Copywriter | READY | RU-микрокопия |
-| T-097 | Growth | READY | Waitlist + competitive scan |
-| T-098 | QA | BACKLOG | Smoke |
-| T-099 | PM + Human | BACKLOG | Dogfood ×3 |
-| T-100 | Copywriter | READY | Вычитка PRD |
+| T-090 | PM | DONE | DoR по PRD |
+| T-091 | UI/UX | DONE | Схема карточки фокуса |
+| T-092 | Developer | DONE | `focusDay` в store (≠ `focusWeek` / FocusWeekCard) |
+| T-093 | Developer | DONE | UI на Mode Hub (`FocusDayCard`) |
+| T-094 | Developer | DONE | Синхрон radar/stages + CTA |
+| T-095 | Developer | DONE | PostHog events |
+| T-096 | Copywriter | DONE | RU-микрокопия |
+| T-097 | Growth | DONE | Waitlist + competitive scan |
+| T-098 | QA | IN_PROGRESS | Smoke после prod |
+| T-099 | PM + Human | BACKLOG | Dogfood ×3 — **next Human** |
+| T-100 | Copywriter | DONE | Вычитка PRD |
+| T-101 | UI/UX + Dev | DONE | Мобильные карточки реестров |
+| T-102 | Developer + PM | DONE | [`t-102-wip-inventory.md`](./t-102-wip-inventory.md) |
 
 Live: https://quiet-partner.vercel.app/ · deploy: `docs/deploy-staging.md`
 
@@ -57,22 +59,21 @@ Live: https://quiet-partner.vercel.app/ · deploy: `docs/deploy-staging.md`
 
 | ID | Суть | Статус |
 |----|------|--------|
-| **T-101** | UX реестров пульта: длинный текст читаем (мобильные карточки) | READY · продукт уже начал |
-| **T-102** | Сверка book/FocusWeek/stages с очередью: что DONE, что отложить, что завести T-0xx | READY |
+| **T-101** | UX реестров пульта: длинный текст читаем (мобильные карточки) | DONE |
+| **T-102** | Сверка book/FocusWeek/stages с очередью | DONE · [`t-102-wip-inventory.md`](./t-102-wip-inventory.md) |
 | T-069…T-071 | Billing YooKassa | BACKLOG — **не трогать** без Human «можно» |
 
-Book/ProjectM (T-073…T-088 в доках) — **не все ID были в эпике фокуса**. T-102 как раз про это.
+Book/ProjectM (T-073…T-088 в доках) — **не переоткрывать** в эпике фокуса; Human-хвосты (GTM post, T-087, T-086) — BACKLOG/DEFERRED. Детали: inventory T-102.
 
 ---
 
 ## D. Порядок работы
 
-1. **T-102** — сверка: FocusWeek vs T-090…T-094; book-доки → очередь или «отложено».  
-2. **T-101** — добить UX реестров (уже в работе у продукта).  
-3. T-090 / T-096 / T-097 / T-100 (docs).  
-4. T-092–T-094 **на базе существующего** FocusWeek/ModeHub.  
-5. Деплой Vercel + **T-098**.  
-6. T-099 dogfood.
+1. ~~T-102~~ **DONE** — [`t-102-wip-inventory.md`](./t-102-wip-inventory.md).  
+2. ~~T-101~~ / ~~T-090…T-097~~ / ~~T-100~~ **DONE** (код на prod).  
+3. **T-098** QA smoke на prod.  
+4. **T-099** dogfood (Human).  
+5. Billing T-069…T-071 — не трогать без Human.
 
 ---
 
@@ -110,7 +111,8 @@ Role: Developer + PM.
 
 ## G. Definition of Done (минимум)
 
-- [ ] T-102 отчёт: что уже в коде vs очередь  
-- [ ] T-101 UX реестров — прогресс или DONE  
-- [ ] Фокус T-090…T-098: на staging или явно отложено  
-- [ ] Очередь обновлена; отчёт Human на русском  
+- [x] T-102 отчёт: что уже в коде vs очередь  
+- [x] T-101 UX реестров — DONE  
+- [x] Фокус T-090…T-097 на prod; T-098 smoke IN_PROGRESS  
+- [x] Очередь обновлена; отчёт Human на русском (`t-102-wip-inventory.md`)  
+

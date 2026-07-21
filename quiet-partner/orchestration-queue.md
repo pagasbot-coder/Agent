@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (T-102 inventory DONE; T-098 smoke IN_PROGRESS; next Human T-099)
+**Последнее обновление:** 2026-07-22 (эпик фокуса T-090…T-102 кроме dogfood; next Human T-099)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -273,7 +273,8 @@
 | 2026-07-22 | UI/UX T-091 **DONE**: `docs/ux-focus-today-card.md` — daily FocusToday vs weekly FocusWeek; placement + states + Dev/Copy handoff. |
 | 2026-07-22 | Growth T-097 **DONE**: waitlist wedge «один фокус на день» + Mode Hub; competitive-scan TL;DR +1 строка. |
 | 2026-07-22 | Push `feat focus card` + T-097 waitlist; T-100 PRD редактура; T-101 мобильные карточки реестров; T-098 чеклист FT1–FT11 — smoke после deploy. |
-| 2026-07-22 | **T-102 DONE:** [`docs/t-102-wip-inventory.md`](docs/t-102-wip-inventory.md) — QP working tree clean vs origin; focus epic shipped; book T-073…T-088 не заводить заново; next Human **T-099** после T-098. |
+| 2026-07-22 | **T-102 DONE:** [`docs/t-102-wip-inventory.md`](docs/t-102-wip-inventory.md) — QP working tree clean vs origin; focus epic shipped; book T-073…T-088 не заводить заново; next Human **T-099**. |
+| 2026-07-22 | **T-098 DONE:** prod smoke — `/` `/radar` `/stages` `/waitlist` 200; waitlist wedge; chunk «Фокус на сегодня» + «Открыть в пульте». |
 
 ---
 
