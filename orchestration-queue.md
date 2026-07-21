@@ -186,3 +186,4 @@
 |------|---------|
 | 2026-07-21 | Политика ассистентов: User Rules / `product-copilot` / `Agent`. KB `assistants-placement.md`, скрипт `scripts/migrate-local-cursor-assistants.sh`. Фактический copy с Mac — Human (Cloud Agent не видит `~/.cursor` и private `product-copilot`). |
 | 2026-07-21 | Мост didactic-doodle ↔ Muster: `skills-muster-bridge.md`, bridge skills в `.agents/skills/{prd-writer,competitor-*}`, `import-didactic-skills.sh`. PM/Growth agents обновлены. Полный import `.productmap` — Human на Mac. |
+| 2026-07-21 | Quiet Partner эпик «Фокус на сегодня» T-090…T-100 в `quiet-partner/orchestration-queue.md`. Copywriter: отчёты Human — русский, грамотные предложения (`role-copywriter` / `muster-copywriter`). |
