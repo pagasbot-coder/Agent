@@ -2,6 +2,9 @@
 # Import ProductMap skills + .productmap KB from didactic-doodle into Agent.
 # Marries them with Muster agents (see knowledge-base/skills-muster-bridge.md).
 #
+# READ-ONLY source: never writes back to didactic-doodle / product-copilot.
+# Teammates keep adding data in the original repo; re-run --apply to refresh Agent.
+#
 # Usage:
 #   ./scripts/import-didactic-skills.sh
 #   ./scripts/import-didactic-skills.sh --apply
