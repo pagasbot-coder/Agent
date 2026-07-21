@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (T-097 DONE — waitlist wedge «один фокус на день»)
+**Последнее обновление:** 2026-07-22 (T-097 shipped; T-098/T-100/T-101 в прогоне; deploy focus card)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -154,10 +154,10 @@
 | T-095 | PostHog: `focus_set`, `focus_opened_in_stages`, `focus_done` | Developer | DONE | P1 | T-094, T-030 | `@lib/analytics/posthog.ts` `@components/FocusDayCard.tsx` | events wired; OFF default ok |
 | T-096 | RU-микрокопия карточки фокуса (режим «Для UI») | Copywriter | DONE | P0 | T-090 | `@docs/prd-focus-today.md` `@role-copywriter` | `@docs/focus-today-microcopy.md` — заголовок, empty, CTA, ручной ввод, confirm замены, done, disclaimer |
 | T-097 | Waitlist/GTM: усилить «фокус на день» + обновить competitive scan | Growth | DONE | P1 | T-090 | `@app/waitlist/page.tsx` `@docs/competitive-scan-1pager.md` | Waitlist RU: H1/sub/bullet «один фокус на день» + Mode Hub; scan TL;DR +1 строка; ICP/disclaimer без Jira-OS |
-| T-098 | QA: чеклист и smoke сценария фокуса | QA | READY | P0 | T-094, T-095 | `@knowledge-base/qa-checklist.md` | next after deploy |
+| T-098 | QA: чеклист и smoke сценария фокуса | QA | IN_PROGRESS | P0 | T-094, T-095 | `@knowledge-base/qa-checklist.md` | FT1–FT11 в qa-checklist; smoke после prod |
 | T-099 | Dogfood: 3 сессии «понял фокус дня?» + заметки | PM + Human | BACKLOG | P1 | T-098 | `@docs/dogfood-log-template.md` | |
-| T-100 | Редактура PRD/отчёта эпика на русском (для команды) | Copywriter | READY | P2 | T-090 | `@docs/prd-focus-today.md` | |
-| T-101 | UX реестров пульта: длинный текст читаем (карточки / wrap) | UI/UX + Developer | READY | P0 | — | `@components/stages/StagesShell.tsx` `@lib/stages/registers.ts` | Human 22.07: однострочные input нечитаемы; v1 textarea+wrap DONE в коде — добить мобильные карточки |
+| T-100 | Редактура PRD/отчёта эпика на русском (для команды) | Copywriter | DONE | P2 | T-090 | `@docs/prd-focus-today.md` | TL;DR + статус-срез очереди; факты без сдвига |
+| T-101 | UX реестров пульта: длинный текст читаем (карточки / wrap) | UI/UX + Developer | DONE | P0 | — | `@components/stages/StagesShell.tsx` `@lib/stages/registers.ts` | textarea+wrap + мобильные карточки (`md:hidden` / table `md+`) |
 | T-102 | Сверка FocusWeek/ModeHub/book-доков с очередью (что DONE / отложить / завести) | Developer + PM | READY | P0 | — | `@docs/handoff-focus-today-agent.md` §B–C | Handoff v2; не дублировать код уже в main |
 
 ### Детали задач эпика
@@ -225,9 +225,9 @@
 #### T-098 — QA
 
 **AC:**
-- [ ] Чеклист: set → sync → CTA → done → persist reload
+- [x] Чеклист: set → sync → CTA → done → persist reload (FT1–FT11 в `qa-checklist.md`)
 - [ ] Smoke staging после деплоя
-- [ ] Запись в qa-report или qa-checklist
+- [x] Запись в qa-checklist (§Фокус на сегодня)
 
 #### T-099 — Dogfood (PM + Human)
 
@@ -238,15 +238,22 @@
 #### T-100 — Редактура отчёта (Copywriter)
 
 **AC:**
-- [ ] Вычитать `prd-focus-today.md` **на русском**: ясные предложения, TL;DR, иерархия
-- [ ] Факты и AC не менять
-- [ ] Режим «Для команды»
+- [x] Вычитать `prd-focus-today.md` **на русском**: ясные предложения, TL;DR, иерархия
+- [x] Факты и AC не менять
+- [x] Режим «Для команды»
 
-#### T-101 — Инвентаризация локального WIP (Developer + PM)
+#### T-101 — Мобильные карточки реестров (UI/UX + Developer)
+
+**AC:**
+- [x] Длинный текст: textarea + wrap (desktop table)
+- [x] На узком экране: карточки полей вместо горизонтального скролла таблицы
+- [x] Desktop `md+`: прежняя таблица
+
+#### T-102 — Инвентаризация / сверка WIP (Developer + PM)
 
 **AC:**
 - [ ] Список файлов QP вне `origin/main` (status/stash)
-- [ ] Сверка с T-090…T-100 и существующими `ModeHub` / `FocusWeekCard` / stages
+- [ ] Сверка с T-090…T-101 и существующими `ModeHub` / `FocusWeekCard` / stages
 - [ ] Book/ProjectM (T-073…T-088 и docs): в очередь или «отложено»
 - [ ] Отчёт Human на русском: что деплоить первым
 - [ ] См. `@docs/handoff-focus-today-agent.md` §B–C
@@ -263,6 +270,7 @@
 | 2026-07-22 | Порядок эпика зафиксирован; **T-090…T-097 DONE** (focusDay + карточка hub/radar/stages + waitlist wedge); next **T-098 QA** после deploy, затем T-099 dogfood |
 | 2026-07-22 | UI/UX T-091 **DONE**: `docs/ux-focus-today-card.md` — daily FocusToday vs weekly FocusWeek; placement + states + Dev/Copy handoff. |
 | 2026-07-22 | Growth T-097 **DONE**: waitlist wedge «один фокус на день» + Mode Hub; competitive-scan TL;DR +1 строка. |
+| 2026-07-22 | Push `feat focus card` + T-097 waitlist; T-100 PRD редактура; T-101 мобильные карточки реестров; T-098 чеклист FT1–FT11 — smoke после deploy. |
 
 ---
 

@@ -311,7 +311,82 @@ export function StagesShell() {
                       </Button>
                     </div>
                   </div>
-                  <div className="overflow-x-auto rounded-lg border border-border">
+                  {/* Mobile: stacked cards — table stays for md+ (T-101) */}
+                  <div className="space-y-3 md:hidden">
+                    {rows.length === 0 && (
+                      <p className="rounded-lg border border-dashed border-border px-3 py-4 text-sm text-muted-foreground">
+                        Пока пусто — нажми «+ строка».
+                      </p>
+                    )}
+                    {rows.map((row, ri) => (
+                      <article
+                        key={ri}
+                        className="rounded-lg border border-border bg-background p-3 shadow-sm"
+                      >
+                        <div className="mb-2 flex items-center justify-between gap-2">
+                          <span className="text-xs font-medium text-muted-foreground">
+                            Строка {ri + 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => delRow(ri)}
+                            className="px-2 py-1 text-sm text-muted-foreground hover:text-destructive"
+                            title="Удалить"
+                            aria-label={`Удалить строку ${ri + 1}`}
+                          >
+                            ×
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          {REGISTERS[activeReg].columns.map((c) => (
+                            <label
+                              key={c.key}
+                              className="block space-y-1"
+                            >
+                              <span className="text-xs font-medium text-foreground">
+                                {c.label}
+                              </span>
+                              {c.type === "select" ? (
+                                <select
+                                  value={row[c.key] ?? ""}
+                                  onChange={(e) =>
+                                    updateCell(ri, c.key, e.target.value)
+                                  }
+                                  className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm outline-none focus:ring-1 focus:ring-ring"
+                                >
+                                  <option value="" />
+                                  {c.options?.map((o) => (
+                                    <option key={o} value={o}>
+                                      {o}
+                                    </option>
+                                  ))}
+                                </select>
+                              ) : c.multiline ? (
+                                <textarea
+                                  value={row[c.key] ?? ""}
+                                  onChange={(e) =>
+                                    updateCell(ri, c.key, e.target.value)
+                                  }
+                                  rows={3}
+                                  className="min-h-[4.5rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
+                                />
+                              ) : (
+                                <input
+                                  value={row[c.key] ?? ""}
+                                  onChange={(e) =>
+                                    updateCell(ri, c.key, e.target.value)
+                                  }
+                                  className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm outline-none focus:ring-1 focus:ring-ring"
+                                />
+                              )}
+                            </label>
+                          ))}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+
+                  <div className="hidden overflow-x-auto rounded-lg border border-border md:block">
                     <table className="w-max min-w-full border-collapse text-sm">
                       <thead>
                         <tr>

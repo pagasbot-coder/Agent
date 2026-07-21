@@ -186,6 +186,33 @@
 
 ---
 
+## Фокус на сегодня (T-098) — daily FocusDay ≠ FocusWeek
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| FT1 | Mode Hub `/` | Карточка «Фокус на сегодня» над выбором режимов; empty state с ручным вводом |
+| FT2 | С радара | «Подставить с радара» → title + domain; source `radar` |
+| FT3 | Ручной | Свой текст → source `manual`; confirm при замене существующего |
+| FT4 | Sync `/radar` | Compact карточка; тот же title, что на hub |
+| FT5 | Sync `/stages` | Compact + CTA «Открыть в пульте» (scroll/focus регистров ok) |
+| FT6 | Done | «Сделано сегодня» → doneAt; можно сбросить |
+| FT7 | Persist | Reload: focusDay в localStorage project store |
+| FT8 | Analytics | События `focus_set` / `focus_opened_in_stages` / `focus_done` в коде; OFF default ok |
+| FT9 | ≠ FocusWeek | На `/radar` «Фокус недели» остаётся отдельной карточкой |
+| FT10 | Waitlist | `/waitlist` H1/bullets про «один фокус на день» + Mode Hub |
+| FT11 | Disclaimer | Co-pilot / не cert — на карточке или рядом без противоречий |
+
+**Smoke (prod, после deploy):**
+
+```bash
+curl -sS https://quiet-partner.vercel.app/ | rg -n 'Фокус на сегодня|focus'
+curl -sS https://quiet-partner.vercel.app/waitlist | rg -n 'один фокус на день'
+```
+
+Ожидание: HTML/chunk содержит карточку фокуса; waitlist wedge на месте.
+
+---
+
 ## Book features — Phase Book (T-080…T-083)
 
 | # | Проверка | Ожидание |
