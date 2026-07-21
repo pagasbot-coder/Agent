@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { ClipboardList, Radar } from "lucide-react";
 
+import { FocusDayCard } from "@/components/FocusDayCard";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DISCLAIMER } from "@/lib/domains";
 
-/** First screen: choose stage pulpit vs domain radar co-pilot. */
+/** First screen: daily focus + choose stage pulpit vs domain radar. */
 export function ModeHub() {
   return (
     <div className="flex min-h-full flex-1 flex-col">
@@ -29,6 +30,10 @@ export function ModeHub() {
             доменов?
           </p>
         </header>
+
+        <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+          <FocusDayCard />
+        </div>
 
         <main className="mx-auto grid w-full max-w-3xl flex-1 gap-4 px-4 py-8 sm:grid-cols-2 sm:gap-5 sm:px-6 sm:py-10">
           <Link
@@ -83,7 +88,10 @@ export function ModeHub() {
             {DEFAULT_DISCLAIMER}
           </p>
           <p className="mt-2 text-center text-xs text-muted-foreground">
-            <Link href="/waitlist" className="underline-offset-2 hover:underline">
+            <Link
+              href="/waitlist"
+              className="underline-offset-2 hover:underline"
+            >
               Ранний доступ
             </Link>
           </p>

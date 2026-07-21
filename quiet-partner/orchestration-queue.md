@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-21 (эпик «Фокус на сегодня» T-090…T-099 из PRD + правило копирайтера: отчёты на русском)
+**Последнее обновление:** 2026-07-22 (T-097 DONE — waitlist wedge «один фокус на день»)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -137,17 +137,24 @@
 > **Владелец исполнения:** агент **продукта/деплоя** — см. [`docs/handoff-focus-today-agent.md`](docs/handoff-focus-today-agent.md).  
 > Агент оркестрации ролей **не** берёт T-090…T-100 в код.
 
+### Порядок (2026-07-22)
+
+1. T-090 DoR → параллельно T-091 / T-096 / T-092  
+2. T-093 hub UI → T-094 sync radar/stages  
+3. T-095 analytics → T-098 QA → T-099 dogfood  
+4. Параллельно: T-097 Growth, T-100 редактура, T-101 мобильные карточки реестров
+
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
 |----|--------|------|--------|-----------|-------------|-------------------|-----------|
-| T-090 | Зафиксировать PRD «Фокус на сегодня» + DoR | PM | READY | P0 | — | `@docs/prd-focus-today.md` `@knowledge-base/product-brief.md` | |
-| T-091 | UX: карточка фокуса на hub / radar / stages | UI/UX | READY | P0 | T-090 | `@docs/prd-focus-today.md` `@docs/ux-reference-productmap.md` | |
-| T-092 | Модель `focusDay` в project store + persist | Developer | READY | P0 | T-090 | `@lib/store/useProjectStore.ts` `@docs/prd-focus-today.md` | |
-| T-093 | UI карточки фокуса на Mode Hub | Developer | BACKLOG | P0 | T-091, T-092, T-096 | `@components/ModeHub.tsx` | |
-| T-094 | Синхрон фокуса в `/radar` и `/stages` + CTA «Открыть в пульте» | Developer | BACKLOG | P0 | T-093 | `@app/radar/` `@app/stages/` | |
-| T-095 | PostHog: `focus_set`, `focus_opened_in_stages`, `focus_done` | Developer | BACKLOG | P1 | T-094, T-030 | `@lib/analytics/posthog.ts` | |
-| T-096 | RU-микрокопия карточки фокуса (режим «Для UI») | Copywriter | READY | P0 | T-090 | `@docs/prd-focus-today.md` `@role-copywriter` | |
-| T-097 | Waitlist/GTM: усилить «фокус на день» + обновить competitive scan | Growth | READY | P1 | T-090 | `@app/waitlist/page.tsx` `@docs/competitive-scan-1pager.md` | |
-| T-098 | QA: чеклист и smoke сценария фокуса | QA | BACKLOG | P0 | T-094, T-095 | `@knowledge-base/qa-checklist.md` | |
+| T-090 | Зафиксировать PRD «Фокус на сегодня» + DoR | PM | DONE | P0 | — | `@docs/prd-focus-today.md` | DoR 22.07: live Mode Hub; ≠ focusWeek |
+| T-091 | UX: карточка фокуса на hub / radar / stages | UI/UX | DONE | P0 | T-090 | `@docs/prd-focus-today.md` `@docs/ux-reference-productmap.md` | [`docs/ux-focus-today-card.md`](docs/ux-focus-today-card.md) — placement hub/radar/stages; states empty/radar/manual/done; CTA; handoff T-093/094/096 |
+| T-092 | Модель `focusDay` в project store + persist | Developer | DONE | P0 | T-090 | `@lib/focusDay.ts` `@lib/store/useProjectStore.ts` | focusDay API + persist |
+| T-093 | UI карточки фокуса на Mode Hub | Developer | DONE | P0 | T-091, T-092, T-096 | `@components/FocusDayCard.tsx` `@components/ModeHub.tsx` | карточка над режимами |
+| T-094 | Синхрон фокуса в `/radar` и `/stages` + CTA «Открыть в пульте» | Developer | DONE | P0 | T-093 | `@components/DashboardShell.tsx` `@components/stages/StagesShell.tsx` | compact + CTA |
+| T-095 | PostHog: `focus_set`, `focus_opened_in_stages`, `focus_done` | Developer | DONE | P1 | T-094, T-030 | `@lib/analytics/posthog.ts` `@components/FocusDayCard.tsx` | events wired; OFF default ok |
+| T-096 | RU-микрокопия карточки фокуса (режим «Для UI») | Copywriter | DONE | P0 | T-090 | `@docs/prd-focus-today.md` `@role-copywriter` | `@docs/focus-today-microcopy.md` — заголовок, empty, CTA, ручной ввод, confirm замены, done, disclaimer |
+| T-097 | Waitlist/GTM: усилить «фокус на день» + обновить competitive scan | Growth | DONE | P1 | T-090 | `@app/waitlist/page.tsx` `@docs/competitive-scan-1pager.md` | Waitlist RU: H1/sub/bullet «один фокус на день» + Mode Hub; scan TL;DR +1 строка; ICP/disclaimer без Jira-OS |
+| T-098 | QA: чеклист и smoke сценария фокуса | QA | READY | P0 | T-094, T-095 | `@knowledge-base/qa-checklist.md` | next after deploy |
 | T-099 | Dogfood: 3 сессии «понял фокус дня?» + заметки | PM + Human | BACKLOG | P1 | T-098 | `@docs/dogfood-log-template.md` | |
 | T-100 | Редактура PRD/отчёта эпика на русском (для команды) | Copywriter | READY | P2 | T-090 | `@docs/prd-focus-today.md` | |
 | T-101 | UX реестров пульта: длинный текст читаем (карточки / wrap) | UI/UX + Developer | READY | P0 | — | `@components/stages/StagesShell.tsx` `@lib/stages/registers.ts` | Human 22.07: однострочные input нечитаемы; v1 textarea+wrap DONE в коде — добить мобильные карточки |
@@ -166,10 +173,12 @@
 #### T-091 — UX карточки (UI/UX)
 
 **AC:**
-- [ ] Схема размещения: hub (обязательно), radar, stages
-- [ ] Состояния: пусто / из радара / вручную / сделано
-- [ ] Mobile: одна колонка, без каши
-- [ ] Handoff строк → T-096
+- [x] Схема размещения: hub (обязательно), radar, stages
+- [x] Состояния: пусто / из радара / вручную / сделано
+- [x] Mobile: одна колонка, без каши
+- [x] Handoff строк → T-096
+
+**Итог:** [`docs/ux-focus-today-card.md`](docs/ux-focus-today-card.md) (2026-07-22, UI/UX).
 
 #### T-092 — Store (Developer)
 
@@ -201,17 +210,17 @@
 #### T-096 — Микрокопия (Copywriter)
 
 **AC:**
-- [ ] Режим **«Для UI/Интерфейса»**, язык **русский**
-- [ ] Заголовок, пустое состояние, CTA, «Сделано сегодня», ошибка/подтверждение смены
-- [ ] Грамотные цельные предложения; без канцелярита ИИ
-- [ ] Согласование с UI/UX (T-091)
+- [x] Режим **«Для UI/Интерфейса»**, язык **русский**
+- [x] Заголовок, пустое состояние, CTA, «Сделано сегодня», ошибка/подтверждение смены
+- [x] Грамотные цельные предложения; без канцелярита ИИ
+- [x] Согласование с UI/UX (T-091) — строки в `@docs/focus-today-microcopy.md`
 
 #### T-097 — Growth (Growth)
 
 **AC:**
-- [ ] Waitlist copy усиливает «один фокус на день» без смены ICP
-- [ ] `competitive-scan-1pager.md`: строка про Mode Hub + фокус
-- [ ] Не позиционировать как work OS / Jira
+- [x] Waitlist copy усиливает «один фокус на день» без смены ICP
+- [x] `competitive-scan-1pager.md`: строка про Mode Hub + фокус
+- [x] Не позиционировать как work OS / Jira
 
 #### T-098 — QA
 
@@ -251,6 +260,9 @@
 | 2026-07-21 | Эпик «Фокус на сегодня» T-090…T-100 из live-прогона PM/Growth. Copywriter: отчёты Human — только русский, грамотные предложения. |
 | 2026-07-21 | Handoff продукта → агент деплоя: `docs/handoff-focus-today-agent.md`. Поток Agent Ops: `knowledge-base/agent-ops-stream.md` (роли/skills отдельно от QP кода). |
 | 2026-07-21 | Handoff v2: полный scope QP + локальный WIP + **T-101** инвентаризация. Эпик T-090…T-100 сохранён. |
+| 2026-07-22 | Порядок эпика зафиксирован; **T-090…T-097 DONE** (focusDay + карточка hub/radar/stages + waitlist wedge); next **T-098 QA** после deploy, затем T-099 dogfood |
+| 2026-07-22 | UI/UX T-091 **DONE**: `docs/ux-focus-today-card.md` — daily FocusToday vs weekly FocusWeek; placement + states + Dev/Copy handoff. |
+| 2026-07-22 | Growth T-097 **DONE**: waitlist wedge «один фокус на день» + Mode Hub; competitive-scan TL;DR +1 строка. |
 
 ---
 

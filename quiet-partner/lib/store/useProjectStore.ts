@@ -18,6 +18,12 @@ import {
   pickWeakestDomain,
   type FocusWeekState,
 } from "@/lib/focusWeek";
+import {
+  buildManualFocusDay,
+  buildRadarFocusDay,
+  getDayKey,
+  type FocusDayState,
+} from "@/lib/focusDay";
 import type { ProjectPrepChecklist } from "@/lib/onboarding";
 import {
   buildProjectSnapshot,
@@ -61,6 +67,7 @@ export type NavigatorContext = {
 };
 
 export type { FocusWeekState };
+export type { FocusDayState };
 
 /** T-082 — max 3 stakeholder rows (local only). */
 export type StakeholderLite = {
@@ -89,6 +96,8 @@ type ProjectStore = {
   domains: Record<DomainId, DomainHealth>;
   projectProfile: ProjectProfile;
   focusWeek: FocusWeekState | null;
+  /** Daily «фокус на сегодня» — hub / radar / stages (T-092). */
+  focusDay: FocusDayState | null;
   projectPrepChecklist: ProjectPrepChecklist;
   stakeholdersLite: StakeholderLite[];
   weeklySnapshots: WeeklySnapshotRef[];
@@ -128,6 +137,10 @@ type ProjectStore = {
   clearNavigatorContext: () => void;
   ensureFocusWeek: () => void;
   markFocusDone: () => void;
+  setFocusFromRadar: (linkedStageId?: number) => void;
+  setFocusManual: (title: string, linkedStageId?: number) => void;
+  markFocusDayDone: () => void;
+  clearFocusDay: () => void;
 };
 
 function clampScore(value: number): number {
@@ -158,6 +171,7 @@ export const useProjectStore = create<ProjectStore>()(
     (set, get) => ({
       domains: buildInitialDomains(MOCK_DOMAIN_SCORES),
       focusWeek: null,
+      focusDay: null,
       projectPrepChecklist: {},
       stakeholdersLite: [],
       weeklySnapshots: [],
@@ -423,6 +437,46 @@ export const useProjectStore = create<ProjectStore>()(
           `Фокус недели (${focus.domainId}): отметил «сделал»`,
         );
       },
+
+      setFocusFromRadar: (linkedStageId) => {
+        const scores = Object.fromEntries(
+          DOMAIN_IDS.map((id) => [id, get().domains[id].value]),
+        ) as Record<DomainId, number>;
+        const next = buildRadarFocusDay(scores, linkedStageId);
+        set({ focusDay: next });
+        get().logAction(
+          "focus_day_set",
+          `radar ${next.domainId}: ${next.title.slice(0, 60)}`,
+        );
+      },
+
+      setFocusManual: (title, linkedStageId) => {
+        const trimmed = title.trim();
+        if (!trimmed) return;
+        const next = buildManualFocusDay(trimmed, linkedStageId);
+        set({ focusDay: next });
+        get().logAction("focus_day_set", `manual: ${trimmed.slice(0, 60)}`);
+      },
+
+      markFocusDayDone: () => {
+        const focus = get().focusDay;
+        if (!focus || focus.doneAt) return;
+        const dayKey = getDayKey();
+        set({
+          focusDay: {
+            ...focus,
+            dayKey,
+            doneAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        });
+        get().logAction("focus_day_done", focus.title.slice(0, 60));
+      },
+
+      clearFocusDay: () => {
+        set({ focusDay: null });
+        get().logAction("focus_day_clear");
+      },
     }),
     {
       name: PROJECT_PERSIST_KEY,
@@ -431,6 +485,7 @@ export const useProjectStore = create<ProjectStore>()(
         projectProfile: state.projectProfile,
         commentaryFeedback: state.commentaryFeedback,
         focusWeek: state.focusWeek,
+        focusDay: state.focusDay,
         projectPrepChecklist: state.projectPrepChecklist,
         stakeholdersLite: state.stakeholdersLite,
         weeklySnapshots: state.weeklySnapshots,

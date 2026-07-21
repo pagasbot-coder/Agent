@@ -16,6 +16,9 @@ export type AnalyticsEvent =
   | "action_logged"
   | "focus_week_view"
   | "focus_week_done"
+  | "focus_set"
+  | "focus_opened_in_stages"
+  | "focus_done"
   | "landing_view"
   | "waitlist_submit";
 
@@ -117,6 +120,19 @@ export function trackFocusWeekView(props?: AnalyticsProperties): void {
 
 export function trackFocusWeekDone(props?: AnalyticsProperties): void {
   capture("focus_week_done", props);
+}
+
+/** Daily focus card (T-095) — no PII in properties. */
+export function trackFocusSet(props?: AnalyticsProperties): void {
+  capture("focus_set", props);
+}
+
+export function trackFocusOpenedInStages(props?: AnalyticsProperties): void {
+  capture("focus_opened_in_stages", props);
+}
+
+export function trackFocusDone(props?: AnalyticsProperties): void {
+  capture("focus_done", props);
 }
 
 export function trackLandingView(props?: AnalyticsProperties): void {

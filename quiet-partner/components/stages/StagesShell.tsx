@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { FocusDayCard } from "@/components/FocusDayCard";
 import { cn } from "@/lib/utils";
 import {
   CHEATSHEETS,
@@ -230,6 +231,7 @@ export function StagesShell() {
               </Link>
             ))}
           </div>
+          <FocusDayCard variant="compact" className="mt-2" />
         </div>
       </header>
 

@@ -5,6 +5,7 @@ import { useSyncExternalStore } from "react";
 
 import { DomainGlossary } from "@/components/DomainGlossary";
 import { DomainRadar } from "@/components/DomainRadar";
+import { FocusDayCard } from "@/components/FocusDayCard";
 import { FocusWeekCard } from "@/components/FocusWeekCard";
 import { HealthCommentary } from "@/components/HealthCommentary";
 import { NavigatorScenariosPanel } from "@/components/NavigatorScenariosPanel";
@@ -93,6 +94,7 @@ export function DashboardShell() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <FocusDayCard variant="compact" className="mb-6" />
         {showOnboardingBanner && (
           <div
             className="mb-6 flex flex-col gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
