@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { capture } from "@/lib/analytics/posthog";
 import {
   buildCursorDeeplink,
+  buildCursorDeeplinkPrompt,
   buildCursorInboxMarkdown,
   buildCursorPrompt,
-  buildCursorWebLink,
   readStagesLocalSnapshot,
 } from "@/lib/cursorBridge";
 import { DOMAIN_IDS } from "@/lib/domains";
@@ -51,22 +51,24 @@ export function AskInCursorCard({ className }: { className?: string }) {
 
   const openInCursor = () => {
     const input = buildInput();
-    const prompt = buildCursorPrompt(input);
+    // Compact prompt for deeplink — full snapshot via copy/download.
+    const prompt = buildCursorDeeplinkPrompt(input);
     const deeplink = buildCursorDeeplink(prompt);
     capture("cursor_ask_open", {
       domain_count: DOMAIN_IDS.length,
       has_question: Boolean(question.trim()),
       prompt_chars: prompt.length,
     });
-    try {
-      window.location.href = deeplink;
-      setStatus(
-        "Открываю Cursor… подтверди отправку промпта в чате (автозапуска нет).",
-      );
-    } catch {
-      window.open(buildCursorWebLink(prompt), "_blank", "noopener,noreferrer");
-      setStatus("Открыта веб-ссылка Cursor — подтверди промпт там.");
-    }
+    // Do NOT assign window.location.href — browser tab hangs on cursor:// navigation.
+    const a = document.createElement("a");
+    a.href = deeplink;
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setStatus(
+      "Cursor должен открыться с коротким снимком. Подтверди промпт. Полный контекст — «Копировать» или MD.",
+    );
   };
 
   const copyPrompt = async () => {
@@ -99,8 +101,9 @@ export function AskInCursorCard({ className }: { className?: string }) {
     >
       <h2 className="text-base font-semibold tracking-tight">Спросить в Cursor</h2>
       <p className="mt-1 text-xs text-muted-foreground">
-        Вопрос уйдёт в Cursor вместе со снимком проекта (радар + выжимка
-        пульта). Cursor должен быть установлен; промпт нужно подтвердить вручную.
+        Вопрос уйдёт в Cursor вместе со снимком (радар). Сайт не уходит с
+        страницы. Для полного пульта — «Копировать промпт» или «Скачать MD».
+        Промпт в Cursor подтверди вручную.
       </p>
       <label className="mt-3 block space-y-1">
         <span className="text-xs font-medium text-foreground">Вопрос</span>

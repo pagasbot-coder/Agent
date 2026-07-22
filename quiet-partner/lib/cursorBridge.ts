@@ -7,6 +7,8 @@ import type { DomainHealth, ProjectProfile } from "@/lib/store/useProjectStore";
 
 /** Soft limit under Cursor deeplink ~8k (docs); leave headroom for encoding. */
 export const CURSOR_PROMPT_MAX_CHARS = 5500;
+/** Shorter body for deeplink — huge URLs freeze some browsers. */
+export const CURSOR_DEEPLINK_MAX_CHARS = 2200;
 
 export type CursorBridgeInput = {
   question: string;
@@ -47,7 +49,12 @@ function summarizeRegister(
 }
 
 /** Build RU prompt for Cursor deeplink / clipboard / MD export. */
-export function buildCursorPrompt(input: CursorBridgeInput): string {
+export function buildCursorPrompt(
+  input: CursorBridgeInput,
+  opts?: { maxChars?: number; includeRegisters?: boolean },
+): string {
+  const maxChars = opts?.maxChars ?? CURSOR_PROMPT_MAX_CHARS;
+  const includeRegisters = opts?.includeRegisters !== false;
   const q = input.question.trim() || "Помоги разобрать здоровье этого проекта.";
   const name = input.projectProfile.name || "Без названия";
   const phase = input.projectProfile.phase ?? "—";
@@ -76,7 +83,7 @@ export function buildCursorPrompt(input: CursorBridgeInput): string {
       `- Пульт: проект «${input.stagesName || "—"}», stageId=${input.stagesStageId ?? "—"}`,
     );
   }
-  if (input.stagesCache) {
+  if (includeRegisters && input.stagesCache) {
     for (const id of [
       "storony",
       "riski",
@@ -119,7 +126,15 @@ export function buildCursorPrompt(input: CursorBridgeInput): string {
     .filter((line) => line != null)
     .join("\n");
 
-  return truncate(body, CURSOR_PROMPT_MAX_CHARS);
+  return truncate(body, maxChars);
+}
+
+/** Compact prompt for deeplink only (avoids browser hang on huge cursor:// URLs). */
+export function buildCursorDeeplinkPrompt(input: CursorBridgeInput): string {
+  return buildCursorPrompt(input, {
+    maxChars: CURSOR_DEEPLINK_MAX_CHARS,
+    includeRegisters: false,
+  });
 }
 
 /** Native Cursor deeplink (user must confirm send). */
