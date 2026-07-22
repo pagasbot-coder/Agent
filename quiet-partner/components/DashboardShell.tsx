@@ -116,7 +116,7 @@ export function DashboardShell() {
         <WeeklySnapshotReminder />
         <div className="grid gap-6 lg:grid-cols-5 lg:gap-8">
           <section
-            className="rounded-xl border border-border/80 bg-card p-6 shadow-sm lg:col-span-3"
+            className="rounded-xl border border-border/80 bg-card p-4 shadow-sm sm:p-6 lg:col-span-3"
             aria-label="Радар доменов"
           >
             <DomainRadar />
