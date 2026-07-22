@@ -70,7 +70,7 @@ export const REGISTERS: Record<string, RegisterDef> = {
       { key: "event", label: "Событие", multiline: true },
       {
         key: "prob",
-        label: "Вер.",
+        label: "Вероятность",
         type: "select",
         options: ["В", "С", "Н"],
       },
@@ -94,6 +94,8 @@ export const REGISTERS: Record<string, RegisterDef> = {
 
 **Проект:** {{project}}  
 **Лимит:** 7–10 активных  
+
+**Вероятность** и **Влияние:** В = высокая, С = средняя, Н = низкая.
 
 `,
   },
