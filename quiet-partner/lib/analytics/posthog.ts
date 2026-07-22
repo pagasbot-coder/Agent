@@ -21,6 +21,9 @@ export type AnalyticsEvent =
   | "focus_done"
   | "bridge_pull_to_radar"
   | "bridge_scores_applied"
+  | "cursor_ask_open"
+  | "cursor_ask_copy"
+  | "cursor_ask_download"
   | "landing_view"
   | "waitlist_submit";
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
 
+import { AskInCursorCard } from "@/components/AskInCursorCard";
 import { DomainGlossary } from "@/components/DomainGlossary";
 import { DomainRadar } from "@/components/DomainRadar";
 import { FocusDayCard } from "@/components/FocusDayCard";
@@ -97,6 +98,7 @@ export function DashboardShell() {
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <StagesBridgeBanner className="mb-6" />
         <FocusDayCard variant="compact" className="mb-6" />
+        <AskInCursorCard className="mb-6" />
         {showOnboardingBanner && (
           <div
             className="mb-6 flex flex-col gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"

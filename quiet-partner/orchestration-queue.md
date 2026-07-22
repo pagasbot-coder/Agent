@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (мост T-103…T-111 DONE — A с баннером в коде)
+**Последнее обновление:** 2026-07-22 (Ask in Cursor T-112/T-113; deploy next)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -289,6 +289,18 @@
 | T-110 | QA: автономия + pull → оценка visible | QA | READY | P0 | T-107, T-108 | `@knowledge-base/qa-checklist.md` | smoke после deploy |
 | T-111 | RU-микрокопия моста (Для UI) | Copywriter | DONE | P1 | T-103, T-109 | `@docs/bridge-microcopy.md` | CTA, confirm, banner |
 
+---
+
+## Эпик: Мост Тихий напарник ↔ Cursor (2026-07-22)
+
+> [`docs/cursor-qp-bridge.md`](docs/cursor-qp-bridge.md) · deeplink prompt + inbox MD · команда `/ask-quiet-partner`
+
+| ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Итог |
+|----|--------|------|--------|-----------|-------------|----------|------|
+| T-112 | UI «Спросить в Cursor» + deeplink/copy/MD | Developer | DONE | P0 | — | `@components/AskInCursorCard.tsx` `@lib/cursorBridge.ts` | hub + radar; prompt ≤5500 |
+| T-113 | Cursor command + inbox docs | Developer | DONE | P0 | T-112 | `.cursor/commands/ask-quiet-partner.md` `docs/cursor-inbox/` | latest.md gitignored |
+| T-114 | QA smoke Cursor bridge | QA | READY | P1 | T-112 | `@docs/cursor-qp-bridge.md` | deeplink opens; MD download |
+
 ### Детали задач моста
 
 #### T-103 — Scope (PM)
@@ -378,6 +390,7 @@
 | 2026-07-22 | **Эпик моста T-103…T-111:** [`docs/prd-stages-radar-bridge.md`](docs/prd-stages-radar-bridge.md) — автономия режимов + pull в напарника с оценкой; T-103 DONE; T-104/105/109/111 READY. |
 | 2026-07-22 | **Human Go мост:** режим **A с баннером** (apply по CTA + баннер/правка; без тихого синка; B отклонён). Next: T-104 Architect ∥ T-105 Senior PM ∥ T-109/T-111. |
 | 2026-07-22 | **Мост ship:** T-104…T-109, T-111 DONE — CTA «Подтянуть в напарника», banner на `/radar`, демо→оба; next T-110 QA + deploy. |
+| 2026-07-22 | **T-112/T-113:** «Спросить в Cursor» (deeplink + MD inbox) на hub/radar; команда `/ask-quiet-partner`. |
 
 ---
 

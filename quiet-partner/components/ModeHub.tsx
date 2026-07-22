@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ClipboardList, Radar } from "lucide-react";
 
+import { AskInCursorCard } from "@/components/AskInCursorCard";
 import { FocusDayCard } from "@/components/FocusDayCard";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DISCLAIMER } from "@/lib/domains";
@@ -33,6 +34,10 @@ export function ModeHub() {
 
         <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
           <FocusDayCard />
+        </div>
+
+        <div className="mx-auto w-full max-w-3xl px-4 pt-4 sm:px-6">
+          <AskInCursorCard />
         </div>
 
         <main className="mx-auto grid w-full max-w-3xl flex-1 gap-4 px-4 py-8 sm:grid-cols-2 sm:gap-5 sm:px-6 sm:py-10">
