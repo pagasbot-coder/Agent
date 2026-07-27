@@ -49,3 +49,17 @@
 - [ ] Staging smoke после merge + deploy
 
 **Вердикт agent:** MVP `/brand` готов к Human dogfood. T-Brand-007 static/compile **PASS**; browser Human — OPTIONAL до «волна A ок».
+
+---
+
+## Re-verify (merge babysit, 2026-07-27)
+
+| # | Проверка | Результат |
+|---|----------|-----------|
+| B1 | `npm run build` | **PASS** — `/brand`, `/brand/docs/*` |
+| B2 | `npm run lint` | **PASS** (тот же warning в `suggestScores.ts`, вне scope brand) |
+| HTTP | `next start` GET `/`, `/brand`, `/brand/docs/etapy`, `/radar`, `/stages` | **200** |
+| BR7 | нет `applyStagesBridge` / store в `components/brand`, `lib/brand` | **PASS** |
+| GitHub | unresolved review threads / issue comments | **0** |
+| Merge | `MERGEABLE` / `CLEAN`, 0 behind `main` | **PASS** |
+| CI | нет workflow в репо; Cursor/Vercel check suites `queued` без runs (как на PR #4) | **N/A / вне scope PR** |

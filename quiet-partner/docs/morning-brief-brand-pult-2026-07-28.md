@@ -8,7 +8,7 @@
 |-----|------------|
 | Репо | https://github.com/pagasbot-coder/Agent |
 | Ветка | `cursor/brand-pult-mvp-0821` |
-| PR (создать/открыть) | https://github.com/pagasbot-coder/Agent/pull/new/cursor/brand-pult-mvp-0821 |
+| PR | https://github.com/pagasbot-coder/Agent/pull/5 |
 | Worktree | `/Users/marina/Projects/Agent-brand-pult/quiet-partner` |
 | UI | `npm run dev` → http://localhost:3000/brand |
 
