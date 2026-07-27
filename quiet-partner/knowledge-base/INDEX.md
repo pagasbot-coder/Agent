@@ -1,6 +1,6 @@
 # Knowledge Base — Quiet Partner (Тихий напарник)
 
-**Обновлено:** 2026-07-19
+**Обновлено:** 2026-07-28
 
 Канон контекста для агентов и Human Architect. Предпочитай `@`-ссылки вместо копипаста длинных спеков в чат.
 
@@ -41,6 +41,20 @@
 |------|-------|
 | [`design-tokens.md`](./design-tokens.md) | Токены UI |
 | [`qa-checklist.md`](./qa-checklist.md) | Чеклист QA |
+
+
+## Пульт бренда (`/brand`)
+
+| Файл | Зачем |
+|------|-------|
+| [`handoff-brand-pult-to-quiet-partner.md`](./handoff-brand-pult-to-quiet-partner.md) | Мост из Banya-Digital |
+| [`brand-pult-etapy-0-6.md`](./brand-pult-etapy-0-6.md) | Этапы/реестры канон |
+| [`brand-pult-primer-travelplus-natural.md`](./brand-pult-primer-travelplus-natural.md) | Demo Natural v1.14 |
+| [`brand-platform-travelplus-natural.md`](./brand-platform-travelplus-natural.md) | Платформа линейки |
+| [`brand-management-playbook.md`](./brand-management-playbook.md) | ДНК бренда / StoryBrand |
+| [`china-russia-logistics.md`](./china-russia-logistics.md) | Чеклист Китай→РФ |
+| [`../content/brand-pult/`](../content/brand-pult/README.md) | Волна A markdown dogfood |
+| [`../docs/dogfood-brand-pult-guide.md`](../docs/dogfood-brand-pult-guide.md) | Dogfood A+B |
 
 ## Pointers
 

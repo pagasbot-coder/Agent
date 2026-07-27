@@ -388,10 +388,12 @@
 | T-Brand-004 | UI BrandShell + editors | Developer + UI/UX | DONE | P0 | T-Brand-003 | `@components/brand/BrandShell.tsx` `@app/brand/page.tsx` | клон shell `/stages`, без моста в radar |
 | T-Brand-005 | Demo Natural + MD export | Developer | DONE | P0 | T-Brand-004 | `@lib/brand/demoNatural.ts` | demo + per-reg + full export; %/origin открыто |
 | T-Brand-006 | China checklist в этапе 2/4 | China + Dev | DONE | P1 | T-Brand-004 | `@content/brand/china-checklist.md` `@knowledge-base/china-russia-logistics.md` | doc link в stages 2/4 |
-| T-Brand-007 | QA smoke + dogfood guide | QA | READY | P0 | T-Brand-004, T-Brand-005 | `@content/brand-pult/DOGFOOD-CHEKLIST.md` | после local/staging |
+| T-Brand-007 | QA smoke + dogfood guide | QA | DONE | P0 | T-Brand-004, T-Brand-005 | `@docs/qa-report-brand-pult.md` `@docs/dogfood-brand-pult-guide.md` | static/compile PASS; Human browser OPTIONAL |
 | T-Brand-008 | Hub-ссылка «Пульт бренда» (мелко) | UI/UX | DONE | P1 | T-Brand-004 | `@components/ModeHub.tsx` | footer link `/brand` |
 
-**Порядок:** Human прогон волны A (`content/brand-pult/`) → «волна A ок» закрывает T-Brand-001 → QA T-Brand-007.
+**Порядок:** Human прогон волны A (`content/brand-pult/` + UI guide) → «волна A ок» закрывает T-Brand-001. T-Brand-007 static DONE overnight; browser Human OPTIONAL.
+
+**Утренний бриф:** [`docs/morning-brief-brand-pult-2026-07-28.md`](docs/morning-brief-brand-pult-2026-07-28.md)
 
 
 ## Журнал (фрагмент)
@@ -977,6 +979,8 @@
 | 2026-06-08 | PM | **Human «пока оплату не подключай»:** T-069 READY → **BACKLOG**; T-070/T-071 остаются BACKLOG. Billing scaffold (T-064…T-068) сохранён; activation blocked on Human, not tech. `BILLING_ENABLED=false`. |
 
 | 2026-07-28 | Developer | Handoff brand-pult → QP: KB + `content/brand-pult/` + MVP `/brand` на ветке `cursor/brand-pult-mvp-0821`; эпик T-Brand-001…008 |
+
+| 2026-07-28 | QA + Developer | Overnight: T-Brand-007 static PASS; dogfood guide; INDEX/roadmap/muster; analytics brand_*; morning brief |
 
 ---
 

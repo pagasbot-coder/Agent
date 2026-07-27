@@ -275,6 +275,10 @@ export function StagesShell() {
             <Link href="/radar" className="hover:text-foreground hover:underline">
               Радар
             </Link>
+            <span aria-hidden>·</span>
+            <Link href="/brand" className="hover:text-foreground hover:underline">
+              Пульт бренда
+            </Link>
           </div>
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Пульт этапов

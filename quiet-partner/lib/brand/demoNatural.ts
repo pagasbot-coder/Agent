@@ -86,6 +86,30 @@ export const DEMO_NATURAL: Record<string, RegisterRow[]> = {
       status: "открыто",
       date: "27.07",
     },
+    {
+      element: "Аудитория",
+      text: "Eco / wellness и сети 3–4★; гость после дороги",
+      status: "ок",
+      date: "23.07",
+    },
+    {
+      element: "Доказательства (до 3)",
+      text: "Состав в границах · бумаги Travel+ · ощущение в номере",
+      status: "частично",
+      date: "27.07",
+    },
+    {
+      element: "Антипозиция",
+      text: "Не самые дешёвые · не «органик» без бумаг · не копия NS",
+      status: "ок",
+      date: "27.07",
+    },
+    {
+      element: "Характер",
+      text: "Спокойный, честный, заботливый",
+      status: "ок",
+      date: "26.07",
+    },
   ],
   assortiment: [
     {

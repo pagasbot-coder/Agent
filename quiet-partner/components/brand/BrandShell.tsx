@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { capture } from "@/lib/analytics/posthog";
 import { cn } from "@/lib/utils";
 import {
   DEMO_LINE_NAME,
@@ -142,12 +143,14 @@ export function BrandShell() {
     const filename = reg.path.split("/").pop() || `${reg.id}.md`;
     downloadText(filename, md);
     setStatus(`Скачан файл ${filename}`);
+    capture("brand_export_md", { scope: "register", register_id: activeReg });
   };
 
   const selectStage = (id: number) => {
     setStageId(id);
     localStorage.setItem(LS_STAGE, String(id));
     setActiveRegOverride(null);
+    capture("brand_stage_change", { stage_id: id });
   };
 
   const loadDemo = () => {
@@ -173,6 +176,7 @@ export function BrandShell() {
     setStatus(
       "Demo Natural: этап Оффер. %/origin/COGS = «открыто» — не зелёный DoD.",
     );
+    capture("brand_demo_load", { stage_id: DEMO_STAGE_ID });
   };
 
   const exportAll = () => {
@@ -195,6 +199,7 @@ export function BrandShell() {
       parts.join("\n"),
     );
     setStatus("Скачан полный MD-экспорт пульта бренда");
+    capture("brand_export_md", { scope: "all" });
   };
 
   return (

@@ -1,9 +1,19 @@
 # Roadmap — Тихий напарник
 
-**Обновлено:** 2026-06-13  
+**Обновлено:** 2026-07-28  
 **План:** [`implementation-plan.md`](./implementation-plan.md) · **Book track:** [`implementation-plan-phase-book.md`](./implementation-plan-phase-book.md) · **ТЗ:** [`technical-specification.md`](./technical-specification.md) · [`technical-specification-book-features.md`](./technical-specification-book-features.md) · **Phase 5:** [`roadmap-phase5.md`](./roadmap-phase5.md)
 
 ---
+
+## Пульт бренда (2026-07-28)
+
+- [x] Handoff KB + волна A markdown из Banya-Digital (`content/brand-pult/`)
+- [x] MVP UI `/brand` на ветке `cursor/brand-pult-mvp-0821` (T-Brand-002…006, 008)
+- [ ] Human: «волна A ок» (T-Brand-001)
+- [ ] QA Human dogfood 3×10 мин (T-Brand-007 browser)
+- [ ] Merge PR → staging `/brand`
+- [ ] Out of scope v1: мост brand→radar, auth/DB
+
 
 ## Сделано (Phase 0–2 spike)
 
