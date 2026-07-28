@@ -1,17 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { FocusDayCard } from "@/components/FocusDayCard";
 import { capture } from "@/lib/analytics/posthog";
 import { cn } from "@/lib/utils";
 import {
-  buildStagesSnapshot,
-  ensureStagesProjectKey,
-} from "@/lib/stages/bridge";
+  DEMO_LINE_NAME,
+  DEMO_NATURAL,
+  DEMO_STAGE_ID,
+} from "@/lib/brand/demoNatural";
 import {
   CHEATSHEETS,
   emptyRow,
@@ -19,18 +18,11 @@ import {
   REGISTERS,
   STAGES,
   type RegisterRow,
-} from "@/lib/stages/registers";
-import {
-  DEMO_PROJECT_NAME,
-  DEMO_STAGE_ID,
-  DEMO_TEST_RUN,
-} from "@/lib/stages/demoTestRun";
-import { useProjectStore } from "@/lib/store/useProjectStore";
+} from "@/lib/brand/registers";
 
-const LS_STAGE = "qp-stages-stage";
-const LS_NAME = "qp-stages-name";
-const LS_CACHE = "qp-stages-cache";
-const LS_PROJECT_KEY = "qp-stages-project-key";
+const LS_STAGE = "qp-brand-stage";
+const LS_NAME = "qp-brand-name";
+const LS_CACHE = "qp-brand-cache";
 
 type Cache = Record<string, RegisterRow[]>;
 
@@ -75,21 +67,17 @@ function downloadText(filename: string, text: string) {
   URL.revokeObjectURL(url);
 }
 
-/** Stage pulpit: rail 0–6 + register tables in localStorage (client-only). */
-export function StagesShell() {
-  const router = useRouter();
-  const applyStagesBridge = useProjectStore((s) => s.applyStagesBridge);
-  const needsStagesOverwriteConfirm = useProjectStore(
-    (s) => s.needsStagesOverwriteConfirm,
-  );
+/** Brand pulpit: rail 0–6 + MVP registers in localStorage (no radar bridge). */
+export function BrandShell() {
   const [stageId, setStageId] = useState(readStage);
-  const [projectName, setProjectName] = useState(readName);
+  const [lineName, setLineName] = useState(readName);
   const [cache, setCache] = useState<Cache>(readCache);
   const [activeRegOverride, setActiveRegOverride] = useState<string | null>(
     null,
   );
-  const [status, setStatus] = useState("Данные хранятся в этом браузере.");
-  const [demoAlsoRadar, setDemoAlsoRadar] = useState(true);
+  const [status, setStatus] = useState(
+    "Данные в браузере (qp-brand-*). Радар не трогаем.",
+  );
 
   const stage = STAGES[stageId] ?? STAGES[0];
 
@@ -151,16 +139,18 @@ export function StagesShell() {
     const data = cache[activeReg]?.length
       ? cache[activeReg]
       : [emptyRow(reg)];
-    const md = objectsToMarkdown(reg, data, projectName);
+    const md = objectsToMarkdown(reg, data, lineName);
     const filename = reg.path.split("/").pop() || `${reg.id}.md`;
     downloadText(filename, md);
     setStatus(`Скачан файл ${filename}`);
+    capture("brand_export_md", { scope: "register", register_id: activeReg });
   };
 
   const selectStage = (id: number) => {
     setStageId(id);
     localStorage.setItem(LS_STAGE, String(id));
     setActiveRegOverride(null);
+    capture("brand_stage_change", { stage_id: id });
   };
 
   const loadDemo = () => {
@@ -172,95 +162,44 @@ export function StagesShell() {
     if (
       hasContent &&
       !window.confirm(
-        "Заменить текущие реестры данными «Тестовый прогон»? Текущее в браузере будет перезаписано.",
+        "Заменить реестры демо Travel+ Natural? Текущее в браузере будет перезаписано.",
       )
     ) {
       return;
     }
-    const nextCache = { ...DEMO_TEST_RUN };
-    persistCache(nextCache);
-    setProjectName(DEMO_PROJECT_NAME);
-    localStorage.setItem(LS_NAME, DEMO_PROJECT_NAME);
+    persistCache({ ...DEMO_NATURAL });
+    setLineName(DEMO_LINE_NAME);
+    localStorage.setItem(LS_NAME, DEMO_LINE_NAME);
     setStageId(DEMO_STAGE_ID);
     localStorage.setItem(LS_STAGE, String(DEMO_STAGE_ID));
     setActiveRegOverride(null);
-
-    if (demoAlsoRadar) {
-      const projectKey = ensureStagesProjectKey(
-        localStorage.getItem(LS_PROJECT_KEY),
-      );
-      localStorage.setItem(LS_PROJECT_KEY, projectKey);
-      const snapshot = buildStagesSnapshot({
-        projectName: DEMO_PROJECT_NAME,
-        stageId: DEMO_STAGE_ID,
-        cache: nextCache,
-        projectKey,
-      });
-      if (
-        needsStagesOverwriteConfirm(snapshot) &&
-        !window.confirm(
-          "В напарнике уже другой проект. Заменить имя и оценку данными из пульта?",
-        )
-      ) {
-        setStatus(
-          "Загружен «Тестовый прогон» в пульт (оценка в напарнике не тронута).",
-        );
-        return;
-      }
-      applyStagesBridge(snapshot);
-      capture("bridge_pull_to_radar", {
-        stage_id: DEMO_STAGE_ID,
-        register_count: snapshot.registerRowCount,
-        from_demo: true,
-      });
-      capture("bridge_scores_applied", {
-        stage_id: DEMO_STAGE_ID,
-        register_count: snapshot.registerRowCount,
-      });
-      setStatus(
-        "«Тестовый прогон» в пульте и оценка в напарнике — открой радар.",
-      );
-      router.push("/radar?from=stages");
-      return;
-    }
-
     setStatus(
-      "Загружен «Тестовый прогон» — лендинг «Северный Мотор», этап Исполнение.",
+      "Demo Natural: этап Оффер. %/origin/COGS = «открыто» — не зелёный DoD.",
     );
+    capture("brand_demo_load", { stage_id: DEMO_STAGE_ID });
   };
 
-  const pullToRadar = () => {
-    const projectKey = ensureStagesProjectKey(
-      localStorage.getItem(LS_PROJECT_KEY),
-    );
-    localStorage.setItem(LS_PROJECT_KEY, projectKey);
-    const snapshot = buildStagesSnapshot({
-      projectName,
-      stageId,
-      cache,
-      projectKey,
-    });
-    const overwrite = needsStagesOverwriteConfirm(snapshot);
-    if (
-      overwrite &&
-      !window.confirm(
-        "В напарнике уже другой проект. Заменить имя и оценку данными из пульта?",
-      )
-    ) {
-      return;
+  const exportAll = () => {
+    const parts: string[] = [
+      `# Пульт бренда — ${lineName || "линейка"}`,
+      "",
+      `**Этап:** ${stageId} — ${stage.name}`,
+      "",
+      "> Co-pilot для линейки, не сертификационный инструмент.",
+      "",
+    ];
+    for (const reg of Object.values(REGISTERS)) {
+      const data = cache[reg.id]?.length ? cache[reg.id] : [emptyRow(reg)];
+      parts.push(objectsToMarkdown(reg, data, lineName));
+      parts.push("---");
+      parts.push("");
     }
-    applyStagesBridge(snapshot);
-    capture("bridge_pull_to_radar", {
-      stage_id: stageId,
-      register_count: snapshot.registerRowCount,
-      overwrite,
-    });
-    capture("bridge_scores_applied", {
-      stage_id: stageId,
-      register_count: snapshot.registerRowCount,
-    });
-    setStatus("Оценка подтянута в Тихого напарника");
-    router.push("/radar?from=stages");
+    downloadText(
+      `brand-pult-${(lineName || "line").replace(/\s+/g, "-").toLowerCase()}.md`,
+      parts.join("\n"),
+    );
+    setStatus("Скачан полный MD-экспорт пульта бренда");
+    capture("brand_export_md", { scope: "all" });
   };
 
   return (
@@ -272,33 +211,36 @@ export function StagesShell() {
               Режимы
             </Link>
             <span aria-hidden>·</span>
+            <Link
+              href="/stages"
+              className="hover:text-foreground hover:underline"
+            >
+              Пульт этапов
+            </Link>
+            <span aria-hidden>·</span>
             <Link href="/radar" className="hover:text-foreground hover:underline">
               Радар
             </Link>
-            <span aria-hidden>·</span>
-            <Link href="/brand" className="hover:text-foreground hover:underline">
-              Пульт бренда
-            </Link>
           </div>
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Пульт этапов
+            Пульт бренда
           </h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
-            Выбери этап → заполни реестр. Сохранение в браузере; «Скачать .md» —
-            в папку ProjectM / reestry.
+            Этапы 0–6 и реестры линейки. Без моста в радар. Сохранение в
+            браузере; «Скачать .md» — в папку brand-pult / reestry.
           </p>
           <div className="flex flex-wrap items-end gap-3">
             <label className="flex flex-col gap-1 text-xs text-muted-foreground">
-              Проект
+              Линейка
               <input
                 type="text"
-                value={projectName}
+                value={lineName}
                 onChange={(e) => {
                   const v = e.target.value;
-                  setProjectName(v);
+                  setLineName(v);
                   localStorage.setItem(LS_NAME, v.trim());
                 }}
-                placeholder="Название проекта"
+                placeholder="Название линейки"
                 className="h-9 min-w-[12rem] rounded-lg border border-input bg-background px-3 text-sm text-foreground"
               />
             </label>
@@ -309,50 +251,36 @@ export function StagesShell() {
               className="mb-0.5"
               onClick={loadDemo}
             >
-              Загрузить «Тестовый прогон»
+              Demo Travel+ Natural
             </Button>
             <Button
               type="button"
               size="sm"
               className="mb-0.5"
-              onClick={pullToRadar}
+              onClick={exportAll}
             >
-              Подтянуть в напарника
+              Скачать весь пульт .md
             </Button>
-            <label className="mb-0.5 flex max-w-xs cursor-pointer items-start gap-2 text-xs text-muted-foreground">
-              <input
-                type="checkbox"
-                className="mt-0.5"
-                checked={demoAlsoRadar}
-                onChange={(e) => setDemoAlsoRadar(e.target.checked)}
-              />
-              <span>Также подтянуть оценку в напарника (с демо)</span>
-            </label>
             <p className="pb-1.5 text-xs text-muted-foreground">{status}</p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Имя проекта и оценка доменов появятся на радаре после «Подтянуть в
-            напарника».
-          </p>
           <div className="flex flex-wrap gap-2">
             {CHEATSHEETS.map((c) => (
               <Link
                 key={c.slug}
-                href={`/stages/docs/${c.slug}`}
+                href={`/brand/docs/${c.slug}`}
                 className="inline-flex rounded-full border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground/80 hover:border-primary/40 hover:text-foreground"
               >
                 {c.title}
               </Link>
             ))}
           </div>
-          <FocusDayCard variant="compact" className="mt-2" />
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <nav
           className="mb-5 grid grid-cols-4 gap-1.5 sm:grid-cols-7"
-          aria-label="Этапы"
+          aria-label="Этапы бренда"
         >
           {STAGES.map((s) => (
             <button
@@ -370,6 +298,11 @@ export function StagesShell() {
               <span className="mt-0.5 block text-[10px] leading-tight">
                 {s.short}
               </span>
+              {s.scenario ? (
+                <span className="mt-0.5 block text-[9px] opacity-80">
+                  сценарий
+                </span>
+              ) : null}
             </button>
           ))}
         </nav>
@@ -377,13 +310,18 @@ export function StagesShell() {
         <section className="rounded-xl border border-border/80 bg-card p-4 shadow-sm sm:p-5">
           <h2 className="text-lg font-semibold tracking-tight">
             Этап {stage.id} — {stage.name}
+            {stage.scenario ? (
+              <span className="ml-2 align-middle text-xs font-normal text-amber-700 dark:text-amber-400">
+                сценарий · не факт
+              </span>
+            ) : null}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">{stage.gate}</p>
 
           {stage.editors.length === 0 ? (
             <p className="mt-4 text-sm text-muted-foreground">
-              На этом этапе реестры не обязательны — зафиксируй уроки в заметках
-              проекта.
+              На этом этапе реестры в MVP не обязательны — уроки в полном пульте /
+              KB.
             </p>
           ) : (
             <>
@@ -425,13 +363,7 @@ export function StagesShell() {
                       </Button>
                     </div>
                   </div>
-                  {/* Mobile: stacked cards — table stays for md+ (T-101) */}
                   <div className="space-y-3 md:hidden">
-                    {rows.length === 0 && (
-                      <p className="rounded-lg border border-dashed border-border px-3 py-4 text-sm text-muted-foreground">
-                        Пока пусто — нажми «+ строка».
-                      </p>
-                    )}
                     {rows.map((row, ri) => (
                       <article
                         key={ri}
@@ -453,10 +385,7 @@ export function StagesShell() {
                         </div>
                         <div className="space-y-3">
                           {REGISTERS[activeReg].columns.map((c) => (
-                            <label
-                              key={c.key}
-                              className="block space-y-1"
-                            >
+                            <label key={c.key} className="block space-y-1">
                               <span className="text-xs font-medium text-foreground">
                                 {c.label}
                               </span>
@@ -509,7 +438,9 @@ export function StagesShell() {
                               key={c.key}
                               className={cn(
                                 "sticky top-0 z-[1] border-b border-border bg-muted/80 px-2 py-2 text-left text-xs font-medium backdrop-blur-sm",
-                                c.multiline ? "min-w-[14rem]" : "whitespace-nowrap",
+                                c.multiline
+                                  ? "min-w-[14rem]"
+                                  : "whitespace-nowrap",
                               )}
                             >
                               {c.label}
@@ -520,7 +451,10 @@ export function StagesShell() {
                       </thead>
                       <tbody>
                         {rows.map((row, ri) => (
-                          <tr key={ri} className="odd:bg-background even:bg-muted/20">
+                          <tr
+                            key={ri}
+                            className="odd:bg-background even:bg-muted/20"
+                          >
                             {REGISTERS[activeReg].columns.map((c) => (
                               <td
                                 key={c.key}
@@ -593,8 +527,9 @@ export function StagesShell() {
         </section>
 
         <footer className="mt-8 text-center text-xs text-muted-foreground">
-          Co-pilot, не сертификация PMBOK. Полный локальный контур с записью на
-          диск — папка ProjectM на Desktop.
+          Co-pilot для линейки, не сертификация и не замена технолога. Markdown
+          dogfood:{" "}
+          <code className="rounded bg-muted px-1">content/brand-pult/</code>
         </footer>
       </main>
     </div>

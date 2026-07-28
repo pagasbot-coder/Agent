@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (Ask in Cursor T-112/T-113; deploy next)
+**Последнее обновление:** 2026-07-28 (эпик T-Brand `/brand` handoff Banya-Digital)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -372,6 +372,29 @@
 - [ ] Disclaimer co-pilot
 
 ---
+
+
+## Эпик: Пульт бренда `/brand` (2026-07-28)
+
+> Handoff из Banya-Digital: [`knowledge-base/handoff-brand-pult-to-quiet-partner.md`](knowledge-base/handoff-brand-pult-to-quiet-partner.md)  
+> Источник: ветка `cursor/copywriter-report-fmcg-pm-0821` · [PR #1](https://github.com/pagasbot-coder/Banya-Digital/pull/1)  
+> Ветка QP: **`cursor/brand-pult-mvp-0821`** · волна A markdown: `content/brand-pult/` · радар **не трогаем**
+
+| ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Итог |
+|----|--------|------|--------|-----------|-------------|----------|------|
+| T-Brand-001 | Human Go волна B (код `/brand`) | Human | READY | P0 | волна A | `@content/brand-pult/DOGFOOD-CHEKLIST.md` | ждать «волна A ок» / Go |
+| T-Brand-002 | `content/brand/` шпаргалки из KB | Copywriter | DONE | P0 | — | `@content/brand/` `@knowledge-base/brand-pult-etapy-0-6.md` | pointers + шаблоны из волны A |
+| T-Brand-003 | `lib/brand/registers.ts` MVP | Developer | DONE | P0 | T-Brand-002 | `@lib/brand/registers.ts` | 7 реестров + этапы 0–6 |
+| T-Brand-004 | UI BrandShell + editors | Developer + UI/UX | DONE | P0 | T-Brand-003 | `@components/brand/BrandShell.tsx` `@app/brand/page.tsx` | клон shell `/stages`, без моста в radar |
+| T-Brand-005 | Demo Natural + MD export | Developer | DONE | P0 | T-Brand-004 | `@lib/brand/demoNatural.ts` | demo + per-reg + full export; %/origin открыто |
+| T-Brand-006 | China checklist в этапе 2/4 | China + Dev | DONE | P1 | T-Brand-004 | `@content/brand/china-checklist.md` `@knowledge-base/china-russia-logistics.md` | doc link в stages 2/4 |
+| T-Brand-007 | QA smoke + dogfood guide | QA | DONE | P0 | T-Brand-004, T-Brand-005 | `@docs/qa-report-brand-pult.md` `@docs/dogfood-brand-pult-guide.md` | static/compile PASS; Human browser OPTIONAL |
+| T-Brand-008 | Hub-ссылка «Пульт бренда» (мелко) | UI/UX | DONE | P1 | T-Brand-004 | `@components/ModeHub.tsx` | footer link `/brand` |
+
+**Порядок:** Human прогон волны A (`content/brand-pult/` + UI guide) → «волна A ок» закрывает T-Brand-001. T-Brand-007 static DONE overnight; browser Human OPTIONAL.
+
+**Утренний бриф:** [`docs/morning-brief-brand-pult-2026-07-28.md`](docs/morning-brief-brand-pult-2026-07-28.md)
+
 
 ## Журнал (фрагмент)
 
@@ -954,6 +977,10 @@
 | 2026-06-07 | PM + Muster (SME/Growth/Senior PM/QA) | **T-062 DONE:** M0 roundtable async 2026-06-07; [`m0-roundtable-minutes.md`](docs/m0-roundtable-minutes.md); **Go + waiver G2→3**; monetization $19/mo; T-063 BACKLOG |
 | 2026-06-08 | PM | **Human directive «закрывай все задачи»:** T-048, T-049, T-050, T-052, T-057, T-058, T-063 → **CANCELLED** (deferred post-M0 / waived / superseded). Очередь T-001…T-063 без открытых статусов. |
 | 2026-06-08 | PM | **Human «пока оплату не подключай»:** T-069 READY → **BACKLOG**; T-070/T-071 остаются BACKLOG. Billing scaffold (T-064…T-068) сохранён; activation blocked on Human, not tech. `BILLING_ENABLED=false`. |
+
+| 2026-07-28 | Developer | Handoff brand-pult → QP: KB + `content/brand-pult/` + MVP `/brand` на ветке `cursor/brand-pult-mvp-0821`; эпик T-Brand-001…008 |
+
+| 2026-07-28 | QA + Developer | Overnight: T-Brand-007 static PASS; dogfood guide; INDEX/roadmap/muster; analytics brand_*; morning brief |
 
 ---
 

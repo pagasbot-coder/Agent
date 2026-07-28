@@ -2,7 +2,7 @@
 
 **Владелец:** QA (`@role-qa`)  
 **Проект:** `quiet-partner/`  
-**Обновлено:** 2026-06-13 (T-080…T-083 book features; G-Book-P3 prod smoke)  
+**Обновлено:** 2026-07-28 (T-Brand `/brand` BP1–BP9)  
 **Отчёт smoke:** [`docs/qa-report-phase3.md`](../docs/qa-report-phase3.md)
 
 ---
@@ -265,3 +265,23 @@ curl -sS -X POST https://quiet-partner.vercel.app/api/advisor/health-commentary 
 |---|----------|----------|
 | E1 | «Копировать снимок» | JSON in clipboard: domains, project name, disclaimer |
 | E2 | «Скачать JSON» | File download; no server POST |
+
+
+---
+
+## Пульт бренда `/brand` (T-Brand)
+
+| # | Проверка | Ожидание |
+|---|----------|----------|
+| BP1 | `GET /brand` | Пульт: этапы 0–6, имя линейки, demo, MD export |
+| BP2 | Demo Travel+ Natural | Реестры заполнены; %/origin/COGS = «открыто» |
+| BP3 | Persist | Reload сохраняет `qp-brand-*` |
+| BP4 | Скачать .md | Файл реестра + полный пульт |
+| BP5 | Этапы 3–6 | Плашка «сценарий · не факт» |
+| BP6 | `/brand/docs/*` | Шпаргалки из `content/brand/` |
+| BP7 | Нет моста в radar | Demo brand не меняет scores напарника |
+| BP8 | Hub / stages | Ссылки «Пульт бренда» в футере `/` и header `/stages` |
+| BP9 | Волна A | `content/brand-pult/DOGFOOD-CHEKLIST.md` доступен |
+
+**Отчёт:** [`docs/qa-report-brand-pult.md`](../docs/qa-report-brand-pult.md) · **Dogfood:** [`docs/dogfood-brand-pult-guide.md`](../docs/dogfood-brand-pult-guide.md)
+

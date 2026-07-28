@@ -94,6 +94,15 @@ export function ModeHub() {
           </p>
           <p className="mt-2 text-center text-xs text-muted-foreground">
             <Link
+              href="/brand"
+              className="underline-offset-2 hover:underline"
+            >
+              Пульт бренда
+            </Link>
+            <span aria-hidden className="mx-2">
+              ·
+            </span>
+            <Link
               href="/waitlist"
               className="underline-offset-2 hover:underline"
             >

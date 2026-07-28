@@ -25,7 +25,10 @@ export type AnalyticsEvent =
   | "cursor_ask_copy"
   | "cursor_ask_download"
   | "landing_view"
-  | "waitlist_submit";
+  | "waitlist_submit"
+  | "brand_stage_change"
+  | "brand_demo_load"
+  | "brand_export_md";
 
 export type AnalyticsProperties = Record<
   string,

@@ -18,9 +18,9 @@ This project uses the **Muster** multi-agent pattern. **Markdown is the source o
 
 ## Role activation
 
-When the Human says **Role: PM | Senior PM | IT-Architect | Developer | UI/UX | QA | Growth** (or Russian equivalents) or opens a dedicated Agents Window chat:
+When the Human says **Role: PM | Senior PM | IT-Architect | Developer | UI/UX | QA | Growth | Brand Manager | Copywriter | China Logistics** (or Russian equivalents) or opens a dedicated Agents Window chat:
 
-- Follow the matching rule: `@role-pm`, `@role-senior-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, `@role-growth-marketer`.
+- Follow the matching rule: `@role-pm`, `@role-senior-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, `@role-growth-marketer`, `@role-brand-manager`, `@role-copywriter`, `@role-china-logistics`.
 - Do **not** perform another role's duties unless explicitly asked.
 
 ## Coordination matrix (Quiet Partner)
