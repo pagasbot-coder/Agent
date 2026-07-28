@@ -382,7 +382,7 @@
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст | Итог |
 |----|--------|------|--------|-----------|-------------|----------|------|
-| T-Brand-001 | Human Go волна B (код `/brand`) | Human | READY | P0 | волна A | `@content/brand-pult/DOGFOOD-CHEKLIST.md` | ждать «волна A ок» / Go |
+| T-Brand-001 | Human Go волна B (код `/brand`) | Human | DONE | P0 | волна A | `@content/brand-pult/DOGFOOD-CHEKLIST.md` | Human: «волна A ок» 2026-07-28; правки позже |
 | T-Brand-002 | `content/brand/` шпаргалки из KB | Copywriter | DONE | P0 | — | `@content/brand/` `@knowledge-base/brand-pult-etapy-0-6.md` | pointers + шаблоны из волны A |
 | T-Brand-003 | `lib/brand/registers.ts` MVP | Developer | DONE | P0 | T-Brand-002 | `@lib/brand/registers.ts` | 7 реестров + этапы 0–6 |
 | T-Brand-004 | UI BrandShell + editors | Developer + UI/UX | DONE | P0 | T-Brand-003 | `@components/brand/BrandShell.tsx` `@app/brand/page.tsx` | клон shell `/stages`, без моста в radar |
@@ -390,9 +390,9 @@
 | T-Brand-006 | China checklist в этапе 2/4 | China + Dev | DONE | P1 | T-Brand-004 | `@content/brand/china-checklist.md` `@knowledge-base/china-russia-logistics.md` | doc link в stages 2/4 |
 | T-Brand-007 | QA smoke + dogfood guide | QA | DONE | P0 | T-Brand-004, T-Brand-005 | `@docs/qa-report-brand-pult.md` `@docs/dogfood-brand-pult-guide.md` | static/compile PASS; Human browser OPTIONAL |
 | T-Brand-008 | Hub-ссылка «Пульт бренда» (мелко) | UI/UX | DONE | P1 | T-Brand-004 | `@components/ModeHub.tsx` | footer link `/brand` |
-| T-Brand-009 | Merge PR #5 + staging `/brand` live | Developer + DevOps | IN_PROGRESS | P0 | T-Brand-004 | `@docs/deploy-staging.md` | PR #5 **merged** 2026-07-28; staging `/brand` → deploy |
+| T-Brand-009 | Merge PR #5 + staging `/brand` live | Developer + DevOps | DONE | P0 | T-Brand-004 | `@docs/deploy-staging.md` | `vercel deploy --prod` 2026-07-28 → quiet-partner.vercel.app/brand 200 |
 
-**Порядок:** Human прогон волны A (`content/brand-pult/` + UI guide) → «волна A ок» закрывает T-Brand-001. **PR #5 в `main`.** Staging `/brand` — после `vercel --prod`.
+**Порядок:** T-Brand-001 **DONE** (Human «волна A ок» 2026-07-28). Staging `/brand` live после deploy.
 
 **Утренний бриф:** [`docs/morning-brief-brand-pult-2026-07-28.md`](docs/morning-brief-brand-pult-2026-07-28.md)
 
