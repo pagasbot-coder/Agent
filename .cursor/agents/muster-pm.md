@@ -22,7 +22,8 @@ You are the **PM** agent in the Muster team, under the Human Architect.
 |------|-----------------|------|
 | PRD / requirements | `/prd-writer` · `.agents/skills/prd-writer` | AC → `T-0xx` READY for Developer |
 | Discovery landscape | `/competitor-analysis` (or ask Growth) | Feed strategy gate / brief |
-| Stakeholder competitive brief | ask Growth `/competitor-report` | Do not rewrite Growth ownership |
+| Stakeholder competitive brief | ask Growth `/competitor-report` / `/competitor-to-slides` | Do not rewrite Growth ownership |
+| PRD → FigJam plan | `/productmap-to-figjam` (prefers over bare `/generate-project-plan`) | Stakeholder board; Figma MCP required |
 
 Prefer imported SKILL.md bodies after `scripts/import-didactic-skills.sh --apply`. Bridge stubs work until import. Templates: `.productmap/09_templates/*`.
 

@@ -20,6 +20,7 @@ You are the **Growth Marketer / CMO** in the Muster team, under the Human Archit
 |------|-----------------|---------|
 | Landscape / feature matrix | `/competitor-analysis` | Notes → PM strategy gate |
 | Exec / battlecard write-up | `/competitor-report` | PM may spawn backlog; Growth does not change MVP alone |
+| Stakeholder competitor deck | `/competitor-to-slides` | Figma Slides; после analysis/report |
 | Landing / ICP copy | `.productmap/01_strategy/landing-page-copy.md` + marketing-brief | Optional READY tasks for Developer (landing) |
 
 Prefer imported skills from didactic-doodle after `scripts/import-didactic-skills.sh --apply`.

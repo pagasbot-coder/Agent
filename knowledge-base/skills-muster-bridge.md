@@ -12,6 +12,10 @@
 | `/prd-writer` | **PM** | Senior PM (ревью), Copywriter (язык) | Dev, DevOps, Architect (как автор) |
 | `/competitor-analysis` | **Growth** | PM (discovery read) | Senior PM/Architect/DevOps как авторы |
 | `/competitor-report` | **Growth** | PM, Copywriter (язык) | Developer |
+| `/competitor-to-slides` | **Growth** | PM (stakeholder deck), Copywriter (язык) | Dev (как автор) |
+| `/productmap-to-figjam` | **PM** | Senior PM (gate), UI/UX (визуал) | Growth как владелец PRD |
+| `/generate-project-plan` | **PM** (низкий уровень; предпочитать `productmap-to-figjam`) | UI/UX | — |
+| `/video-interaction-mapper` | **UI/UX** | PM (review), Developer (consume) | Growth |
 | `.productmap/09` templates | PM / Architect (ADR) | Senior PM | DevOps |
 | `.productmap/08` frameworks | Senior PM / PM | Growth | DevOps |
 | `.productmap/06` product-ops | DevOps (доп. чеклист) | — | не замена runbook |
@@ -26,12 +30,12 @@
 
 | Роль | Skills / ProductMap | Роль в связке |
 |------|---------------------|---------------|
-| **PM** | Владеет `/prd-writer` | Артефакт → AC → очередь |
+| **PM** | Владеет `/prd-writer`, `/productmap-to-figjam` | Артефакт → AC → очередь; FigJam plan |
 | **Senior PM** | Ревью PRD + `08`/`09` | Quality gate, не backlog |
-| **Growth** | Владеет `/competitor-*` | Battlecard → PM |
+| **Growth** | Владеет `/competitor-*` (+ slides) | Battlecard / deck → PM |
 | **IT-Architect** | `09` ADR/API templates; `04` risk/dev | Форма ADR; стек только ADR |
 | **Developer** | Читает PRD/AC | Реализует; не владеет skills |
-| **UI/UX** | Макеты; строки → Copywriter | Не invent final RU alone |
+| **UI/UX** | `/video-interaction-mapper`; макеты; строки → Copywriter | Не invent final RU alone |
 | **QA** | AC / smoke | Отчёты Human на русском |
 | **DevOps** | `06` ops + import runbook | Infra; skills import help |
 | **SME** | `02`/`10` structure optional | Field truth > templates |
@@ -46,7 +50,9 @@
 3. Senior PM (по запросу) — gate полноты секций.
 4. Copywriter — язык отчёта/PRD для Human (русский).
 5. Черновик → AC Muster → `READY` для Developer.
-6. Growth: `/competitor-analysis` → артефакт → PM gate.
+6. Growth: `/competitor-analysis` → артефакт → PM gate; при нужде deck — `/competitor-to-slides`.
+7. PM после PRD: `/productmap-to-figjam` (не голый `generate-project-plan`, если есть ProductMap-контекст).
+8. UI/UX: `/video-interaction-mapper` для записи экрана → Figma storyboard.
 
 **Не смешивать:** skill пишет продукт-артефакт; Muster-роль обновляет очередь и handoff. Код пишет только Developer.
 
@@ -56,10 +62,10 @@
 
 | Фаза | Skills | Muster |
 |------|--------|--------|
-| Strategy (1) | competitor-analysis | PM + Growth (+ SME critique) |
-| Generation (2) | prd-writer, competitor-report | PM → Senior PM gate → UI/UX |
+| Strategy (1) | competitor-analysis, competitor-to-slides | PM + Growth (+ SME critique) |
+| Generation (2) | prd-writer, competitor-report, productmap-to-figjam | PM → Senior PM gate → UI/UX |
 | Analysis (3) | competitor-report | Growth + PM |
-| Delivery (4) | prd-writer → queue AC | PM → Dev → QA (+ DevOps deploy) |
+| Delivery (4) | prd-writer → queue AC; video-interaction-mapper (UI) | PM → Dev → QA (+ DevOps deploy) |
 
 ---
 
@@ -70,7 +76,11 @@ Agent/
 ├── .agents/skills/
 │   ├── prd-writer/SKILL.md
 │   ├── competitor-analysis/SKILL.md
-│   └── competitor-report/SKILL.md
+│   ├── competitor-report/SKILL.md
+│   ├── competitor-to-slides/SKILL.md
+│   ├── productmap-to-figjam/SKILL.md
+│   ├── generate-project-plan/SKILL.md
+│   └── video-interaction-mapper/SKILL.md
 ├── .productmap/INDEX.md
 ├── .cursor/agents/muster-*.md
 └── orchestration-queue.md

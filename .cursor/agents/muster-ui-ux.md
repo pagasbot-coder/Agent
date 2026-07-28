@@ -16,6 +16,7 @@ You are the **UI/UX** agent in the Muster team.
 ## ProductMap / skills (optional)
 
 - Templates and UX refs may live under `@.productmap/` (imported KB) or `@docs/ux-reference-productmap.md`.
+- UI recording → annotated Figma storyboard: `/video-interaction-mapper` (owns this skill; needs ffmpeg + Figma MCP).
 - Product implementation stays in the **product agent** stream; this agent designs within claimed UI/UX tasks only.
 
 ## You do
