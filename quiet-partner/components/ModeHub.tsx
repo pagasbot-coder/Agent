@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ClipboardList, Radar } from "lucide-react";
+import { ClipboardList, Radar, Tag } from "lucide-react";
 
 import { AskInCursorCard } from "@/components/AskInCursorCard";
 import { FocusDayCard } from "@/components/FocusDayCard";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_DISCLAIMER } from "@/lib/domains";
 
-/** First screen: daily focus + choose stage pulpit vs domain radar. */
+/** First screen: focus → radar → brand → stages → Cursor. */
 export function ModeHub() {
   return (
     <div className="flex min-h-full flex-1 flex-col">
@@ -27,40 +27,12 @@ export function ModeHub() {
             Тихий напарник
           </h1>
           <p className="mt-3 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Что нужно сейчас — операционка по этапам или взгляд на здоровье
-            доменов?
+            Фокус дня, радар доменов, пульт бренда или этапы проекта.
           </p>
         </header>
 
-        <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 px-4 py-6 sm:gap-5 sm:px-6 sm:py-8">
           <FocusDayCard />
-        </div>
-
-        <div className="mx-auto w-full max-w-3xl px-4 pt-4 sm:px-6">
-          <AskInCursorCard />
-        </div>
-
-        <main className="mx-auto grid w-full max-w-3xl flex-1 gap-4 px-4 py-8 sm:grid-cols-2 sm:gap-5 sm:px-6 sm:py-10">
-          <Link
-            href="/stages"
-            className="group flex flex-col rounded-xl border border-border/80 bg-card p-6 shadow-sm transition hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span className="inline-flex size-10 items-center justify-center rounded-lg bg-muted text-foreground">
-              <ClipboardList className="size-5" aria-hidden />
-            </span>
-            <h2 className="mt-4 text-xl font-semibold tracking-tight">
-              Пульт этапов
-            </h2>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-              Этапы 0–6, реестры сторон / рисков / вех, шпаргалки. Данные в
-              браузере — можно скачать Markdown.
-            </p>
-            <span className="mt-5">
-              <Button className="pointer-events-none" tabIndex={-1}>
-                Открыть пульт
-              </Button>
-            </span>
-          </Link>
 
           <Link
             href="/radar"
@@ -86,22 +58,61 @@ export function ModeHub() {
               </Button>
             </span>
           </Link>
-        </main>
+
+          <Link
+            href="/brand"
+            className="group flex flex-col rounded-xl border border-border/80 bg-card p-6 shadow-sm transition hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span className="inline-flex size-10 items-center justify-center rounded-lg bg-muted text-foreground">
+              <Tag className="size-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 text-xl font-semibold tracking-tight">
+              Пульт бренда
+            </h2>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+              Этапы 0–6 линейки, реестры аудитории / платформы / рисков,
+              demo Natural. Данные в браузере — можно скачать Markdown.
+            </p>
+            <span className="mt-5">
+              <Button className="pointer-events-none" tabIndex={-1}>
+                Открыть пульт бренда
+              </Button>
+            </span>
+          </Link>
+
+          <Link
+            href="/stages"
+            className="group flex flex-col rounded-xl border border-border/80 bg-card p-6 shadow-sm transition hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span className="inline-flex size-10 items-center justify-center rounded-lg bg-muted text-foreground">
+              <ClipboardList className="size-5" aria-hidden />
+            </span>
+            <h2 className="mt-4 text-xl font-semibold tracking-tight">
+              Пульт этапов
+            </h2>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+              Этапы 0–6, реестры сторон / рисков / вех, шпаргалки. Данные в
+              браузере — можно скачать Markdown.
+            </p>
+            <span className="mt-5">
+              <Button
+                variant="outline"
+                className="pointer-events-none"
+                tabIndex={-1}
+              >
+                Открыть пульт
+              </Button>
+            </span>
+          </Link>
+
+          <AskInCursorCard />
+        </div>
 
         <footer className="mx-auto w-full max-w-3xl px-4 pb-10 sm:px-6">
           <p className="text-center text-xs text-muted-foreground">
             {DEFAULT_DISCLAIMER}
           </p>
           <p className="mt-2 text-center text-xs text-muted-foreground">
-            <Link
-              href="/brand"
-              className="underline-offset-2 hover:underline"
-            >
-              Пульт бренда
-            </Link>
-            <span aria-hidden className="mx-2">
-              ·
-            </span>
             <Link
               href="/waitlist"
               className="underline-offset-2 hover:underline"
