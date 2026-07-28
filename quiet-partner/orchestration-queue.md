@@ -5,7 +5,7 @@
 
 **Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (Ask in Cursor T-112/T-113; deploy next)
+**Последнее обновление:** 2026-07-22 (T-115 анти-Goodhart scores D8; Ask in Cursor T-112/T-113)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -281,13 +281,14 @@
 |----|--------|------|--------|-----------|-------------|-------------------|-----------|
 | T-103 | Scope/PRD моста Пульт↔Напарник + DoR | PM | DONE | P0 | — | `@docs/prd-stages-radar-bridge.md` | Автономия режимов; one-way pull; оценка на радаре; out of scope |
 | T-104 | ADR: контракт `stagesRadarBridge` v1 + канон данных | IT-Architect | DONE | P0 | T-103 | `@knowledge-base/adr-006-stages-radar-bridge.md` | ADR-006 Accepted |
-| T-105 | Правила: реестры пульта → suggested domain scores | Senior PM | DONE | P0 | T-103 | `@docs/bridge-score-mapping.md` `@lib/stages/suggestScores.ts` | baseline 62; clamp 15–95 |
+| T-105 | Правила: реестры пульта → suggested domain scores | Senior PM | DONE | P0 | T-103 | `@docs/bridge-score-mapping.md` `@lib/stages/suggestScores.ts` | baseline 62; clamp 15–95; см. T-115 |
 | T-106 | Модель link + snapshot + apply scores в project store | Developer | DONE | P0 | T-104, T-105 | `@lib/stages/bridge.ts` `@lib/store/useProjectStore.ts` | `applyStagesBridge` + persist |
 | T-107 | UI: CTA «Подтянуть в напарника» + баннер/оценка на `/radar` | Developer | DONE | P0 | T-106, T-109 | `@components/stages/StagesShell.tsx` `@components/StagesBridgeBanner.tsx` | CTA + banner A |
 | T-108 | «Тестовый прогон» наполняет пульт **и** оценку напарника | Developer | DONE | P1 | T-106 | `@components/stages/StagesShell.tsx` | чекбокс default on |
 | T-109 | UX: мост без слияния режимов (схема + states) | UI/UX | DONE | P0 | T-103 | `@docs/ux-stages-radar-bridge.md` | placement + states |
 | T-110 | QA: автономия + pull → оценка visible | QA | READY | P0 | T-107, T-108 | `@knowledge-base/qa-checklist.md` | smoke после deploy |
 | T-111 | RU-микрокопия моста (Для UI) | Copywriter | DONE | P1 | T-103, T-109 | `@docs/bridge-microcopy.md` | CTA, confirm, banner |
+| T-115 | Ревизия маппинга D8: не штрафовать фиксацию рисков | Senior PM + Developer | DONE | P0 | T-105 | `@docs/bridge-score-mapping.md` `@lib/stages/suggestScores.ts` | unmanaged only; +за снижен/закрыт; пустой реестр −; «не знаем» закрыт без штрафа |
 
 ---
 
@@ -391,6 +392,7 @@
 | 2026-07-22 | **Human Go мост:** режим **A с баннером** (apply по CTA + баннер/правка; без тихого синка; B отклонён). Next: T-104 Architect ∥ T-105 Senior PM ∥ T-109/T-111. |
 | 2026-07-22 | **Мост ship:** T-104…T-109, T-111 DONE — CTA «Подтянуть в напарника», banner на `/radar`, демо→оба; next T-110 QA + deploy. |
 | 2026-07-22 | **T-112/T-113:** «Спросить в Cursor» (deeplink + MD inbox) на hub/radar; команда `/ask-quiet-partner`. |
+| 2026-07-22 | **T-115:** анти-Goodhart для D8 — штраф только unmanaged `открыт`; плюс за снижен/закрыт/принят; пустой реестр на этапе ≥4 −15; «не знаем» `закрыт` без штрафа. |
 
 ---
 

@@ -75,6 +75,24 @@ function downloadText(filename: string, text: string) {
   URL.revokeObjectURL(url);
 }
 
+function averageSuggested(scores: Record<string, number>): number {
+  const vals = Object.values(scores);
+  if (!vals.length) return 0;
+  return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+}
+
+/** Ask before wiping a better radar with a weaker pulpit snapshot. */
+function confirmScoreDowngrade(
+  currentOverall: number,
+  nextOverall: number,
+  nextD8: number,
+): boolean {
+  if (currentOverall <= 0 || nextOverall >= currentOverall) return true;
+  return window.confirm(
+    `На радаре индекс ${currentOverall}, из пульта выйдет ${nextOverall} (Неопределённость ${nextD8}).\n\nЗаменить текущую оценку? Пульт при этом не трогаем — отмена оставит радар как есть.`,
+  );
+}
+
 /** Stage pulpit: rail 0–6 + register tables in localStorage (client-only). */
 export function StagesShell() {
   const router = useRouter();
@@ -82,16 +100,31 @@ export function StagesShell() {
   const needsStagesOverwriteConfirm = useProjectStore(
     (s) => s.needsStagesOverwriteConfirm,
   );
+  const getOverallHealth = useProjectStore((s) => s.getOverallHealth);
   const [stageId, setStageId] = useState(readStage);
   const [projectName, setProjectName] = useState(readName);
   const [cache, setCache] = useState<Cache>(readCache);
   const [activeRegOverride, setActiveRegOverride] = useState<string | null>(
     null,
   );
-  const [status, setStatus] = useState("Данные хранятся в этом браузере.");
-  const [demoAlsoRadar, setDemoAlsoRadar] = useState(true);
+  const [status, setStatus] = useState(
+    "Пульт сохраняется в этом браузере сам. Радар — только после «Подтянуть».",
+  );
+  /** Default off: demo must not silently overwrite a better radar. */
+  const [demoAlsoRadar, setDemoAlsoRadar] = useState(false);
 
   const stage = STAGES[stageId] ?? STAGES[0];
+
+  /** Live preview of bridge scores — so D8 moves when statuses change, before pull. */
+  const previewScores = useMemo(
+    () =>
+      buildStagesSnapshot({
+        projectName,
+        stageId,
+        cache,
+      }).suggestedScores,
+    [projectName, stageId, cache],
+  );
 
   const activeReg = useMemo(() => {
     const editors = stage.editors;
@@ -207,6 +240,18 @@ export function StagesShell() {
         );
         return;
       }
+      if (
+        !confirmScoreDowngrade(
+          getOverallHealth(),
+          averageSuggested(snapshot.suggestedScores),
+          snapshot.suggestedScores.D8,
+        )
+      ) {
+        setStatus(
+          "Загружен «Тестовый прогон» в пульт (оценка в напарнике не тронута).",
+        );
+        return;
+      }
       applyStagesBridge(snapshot);
       capture("bridge_pull_to_radar", {
         stage_id: DEMO_STAGE_ID,
@@ -249,6 +294,16 @@ export function StagesShell() {
     ) {
       return;
     }
+    if (
+      !confirmScoreDowngrade(
+        getOverallHealth(),
+        averageSuggested(snapshot.suggestedScores),
+        snapshot.suggestedScores.D8,
+      )
+    ) {
+      setStatus("Подтягивание отменено — радар без изменений.");
+      return;
+    }
     applyStagesBridge(snapshot);
     capture("bridge_pull_to_radar", {
       stage_id: stageId,
@@ -259,7 +314,10 @@ export function StagesShell() {
       stage_id: stageId,
       register_count: snapshot.registerRowCount,
     });
-    setStatus("Оценка подтянута в Тихого напарника");
+    const d8 = snapshot.suggestedScores.D8;
+    setStatus(
+      `Оценка подтянута: Неопределённость ${d8}, Работа проекта ${snapshot.suggestedScores.D5}`,
+    );
     router.push("/radar?from=stages");
   };
 
@@ -322,13 +380,28 @@ export function StagesShell() {
                 checked={demoAlsoRadar}
                 onChange={(e) => setDemoAlsoRadar(e.target.checked)}
               />
-              <span>Также подтянуть оценку в напарника (с демо)</span>
+              <span>
+                Также подтянуть оценку в напарника (с демо) — по умолчанию
+                выкл., чтобы не затереть радар
+              </span>
             </label>
             <p className="pb-1.5 text-xs text-muted-foreground">{status}</p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Имя проекта и оценка доменов появятся на радаре после «Подтянуть в
-            напарника».
+          <p className="rounded-lg border border-border/70 bg-muted/40 px-3 py-2 text-xs text-foreground">
+            Оценка из пульта сейчас:{" "}
+            <span className="font-medium">
+              Неопределённость {previewScores.D8}
+            </span>
+            {" · "}
+            Работа проекта {previewScores.D5}
+            {" · "}
+            Поставка {previewScores.D6}
+            {" · "}
+            индекс ~{averageSuggested(previewScores)}
+            <span className="mt-0.5 block text-muted-foreground">
+              Реестры пульта сохраняются сами. Радар — только по «Подтянуть»;
+              если новая оценка хуже текущей, спросим подтверждение.
+            </span>
           </p>
           <div className="flex flex-wrap gap-2">
             {CHEATSHEETS.map((c) => (

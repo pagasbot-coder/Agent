@@ -31,6 +31,30 @@ Workspace skills live in `.agents/skills/<skill-name>/SKILL.md`. Gemini CLI disc
 - **Use when:** The user wants operational competitive intel — pricing, contacts, social accounts — with table-based summaries.
 - **Invoke:** Ask for a "competitor report" with a URL or company name. Complements `competitor-analysis` (positioning vs. operational intel).
 
+### generate-project-plan
+
+- **Path:** `.agents/skills/generate-project-plan/SKILL.md`
+- **Use when:** Turning a PRD into an interactive FigJam project plan board.
+- **Invoke:** Ask for a "project plan in FigJam" or name the PRD. Requires Figma MCP.
+
+### video-interaction-mapper
+
+- **Path:** `.agents/skills/video-interaction-mapper/SKILL.md`
+- **Use when:** Mapping a UI screen recording into an annotated Figma storyboard.
+- **Invoke:** Provide a video and ask to extract interaction states into Figma.
+
+### productmap-to-figjam
+
+- **Path:** `.agents/skills/productmap-to-figjam/SKILL.md`
+- **Use when:** Building a FigJam plan grounded in `.productmap/` from a PRD or feature brief.
+- **Invoke:** Ask for "ProductMap → FigJam" or `$productmap-to-figjam`. Prefer over bare `generate-project-plan` in this repo.
+
+### competitor-to-slides
+
+- **Path:** `.agents/skills/competitor-to-slides/SKILL.md`
+- **Use when:** Turning competitor intel into a short Figma Slides deck.
+- **Invoke:** Ask for competitor slides with a URL or company name.
+
 ## Conventions
 
 - Follow skill instructions rather than relying on prior knowledge for competitor research or PRD structure.
