@@ -167,6 +167,30 @@ export const REGISTERS: Record<string, RegisterDef> = {
 
 `,
   },
+  logistika: {
+    id: "logistika",
+    path: "reestry/R-12-logistika.md",
+    title: "Логистика",
+    columns: [
+      { key: "param", label: "Параметр" },
+      { key: "value", label: "Значение", multiline: true },
+      {
+        key: "status",
+        label: "Статус",
+        type: "select",
+        options: ["открыто", "черновик", "ок", "ждём ops", "не применимо"],
+      },
+      { key: "owner", label: "Владелец" },
+      { key: "date", label: "Дата" },
+    ],
+    header: `# Р-12. Логистика / поставка
+
+**Линейка:** {{project}}  
+**Связка:** Китай → РФ · раздел L · \`china-russia-logistics.md\`  
+**Правило:** срок в КП и DoD — «на складе», не «завод сказал готово». Заводы сравниваем в FOB.
+
+`,
+  },
 };
 
 export const STAGES: StageDef[] = [
@@ -196,8 +220,8 @@ export const STAGES: StageDef[] = [
     id: 2,
     name: "Оффер",
     short: "Оффер",
-    gate: "Ассортимент + риски; %/origin/COGS = «открыто», пока нет цифр завода.",
-    editors: ["assortiment", "neznaem", "riski", "resheniya"],
+    gate: "Ассортимент + риски + логистика; %/origin/COGS = «открыто», пока нет цифр завода.",
+    editors: ["assortiment", "logistika", "neznaem", "riski", "resheniya"],
     docLinks: [
       { slug: "china", title: "Китай → РФ" },
       { slug: "etapy", title: "Этапы 0–6" },
@@ -209,19 +233,20 @@ export const STAGES: StageDef[] = [
     short: "Рынок",
     gate: "План запуска и аргументы закупщику — сценарий до Go.",
     scenario: true,
-    editors: ["resheniya"],
+    editors: ["resheniya", "logistika"],
     docLinks: [
       { slug: "sh-05", title: "Ш-05 План запуска" },
       { slug: "sh-03", title: "Ш-03 Закупщику" },
+      { slug: "china", title: "Китай → РФ" },
     ],
   },
   {
     id: 4,
     name: "Исполнение",
     short: "Исполнение",
-    gate: "Риски и «не знаем» в цикле; чеклист Китая на поставке.",
+    gate: "Риски, логистика и «не знаем» в цикле; чеклист Китая на поставке.",
     scenario: true,
-    editors: ["riski", "resheniya", "neznaem"],
+    editors: ["logistika", "riski", "resheniya", "neznaem"],
     docLinks: [
       { slug: "china", title: "Китай → РФ" },
       { slug: "etapy", title: "Этапы 0–6" },
