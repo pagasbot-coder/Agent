@@ -390,8 +390,9 @@
 | T-Brand-006 | China checklist в этапе 2/4 | China + Dev | DONE | P1 | T-Brand-004 | `@content/brand/china-checklist.md` `@knowledge-base/china-russia-logistics.md` | doc link в stages 2/4 |
 | T-Brand-007 | QA smoke + dogfood guide | QA | DONE | P0 | T-Brand-004, T-Brand-005 | `@docs/qa-report-brand-pult.md` `@docs/dogfood-brand-pult-guide.md` | static/compile PASS; Human browser OPTIONAL |
 | T-Brand-008 | Hub-ссылка «Пульт бренда» (мелко) | UI/UX | DONE | P1 | T-Brand-004 | `@components/ModeHub.tsx` | footer link `/brand` |
+| T-Brand-009 | Merge PR #5 + staging `/brand` live | Developer + DevOps | IN_PROGRESS | P0 | T-Brand-004 | `@docs/deploy-staging.md` | PR #5 **merged** 2026-07-28; staging `/brand` → deploy |
 
-**Порядок:** Human прогон волны A (`content/brand-pult/` + UI guide) → «волна A ок» закрывает T-Brand-001. T-Brand-007 static DONE overnight; browser Human OPTIONAL.
+**Порядок:** Human прогон волны A (`content/brand-pult/` + UI guide) → «волна A ок» закрывает T-Brand-001. **PR #5 в `main`.** Staging `/brand` — после `vercel --prod`.
 
 **Утренний бриф:** [`docs/morning-brief-brand-pult-2026-07-28.md`](docs/morning-brief-brand-pult-2026-07-28.md)
 
