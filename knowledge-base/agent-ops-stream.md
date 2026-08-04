@@ -29,6 +29,8 @@
 | A-010 | Держать поток Agent Ops отдельно от QP деплоя | Ops | DONE | P1 | handoff + этот файл |
 | A-011 | Секции skills для всех ролей (Senior PM, Arch, DevOps, Dev, SME, Copywriter) | Ops | DONE | P1 | bridge matrix + agent files |
 | A-012 | Merge PR #1 → main (deploy Agent Ops) | Ops | DONE | P0 | `7532681` 2026-07-21 |
+| A-013 | Refresh skills из didactic-doodle (+4 Figma) | Ops | DONE | P1 | 2026-07-28: `competitor-to-slides`, `generate-project-plan`, `productmap-to-figjam`, `video-interaction-mapper`; bridge + rule обновлены |
+| A-014 | Каталог skills.sh + `find-skills` | Ops | DONE | P1 | 2026-07-28: `find-skills`, `writing-guidelines`, `skills-lock.json`, `docs/runbook-skills-sh.md` |
 
 ---
 
