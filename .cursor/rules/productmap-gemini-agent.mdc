@@ -13,6 +13,18 @@ This repository is the **ProductMap.io** PM knowledge base. Structured framework
 
 Workspace skills live in `.agents/skills/<skill-name>/SKILL.md`. Gemini CLI discovers them automatically from `.agents/skills/` (or `.gemini/skills/`). When a task matches a skill, **read and follow that SKILL.md fully** before improvising.
 
+### find-skills
+
+- **Path:** `.agents/skills/find-skills/SKILL.md`
+- **Use when:** User asks to find/install a skill from the open catalog (skills.sh).
+- **Invoke:** "найди skill для …" / "find a skill for …". Catalog: https://www.skills.sh/ · runbook: `docs/runbook-skills-sh.md`.
+
+### writing-guidelines
+
+- **Path:** `.agents/skills/writing-guidelines/SKILL.md`
+- **Use when:** Reviewing docs/prose against Vercel Writing Guidelines.
+- **Invoke:** "review my docs" / "check writing style".
+
 ### prd-writer
 
 - **Path:** `.agents/skills/prd-writer/SKILL.md`

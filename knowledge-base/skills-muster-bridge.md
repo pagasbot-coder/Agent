@@ -9,6 +9,8 @@
 
 | Skill / KB | Владелец (вызывает) | Кто ещё трогает | Не трогают |
 |------------|---------------------|-----------------|------------|
+| `/find-skills` | **Ops / любой** | предлагает install из [skills.sh](https://www.skills.sh/) | не замена ProductMap import |
+| `/writing-guidelines` | **Copywriter** | PM (docs review) | Dev как автор |
 | `/prd-writer` | **PM** | Senior PM (ревью), Copywriter (язык) | Dev, DevOps, Architect (как автор) |
 | `/competitor-analysis` | **Growth** | PM (discovery read) | Senior PM/Architect/DevOps как авторы |
 | `/competitor-report` | **Growth** | PM, Copywriter (язык) | Developer |

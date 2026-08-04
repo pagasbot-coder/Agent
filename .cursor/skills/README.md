@@ -1,14 +1,15 @@
 # Skills in this monorepo (Agent)
 
-Only skills for **Muster / Quiet Partner / coding workflows**.
+**Канон:** все project skills живут в **`.agents/skills/<name>/SKILL.md`**.
 
-Product-management skills and PDF books belong in **`product-copilot`**, not here.
+Эта папка (`.cursor/skills/`) — только указатель. Не дублируй сюда копии skills.
 
-See [`knowledge-base/assistants-placement.md`](../../knowledge-base/assistants-placement.md).
+| Тип | Куда |
+|-----|------|
+| ProductMap / Muster (prd, competitor, figjam…) | `.agents/skills/` ← `import-didactic-skills.sh` |
+| Каталог [skills.sh](https://www.skills.sh/) | `.agents/skills/` ← `npx skills add … -a cursor -y --copy` |
+| Личные (все проекты) | `~/.cursor/skills/` (`npx skills add -g`) |
 
-Migrate from the Mac:
+PM-книги и product-copilot skills — **не** сюда (см. [`assistants-placement.md`](../../knowledge-base/assistants-placement.md)).
 
-```bash
-./scripts/migrate-local-cursor-assistants.sh        # dry-run
-./scripts/migrate-local-cursor-assistants.sh --apply
-```
+Runbook каталога: [`docs/runbook-skills-sh.md`](../../docs/runbook-skills-sh.md).

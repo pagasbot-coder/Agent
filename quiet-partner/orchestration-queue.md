@@ -3,9 +3,9 @@
 > **Источник истины для задач.** PM / Senior PM добавляют задачи; роли берут `READY` → `IN_PROGRESS` → `DONE`.  
 > Перед любой работой агент **читает этот файл**; после завершения — **обновляет статус и краткий итог**.
 
-**Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot)  
+**Проект:** Тихий напарник / Quiet Partner (PMBOK 7 co-pilot) + эпик **Проект МТС** (Exolve антифрод)  
 **Архитектор (Human):** Pavel  
-**Последнее обновление:** 2026-07-22 (T-115 анти-Goodhart scores D8; Ask in Cursor T-112/T-113)
+**Последнее обновление:** 2026-08-04 (роли SME/Legal/DevOps/Detection + эпик Проект МТС)
 
 > **PM rhythm:** PM обновляет [`docs/pm-status.md`](docs/pm-status.md) **еженедельно** и на каждом phase gate (G0→1 … G4→5). Journal фиксирует каждый review.
 
@@ -17,14 +17,20 @@
 |------|----------|-----|---------|
 | PM | `muster-pm` | «Role: PM» | `@role-pm` |
 | **Senior PM** | — | «Role: Senior PM» / «Роль: Старший PM» | `@role-senior-pm` |
+| **Legal / Compliance** | `muster-legal` | «Role: Legal» / «Role: Compliance» | `@role-legal-compliance` |
+| **SME** | `muster-sme` | «Role: SME» / «Роль: Отраслевой эксперт» | `@role-sme` |
+| **Detection / ИБ** | `muster-detection` | «Role: Detection» / «Role: ИБ» | `@role-detection-ib` |
 | IT-Architect | `muster-it-architect` | «Role: IT-Architect» | `@role-it-architect` |
+| **DevOps / SRE** | `muster-devops` | «Role: DevOps» / «Role: SRE» | `@role-devops` |
 | Developer | `muster-developer` | «Role: Developer» | `@role-developer` |
 | UI/UX | `muster-ui-ux` | «Role: UI/UX» | `@role-ui-ux` |
 | QA | `muster-qa` | «Role: QA» | `@role-qa` |
 | Growth | `muster-growth-marketer` | «Role: Growth» | `@role-growth-marketer` |
 | **Chief Editor** | `muster-copywriter` | «Role: Copywriter» / «Роль: Копирайтер» | `@role-copywriter` |
 
-Контекст: `@knowledge-base/product-brief.md`, `@knowledge-base/pmbok-domain-playbook.md`, `@docs/implementation-plan.md`, `@docs/technical-specification.md`, эпик фокуса: `@docs/prd-focus-today.md`, эпик моста: `@docs/prd-stages-radar-bridge.md`.
+Контекст QP-продукта: `@knowledge-base/product-brief.md`, `@knowledge-base/pmbok-domain-playbook.md`, `@docs/implementation-plan.md`, `@docs/technical-specification.md`.
+
+Контекст **Проект МТС:** `@knowledge-base/mts-project/INDEX.md`, `@knowledge-base/mts-project/roles-matrix.md`, `@knowledge-base/mts-exolve-antifraud-project-prep.md`.
 
 ---
 
@@ -41,7 +47,29 @@
 
 ---
 
-## Активная очередь (Phase 3–4)
+
+## Эпик: Проект МТС (Exolve антифрод) — ACTIVE
+
+> Подготовка к собесу / kickoff. Канон: [`knowledge-base/mts-project/INDEX.md`](knowledge-base/mts-project/INDEX.md).  
+> Даты НПА не выдумывать — Legal + юрист Exolve.
+
+| ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
+|----|--------|------|--------|-----------|-------------|-------------------|-----------|
+| MTS-000 | Bootstrap ролей + skills + KB Проект МТС | PM | DONE | P0 | — | `@knowledge-base/mts-project/` `@role-sme` `@role-legal-compliance` `@role-devops` `@role-detection-ib` | Роли подключены; skills в `.claude/skills/`; матрица ролей |
+| MTS-001 | Реестр НПА v0.1 + Top-10 вопросов юристу | Legal | READY | P0 | MTS-000 | `@knowledge-base/mts-exolve-npa-registry.md` skill `npa-registry-legal` | Черновик создан — углубить / сверить источники |
+| MTS-002 | Industry brief v1 (глоссарий, pains, KPI) | SME | READY | P0 | MTS-000 | `@knowledge-base/mts-exolve-industry-brief.md` skill `telecom-antifraud-sme` | v0.1 есть — расширить day-in-life и critique |
+| MTS-003 | Gap matrix: требование → продукт Exolve | PM + Legal + SME | READY | P0 | MTS-001, MTS-002 | `@knowledge-base/mts-exolve-antifraud-project-prep.md` | Создать таблицу gap |
+| MTS-004 | Detection policy draft + FP budget TBD | Detection | READY | P1 | MTS-002 | `@knowledge-base/mts-exolve-detection-policy.md` | v0.1 каркас — детализировать P-00x |
+| MTS-005 | GIS ops runbook 24/7 каркас | DevOps | READY | P1 | MTS-000 | `@knowledge-base/mts-exolve-gis-ops-runbook.md` | v0.1 каркас — inventory TBD на kickoff |
+| MTS-006 | ADR-черновик канала обмена с ГИС | IT-Architect | BACKLOG | P1 | MTS-001, MTS-005 | `@knowledge-base/architecture.md` | После уточнения Legal |
+| MTS-007 | Q&A шпаргалка 20 мин (антифрод) | Senior PM + Copywriter | BACKLOG | P1 | MTS-003 | prep §9 | Для собеса |
+| MTS-008 | RACI живая команда Exolve vs Muster | PM | BACKLOG | P2 | MTS-000 | `@knowledge-base/mts-project/roles-matrix.md` | Расширить под kickoff |
+
+**Старт чата:** [`docs/chat-handoff-mts-exolve-antifraud.md`](docs/chat-handoff-mts-exolve-antifraud.md).
+
+---
+
+## Активная очередь (Phase 3–4) — Quiet Partner product
 
 | ID | Задача | Роль | Статус | Приоритет | Зависимости | Контекст (@files) | Итог / PR |
 |----|--------|------|--------|-----------|-------------|-------------------|-----------|

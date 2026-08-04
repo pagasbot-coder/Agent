@@ -1,10 +1,25 @@
 # Knowledge Base — Quiet Partner (Тихий напарник)
 
-**Обновлено:** 2026-07-19
+**Обновлено:** 2026-08-04 (Проект МТС: роли SME/Legal/DevOps/Detection)
 
 Канон контекста для агентов и Human Architect. Предпочитай `@`-ссылки вместо копипаста длинных спеков в чат.
 
 ---
+
+## Активные внешние проекты (подготовка)
+
+| Файл | Зачем |
+|------|-------|
+| [`mts-project/INDEX.md`](./mts-project/INDEX.md) | **Проект МТС** — оглавление, роли, skills |
+| [`mts-project/roles-matrix.md`](./mts-project/roles-matrix.md) | Muster vs живая команда Exolve |
+| [`mts-project/skills-bridge.md`](./mts-project/skills-bridge.md) | Кто какой скилл вызывает |
+| [`mts-exolve-antifraud-project-prep.md`](./mts-exolve-antifraud-project-prep.md) | Устав, НПА-обзор, 90 дней, собес |
+| [`mts-exolve-npa-registry.md`](./mts-exolve-npa-registry.md) | Legal: реестр обязательств |
+| [`mts-exolve-industry-brief.md`](./mts-exolve-industry-brief.md) | SME: поле, глоссарий, KPI |
+| [`mts-exolve-detection-policy.md`](./mts-exolve-detection-policy.md) | Detection: правила / FP |
+| [`mts-exolve-gis-ops-runbook.md`](./mts-exolve-gis-ops-runbook.md) | DevOps: 24/7 узел обмена |
+| [`../docs/chat-handoff-mts-exolve-antifraud.md`](../docs/chat-handoff-mts-exolve-antifraud.md) | Handoff / стартовые промпты |
+
 
 ## Product & discovery
 

@@ -18,24 +18,34 @@ This project uses the **Muster** multi-agent pattern. **Markdown is the source o
 
 ## Role activation
 
-When the Human says **Role: PM | Senior PM | IT-Architect | Developer | UI/UX | QA | Growth** (or Russian equivalents) or opens a dedicated Agents Window chat:
+When the Human says **Role: PM | Senior PM | IT-Architect | Developer | UI/UX | QA | Growth | SME | Legal | Compliance | DevOps | SRE | Detection | ИБ | Copywriter** (or Russian equivalents) or opens a dedicated Agents Window chat:
 
-- Follow the matching rule: `@role-pm`, `@role-senior-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, `@role-growth-marketer`.
+- Follow the matching rule: `@role-pm`, `@role-senior-pm`, `@role-it-architect`, `@role-developer`, `@role-ui-ux`, `@role-qa`, `@role-growth-marketer`, `@role-sme`, `@role-legal-compliance`, `@role-devops`, `@role-detection-ib`, `@role-copywriter`.
 - Do **not** perform another role's duties unless explicitly asked.
 
 ## Coordination matrix (Quiet Partner)
 
 | Role | Owns | Does not |
 |------|------|----------|
-| **PM** | Backlog, AC, `product-brief`, prioritization | Implement app code; redefine PMBOK mapping without Senior PM |
-| **Senior PM** | `pmbok-domain-playbook.md`, domain health signals, AI system prompt review, tailoring guidance | Write app code unless Human asks; act as industry SME |
-| **IT-Architect** | LLM ADR, BFF security, `architecture.md` | Client-side API keys; mark code tasks DONE without QA |
-| **Developer** | Next.js features, Zustand store, `/api/advisor/*` BFF | Change playbook domains without Senior PM |
-| **UI/UX** | DomainRadar layout, tokens, shadcn patterns | Change LLM prompt without Senior PM review |
-| **QA** | AC verification, `qa-checklist.md` | Override failed AC |
-| **Growth** | ICP validation plan, landing copy hypotheses | Change MVP scope without PM |
+| **PM** | Backlog, AC, `product-brief`, приоритеты, эпик **Проект МТС** | App code; отраслевой SME; реестр НПА как SoT |
+| **Senior PM** | `pmbok-domain-playbook.md`, domain health, AI prompt review, methodology gate | Industry SME; Legal conclusions |
+| **Legal / Compliance** | `mts-exolve-npa-registry.md`, Q-list юристу Exolve | Field SME; detection thresholds as law |
+| **SME** | `mts-exolve-industry-brief.md`, поле/глоссарий, критика гипотез | NPA dates; app code |
+| **Detection / ИБ** | `mts-exolve-detection-policy.md`, FP/policy drafts | Legal SoT; 24/7 infra |
+| **IT-Architect** | LLM ADR (QP app) + ADR обмена ГИС (Проект МТС) | Client-side API keys; mark code DONE without QA |
+| **DevOps / SRE** | `mts-exolve-gis-ops-runbook.md`, 24/7 NFR, smoke infra | Business block rules; NPA registry |
+| **Developer** | Next.js QP features; later Exolve delivery via AC | Playbook domains; Legal |
+| **UI/UX** | DomainRadar / tokens (QP product) | LLM prompt without Senior PM; МТС MVP critical path |
+| **QA** | AC verification, checklists | Override failed AC |
+| **Growth** | ICP / landing (QP product) | МТС antifraud scope |
+| **Copywriter** | RU clarity for reports / Q&A | Change Legal facts or AC |
 
-**Parallel track:** Banya-Digital pilot (`../banya-digital/orchestration-queue.md` T-028) has priority for Human Architect time — do not block it.
+### Проект МТС (Exolve antifraud)
+
+Канон: `@knowledge-base/mts-project/INDEX.md` · матрица: `@knowledge-base/mts-project/roles-matrix.md`  
+Pipeline: **Legal ∥ SME** → PM gap → Architect / DevOps / Detection → QA / Human.
+
+**Parallel track:** Banya-Digital / Village VPN — не блокировать чужие READY; Проект МТС вести отдельными ID `MTS-*`.
 
 ## Parallel agents (Work 3)
 
