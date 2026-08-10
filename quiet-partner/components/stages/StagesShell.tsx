@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FocusDayCard } from "@/components/FocusDayCard";
@@ -15,6 +15,8 @@ import {
 import {
   CHEATSHEETS,
   emptyRow,
+  normalizeLevel,
+  normalizeRegisterCache,
   objectsToMarkdown,
   REGISTERS,
   STAGES,
@@ -25,12 +27,20 @@ import {
   DEMO_STAGE_ID,
   DEMO_TEST_RUN,
 } from "@/lib/stages/demoTestRun";
+import {
+  MTS_EXOLVE_SEED,
+  MTS_NEXT_HIGHLIGHTS,
+  MTS_PROJECT_ID,
+  MTS_PROJECT_NAME,
+  MTS_STAGE_ID,
+} from "@/lib/stages/mtsExolveSeed";
 import { useProjectStore } from "@/lib/store/useProjectStore";
 
 const LS_STAGE = "qp-stages-stage";
 const LS_NAME = "qp-stages-name";
 const LS_CACHE = "qp-stages-cache";
 const LS_PROJECT_KEY = "qp-stages-project-key";
+const SAVE_DEBOUNCE_MS = 800;
 
 type Cache = Record<string, RegisterRow[]>;
 
@@ -55,14 +65,17 @@ function readCache(): Cache {
   try {
     const raw = localStorage.getItem(LS_CACHE);
     if (!raw) return {};
-    return JSON.parse(raw) as Cache;
+    return normalizeRegisterCache(JSON.parse(raw) as Cache);
   } catch {
     return {};
   }
 }
 
 function saveCache(cache: Cache) {
-  localStorage.setItem(LS_CACHE, JSON.stringify(cache));
+  localStorage.setItem(
+    LS_CACHE,
+    JSON.stringify(normalizeRegisterCache(cache)),
+  );
 }
 
 function downloadText(filename: string, text: string) {
@@ -96,6 +109,7 @@ function confirmScoreDowngrade(
 /** Stage pulpit: rail 0–6 + register tables in localStorage (client-only). */
 export function StagesShell() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const applyStagesBridge = useProjectStore((s) => s.applyStagesBridge);
   const needsStagesOverwriteConfirm = useProjectStore(
     (s) => s.needsStagesOverwriteConfirm,
@@ -107,13 +121,203 @@ export function StagesShell() {
   const [activeRegOverride, setActiveRegOverride] = useState<string | null>(
     null,
   );
-  const [status, setStatus] = useState(
-    "Пульт сохраняется в этом браузере сам. Радар — только после «Подтянуть».",
-  );
+  const [status, setStatus] = useState("Загрузка проекта с сервера…");
+  const [storageBackend, setStorageBackend] = useState<string>("…");
+  const [hydrated, setHydrated] = useState(false);
+  const [projectKey, setProjectKey] = useState(() => {
+    try {
+      return localStorage.getItem(LS_PROJECT_KEY) || MTS_PROJECT_ID;
+    } catch {
+      return MTS_PROJECT_ID;
+    }
+  });
   /** Default off: demo must not silently overwrite a better radar. */
   const [demoAlsoRadar, setDemoAlsoRadar] = useState(false);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextSave = useRef(true);
 
   const stage = STAGES[stageId] ?? STAGES[0];
+
+  const applyUrlRegister = useCallback(() => {
+    try {
+      const reg = searchParams.get("reg");
+      if (!reg || !Object.prototype.hasOwnProperty.call(REGISTERS, reg)) {
+        return false;
+      }
+      const withReg = STAGES.find((s) => s.editors.includes(reg));
+      if (withReg) {
+        setStageId(withReg.id);
+        localStorage.setItem(LS_STAGE, String(withReg.id));
+      }
+      setActiveRegOverride(reg);
+      setStatus(`Открыт реестр «${REGISTERS[reg].title}».`);
+      return true;
+    } catch {
+      return false;
+    }
+  }, [searchParams]);
+
+  const applyProjectSnapshot = useCallback(
+    (input: {
+      id: string;
+      name: string;
+      stageId: number;
+      cache: Cache;
+    }) => {
+      const nextCache = normalizeRegisterCache(input.cache);
+      setProjectKey(input.id);
+      setProjectName(input.name);
+      setCache(nextCache);
+      try {
+        const urlReg = new URLSearchParams(window.location.search).get("reg");
+        const keepReg =
+          urlReg && Object.prototype.hasOwnProperty.call(REGISTERS, urlReg)
+            ? urlReg
+            : null;
+        if (keepReg) {
+          const withReg = STAGES.find((s) => s.editors.includes(keepReg));
+          setStageId(withReg?.id ?? input.stageId);
+          setActiveRegOverride(keepReg);
+          localStorage.setItem(
+            LS_STAGE,
+            String(withReg?.id ?? input.stageId),
+          );
+        } else {
+          setStageId(input.stageId);
+          setActiveRegOverride(null);
+          localStorage.setItem(LS_STAGE, String(input.stageId));
+        }
+        localStorage.setItem(LS_PROJECT_KEY, input.id);
+        localStorage.setItem(LS_NAME, input.name);
+        saveCache(nextCache);
+      } catch {
+        setStageId(input.stageId);
+        setActiveRegOverride(null);
+      }
+    },
+    [],
+  );
+
+  const saveToServer = useCallback(
+    async (id: string, name: string, stage: number, nextCache: Cache) => {
+      try {
+        const res = await fetch(
+          `/api/stages/projects/${encodeURIComponent(id)}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              stageId: stage,
+              cache: nextCache,
+            }),
+          },
+        );
+        if (!res.ok) throw new Error(`save_${res.status}`);
+        setStatus("Сохранено на сервере. Радар — после «Подтянуть».");
+      } catch {
+        setStatus(
+          "Не удалось сохранить на сервер — данные пока только в браузере.",
+        );
+      }
+    },
+    [],
+  );
+
+  const scheduleSave = useCallback(
+    (id: string, name: string, stage: number, nextCache: Cache) => {
+      if (!hydrated || skipNextSave.current) return;
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+      saveTimer.current = setTimeout(() => {
+        void saveToServer(id, name, stage, nextCache);
+      }, SAVE_DEBOUNCE_MS);
+    },
+    [hydrated, saveToServer],
+  );
+
+  useEffect(() => {
+    applyUrlRegister();
+  }, [applyUrlRegister, searchParams]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const listRes = await fetch("/api/stages/projects");
+        const listJson = (await listRes.json()) as {
+          ok?: boolean;
+          backend?: string;
+          defaultProjectId?: string;
+        };
+        if (cancelled) return;
+        if (listJson.backend) setStorageBackend(listJson.backend);
+
+        const preferred =
+          localStorage.getItem(LS_PROJECT_KEY) ||
+          listJson.defaultProjectId ||
+          MTS_PROJECT_ID;
+        const getRes = await fetch(
+          `/api/stages/projects/${encodeURIComponent(preferred)}`,
+        );
+        if (getRes.ok) {
+          const body = (await getRes.json()) as {
+            project?: {
+              id: string;
+              name: string;
+              stageId: number;
+              cache: Cache;
+            };
+          };
+          if (body.project && !cancelled) {
+            skipNextSave.current = true;
+            applyProjectSnapshot(body.project);
+            setStatus(
+              `Загружено с сервера (${listJson.backend ?? "file"}). Правки сохраняются сами.`,
+            );
+            setHydrated(true);
+            queueMicrotask(() => {
+              skipNextSave.current = false;
+            });
+            return;
+          }
+        }
+
+        if (!cancelled) {
+          skipNextSave.current = true;
+          applyProjectSnapshot({
+            id: MTS_PROJECT_ID,
+            name: MTS_PROJECT_NAME,
+            stageId: MTS_STAGE_ID,
+            cache: { ...MTS_EXOLVE_SEED },
+          });
+          setStatus("Локальный шаблон МТС — сохраняем на сервер…");
+          setHydrated(true);
+          queueMicrotask(() => {
+            skipNextSave.current = false;
+            void saveToServer(
+              MTS_PROJECT_ID,
+              MTS_PROJECT_NAME,
+              MTS_STAGE_ID,
+              normalizeRegisterCache({ ...MTS_EXOLVE_SEED }),
+            );
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setStorageBackend("browser");
+          setStatus(
+            "Сервер недоступен — работа в браузере. Запусти npm run dev.",
+          );
+          setHydrated(true);
+          skipNextSave.current = false;
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+    };
+  }, [applyProjectSnapshot, saveToServer]);
 
   /** Live preview of bridge scores — so D8 moves when statuses change, before pull. */
   const previewScores = useMemo(
@@ -141,10 +345,14 @@ export function StagesShell() {
     return cache[activeReg]?.length ? cache[activeReg] : [emptyRow(reg)];
   }, [activeReg, cache]);
 
-  const persistCache = useCallback((next: Cache) => {
-    setCache(next);
-    saveCache(next);
-  }, []);
+  const persistCache = useCallback(
+    (next: Cache) => {
+      setCache(next);
+      saveCache(next);
+      scheduleSave(projectKey, projectName, stageId, next);
+    },
+    [projectKey, projectName, stageId, scheduleSave],
+  );
 
   const updateCell = (ri: number, key: string, value: string) => {
     if (!activeReg) return;
@@ -153,7 +361,11 @@ export function StagesShell() {
       ? [...cache[activeReg]]
       : [emptyRow(reg)];
     while (base.length <= ri) base.push(emptyRow(reg));
-    base[ri] = { ...base[ri], [key]: value };
+    const nextVal =
+      key === "influence" || key === "prob" || key === "impact"
+        ? normalizeLevel(value) || value
+        : value;
+    base[ri] = { ...base[ri], [key]: nextVal };
     persistCache({ ...cache, [activeReg]: base });
   };
 
@@ -194,6 +406,7 @@ export function StagesShell() {
     setStageId(id);
     localStorage.setItem(LS_STAGE, String(id));
     setActiveRegOverride(null);
+    scheduleSave(projectKey, projectName, id, cache);
   };
 
   const loadDemo = () => {
@@ -210,24 +423,22 @@ export function StagesShell() {
     ) {
       return;
     }
-    const nextCache = { ...DEMO_TEST_RUN };
-    persistCache(nextCache);
-    setProjectName(DEMO_PROJECT_NAME);
-    localStorage.setItem(LS_NAME, DEMO_PROJECT_NAME);
-    setStageId(DEMO_STAGE_ID);
-    localStorage.setItem(LS_STAGE, String(DEMO_STAGE_ID));
-    setActiveRegOverride(null);
+    const nextCache = normalizeRegisterCache({ ...DEMO_TEST_RUN });
+    const demoKey = "demo-test-run";
+    applyProjectSnapshot({
+      id: demoKey,
+      name: DEMO_PROJECT_NAME,
+      stageId: DEMO_STAGE_ID,
+      cache: nextCache,
+    });
+    void saveToServer(demoKey, DEMO_PROJECT_NAME, DEMO_STAGE_ID, nextCache);
 
     if (demoAlsoRadar) {
-      const projectKey = ensureStagesProjectKey(
-        localStorage.getItem(LS_PROJECT_KEY),
-      );
-      localStorage.setItem(LS_PROJECT_KEY, projectKey);
       const snapshot = buildStagesSnapshot({
         projectName: DEMO_PROJECT_NAME,
         stageId: DEMO_STAGE_ID,
         cache: nextCache,
-        projectKey,
+        projectKey: demoKey,
       });
       if (
         needsStagesOverwriteConfirm(snapshot) &&
@@ -270,20 +481,79 @@ export function StagesShell() {
     }
 
     setStatus(
-      "Загружен «Тестовый прогон» — лендинг «Северный Мотор», этап Исполнение.",
+      "Загружен «Тестовый прогон» — сохранён на сервере, этап Исполнение.",
     );
   };
 
-  const pullToRadar = () => {
-    const projectKey = ensureStagesProjectKey(
-      localStorage.getItem(LS_PROJECT_KEY),
+  /** Сброс к каноническому шаблону МТС + сохранение на сервер. */
+  const loadMts = async () => {
+    const hasContent = Object.values(cache).some((rows) =>
+      (rows ?? []).some((row) =>
+        Object.values(row).some((v) => String(v ?? "").trim().length > 0),
+      ),
     );
-    localStorage.setItem(LS_PROJECT_KEY, projectKey);
+    if (
+      hasContent &&
+      !window.confirm(
+        "Загрузить «Проект МТС» из шаблона? Текущие реестры в пульте будут заменены.",
+      )
+    ) {
+      return;
+    }
+    try {
+      const res = await fetch("/api/stages/projects/mts/reset", {
+        method: "POST",
+      });
+      if (res.ok) {
+        const body = (await res.json()) as {
+          project?: {
+            id: string;
+            name: string;
+            stageId: number;
+            cache: Cache;
+          };
+        };
+        if (body.project) {
+          skipNextSave.current = true;
+          applyProjectSnapshot(body.project);
+          setStatus("Проект МТС сброшен к шаблону и сохранён на сервере.");
+          queueMicrotask(() => {
+            skipNextSave.current = false;
+          });
+          return;
+        }
+      }
+    } catch {
+      /* fallback below */
+    }
+    const nextCache = normalizeRegisterCache({ ...MTS_EXOLVE_SEED });
+    applyProjectSnapshot({
+      id: MTS_PROJECT_ID,
+      name: MTS_PROJECT_NAME,
+      stageId: MTS_STAGE_ID,
+      cache: nextCache,
+    });
+    void saveToServer(
+      MTS_PROJECT_ID,
+      MTS_PROJECT_NAME,
+      MTS_STAGE_ID,
+      nextCache,
+    );
+    setStatus("Проект МТС загружен (локальный шаблон) и отправлен на сервер.");
+  };
+
+  const isMtsLoaded =
+    projectName.trim() === MTS_PROJECT_NAME ||
+    projectName.trim().startsWith("Проект МТС");
+
+  const pullToRadar = () => {
+    const key = ensureStagesProjectKey(projectKey);
+    localStorage.setItem(LS_PROJECT_KEY, key);
     const snapshot = buildStagesSnapshot({
       projectName,
       stageId,
       cache,
-      projectKey,
+      projectKey: key,
     });
     const overwrite = needsStagesOverwriteConfirm(snapshot);
     if (
@@ -338,8 +608,9 @@ export function StagesShell() {
             Пульт этапов
           </h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
-            Выбери этап → заполни реестр. Сохранение в браузере; «Скачать .md» —
-            в папку ProjectM / reestry.
+            Реестры сохраняются на сервер сами (хранилище:{" "}
+            <span className="font-medium text-foreground">{storageBackend}</span>
+            ). Радар — только после «Подтянуть в напарника».
           </p>
           <div className="flex flex-wrap items-end gap-3">
             <label className="flex flex-col gap-1 text-xs text-muted-foreground">
@@ -351,6 +622,7 @@ export function StagesShell() {
                   const v = e.target.value;
                   setProjectName(v);
                   localStorage.setItem(LS_NAME, v.trim());
+                  scheduleSave(projectKey, v.trim(), stageId, cache);
                 }}
                 placeholder="Название проекта"
                 className="h-9 min-w-[12rem] rounded-lg border border-input bg-background px-3 text-sm text-foreground"
@@ -364,6 +636,15 @@ export function StagesShell() {
               onClick={loadDemo}
             >
               Загрузить «Тестовый прогон»
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mb-0.5"
+              onClick={() => void loadMts()}
+            >
+              Загрузить Проект МТС
             </Button>
             <Button
               type="button"
@@ -403,6 +684,28 @@ export function StagesShell() {
               если новая оценка хуже текущей, спросим подтверждение.
             </span>
           </p>
+          {isMtsLoaded ? (
+            <aside
+              className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-3 text-sm text-foreground"
+              aria-label="Что ещё нужно для Проекта МТС"
+            >
+              <p className="font-medium text-amber-950 dark:text-amber-100">
+                Что ещё нужно — проект и собес
+              </p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-foreground/90">
+                {MTS_NEXT_HIGHLIGHTS.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Полный чеклист в репо:{" "}
+                <code className="rounded bg-background/60 px-1">
+                  docs/mts-exolve-next-checklist.md
+                </code>
+                . После загрузки нажми «Подтянуть в напарника».
+              </p>
+            </aside>
+          ) : null}
           <div className="flex flex-wrap gap-2">
             {CHEATSHEETS.map((c) => (
               <Link
@@ -449,6 +752,31 @@ export function StagesShell() {
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">{stage.gate}</p>
 
+          {stage.docLinks.length > 0 ? (
+            <div className="mt-3">
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Шаблоны этапа
+              </p>
+              <div className="mt-1.5 flex flex-wrap gap-x-2 gap-y-1 text-sm">
+                {stage.docLinks.map((doc, i) => (
+                  <span key={doc.href} className="inline-flex items-center gap-2">
+                    {i > 0 ? (
+                      <span className="text-muted-foreground/50" aria-hidden>
+                        ·
+                      </span>
+                    ) : null}
+                    <Link
+                      href={doc.href}
+                      className="font-medium text-primary underline-offset-2 hover:underline"
+                    >
+                      {doc.title}
+                    </Link>
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           {stage.editors.length === 0 ? (
             <p className="mt-4 text-sm text-muted-foreground">
               На этом этапе реестры не обязательны — зафиксируй уроки в заметках
@@ -490,7 +818,7 @@ export function StagesShell() {
                         + строка
                       </Button>
                       <Button type="button" size="sm" onClick={onSaveMd}>
-                        Скачать .md
+                        Скачать таблицу
                       </Button>
                     </div>
                   </div>
@@ -531,7 +859,13 @@ export function StagesShell() {
                               </span>
                               {c.type === "select" ? (
                                 <select
-                                  value={row[c.key] ?? ""}
+                                  value={
+                                    c.key === "influence" ||
+                                    c.key === "prob" ||
+                                    c.key === "impact"
+                                      ? normalizeLevel(row[c.key])
+                                      : (row[c.key] ?? "")
+                                  }
                                   onChange={(e) =>
                                     updateCell(ri, c.key, e.target.value)
                                   }
@@ -550,8 +884,8 @@ export function StagesShell() {
                                   onChange={(e) =>
                                     updateCell(ri, c.key, e.target.value)
                                   }
-                                  rows={3}
-                                  className="min-h-[4.5rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
+                                  rows={c.key === "name" ? 2 : 3}
+                                  className="min-h-[3rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
                                 />
                               ) : (
                                 <input
@@ -578,7 +912,9 @@ export function StagesShell() {
                               key={c.key}
                               className={cn(
                                 "sticky top-0 z-[1] border-b border-border bg-muted/80 px-2 py-2 text-left text-xs font-medium backdrop-blur-sm",
-                                c.multiline ? "min-w-[14rem]" : "whitespace-nowrap",
+                                c.multiline || c.key === "name"
+                                  ? "min-w-[14rem]"
+                                  : "whitespace-nowrap",
                               )}
                             >
                               {c.label}
@@ -595,16 +931,23 @@ export function StagesShell() {
                                 key={c.key}
                                 className={cn(
                                   "border-b border-border p-1.5 align-top",
-                                  c.multiline && "min-w-[14rem] max-w-[22rem]",
+                                  c.multiline && "min-w-[16rem] max-w-[28rem]",
+                                  c.key === "name" && "min-w-[14rem] max-w-[22rem]",
                                 )}
                               >
                                 {c.type === "select" ? (
                                   <select
-                                    value={row[c.key] ?? ""}
+                                    value={
+                                      c.key === "influence" ||
+                                      c.key === "prob" ||
+                                      c.key === "impact"
+                                        ? normalizeLevel(row[c.key])
+                                        : (row[c.key] ?? "")
+                                    }
                                     onChange={(e) =>
                                       updateCell(ri, c.key, e.target.value)
                                     }
-                                    className="h-9 w-full min-w-[5rem] rounded-md border border-input bg-background px-2 text-sm outline-none focus:ring-1 focus:ring-ring"
+                                    className="h-9 w-full min-w-[7rem] rounded-md border border-input bg-background px-2 text-sm outline-none focus:ring-1 focus:ring-ring"
                                   >
                                     <option value="" />
                                     {c.options?.map((o) => (
@@ -619,8 +962,8 @@ export function StagesShell() {
                                     onChange={(e) =>
                                       updateCell(ri, c.key, e.target.value)
                                     }
-                                    rows={3}
-                                    className="min-h-[4.5rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
+                                    rows={c.key === "name" ? 2 : 3}
+                                    className="min-h-[3rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
                                   />
                                 ) : (
                                   <input

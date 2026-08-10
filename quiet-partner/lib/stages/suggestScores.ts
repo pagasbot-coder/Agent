@@ -26,6 +26,7 @@ export function suggestScoresFromRegisters(
   const byudzhet = nonEmptyRows(cache.byudzhet);
   const vekhi = nonEmptyRows(cache.vekhi);
   const resheniya = nonEmptyRows(cache.resheniya);
+  const artefakty = nonEmptyRows(cache.artefakty);
 
   if (storony.length === 0) scores.D1 -= 25;
   else if (storony.length <= 2) scores.D1 -= 12;
@@ -104,6 +105,18 @@ export function suggestScoresFromRegisters(
   const accepted = resheniya.filter((r) => /принят/i.test(r.status ?? ""));
   if (accepted.length >= 3) scores.D3 += 6;
 
+  // Артефакты: список есть — планирование живое; пусто на этапе ≥2 — дыра в поставке
+  if (artefakty.length === 0 && stageId >= 2) {
+    scores.D4 -= 6;
+    scores.D6 -= 4;
+  } else if (artefakty.length >= 5) {
+    scores.D4 += 4;
+    const ready = artefakty.filter((r) =>
+      /готов|черновик|в работе/i.test(r.status ?? ""),
+    );
+    scores.D6 += Math.min(6, ready.length);
+  }
+
   if (stageId <= 1) {
     scores.D3 += 4;
     scores.D4 -= 8;
@@ -150,7 +163,9 @@ function isManagedRiskStatus(status: string | undefined): boolean {
 }
 
 function isHighImpact(impact: string | undefined): boolean {
-  return /^в$/i.test((impact ?? "").trim());
+  const n = (impact ?? "").trim();
+  if (/^(в|b)$/i.test(n) || /^высок/i.test(n)) return true;
+  return false;
 }
 
 /** Empty status treated as still open (legacy / incomplete rows). */

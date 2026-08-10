@@ -146,6 +146,21 @@ export const waitlistSignups = pgTable("waitlist_signups", {
     .defaultNow(),
 });
 
+/**
+ * Пульт этапов — снимок проекта (реестры JSON).
+ * Без auth: один workspace (личный контур). MTS-012.
+ */
+export const stagesProjects = pgTable("stages_projects", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  stageId: integer("stage_id").notNull().default(0),
+  /** JSON строка RegisterCache — проще для Neon HTTP. */
+  cacheJson: text("cache_json").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 /** Optional audit table — hot path stays Redis (T-036). */
 export const tokenUsageDaily = pgTable(
   "token_usage_daily",
@@ -173,6 +188,7 @@ export const appSchema = {
   auditLog,
   commentaryFeedback,
   waitlistSignups,
+  stagesProjects,
   tokenUsageDaily,
 };
 
