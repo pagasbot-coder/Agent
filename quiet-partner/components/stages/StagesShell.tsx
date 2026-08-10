@@ -55,9 +55,9 @@ function readStage(): number {
 
 function readName(): string {
   try {
-    return localStorage.getItem(LS_NAME) || "";
+    return localStorage.getItem(LS_NAME) || MTS_PROJECT_NAME;
   } catch {
-    return "";
+    return MTS_PROJECT_NAME;
   }
 }
 
@@ -124,13 +124,7 @@ export function StagesShell() {
   const [status, setStatus] = useState("Загрузка проекта с сервера…");
   const [storageBackend, setStorageBackend] = useState<string>("…");
   const [hydrated, setHydrated] = useState(false);
-  const [projectKey, setProjectKey] = useState(() => {
-    try {
-      return localStorage.getItem(LS_PROJECT_KEY) || MTS_PROJECT_ID;
-    } catch {
-      return MTS_PROJECT_ID;
-    }
-  });
+  const [projectKey, setProjectKey] = useState(() => MTS_PROJECT_ID);
   /** Default off: demo must not silently overwrite a better radar. */
   const [demoAlsoRadar, setDemoAlsoRadar] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -252,10 +246,10 @@ export function StagesShell() {
         if (cancelled) return;
         if (listJson.backend) setStorageBackend(listJson.backend);
 
+        // Канон: при каждом открытии пульта — Проект МТС (не демо из localStorage).
         const preferred =
-          localStorage.getItem(LS_PROJECT_KEY) ||
-          listJson.defaultProjectId ||
-          MTS_PROJECT_ID;
+          listJson.defaultProjectId?.trim() || MTS_PROJECT_ID;
+        localStorage.setItem(LS_PROJECT_KEY, preferred);
         const getRes = await fetch(
           `/api/stages/projects/${encodeURIComponent(preferred)}`,
         );
@@ -305,11 +299,25 @@ export function StagesShell() {
       } catch {
         if (!cancelled) {
           setStorageBackend("browser");
+          skipNextSave.current = true;
+          applyProjectSnapshot({
+            id: MTS_PROJECT_ID,
+            name: MTS_PROJECT_NAME,
+            stageId: MTS_STAGE_ID,
+            cache: { ...MTS_EXOLVE_SEED },
+          });
+          try {
+            localStorage.setItem(LS_PROJECT_KEY, MTS_PROJECT_ID);
+          } catch {
+            /* ignore */
+          }
           setStatus(
-            "Сервер недоступен — работа в браузере. Запусти npm run dev.",
+            "Сервер недоступен — локальный Проект МТС. Запусти npm run dev для сохранения.",
           );
           setHydrated(true);
-          skipNextSave.current = false;
+          queueMicrotask(() => {
+            skipNextSave.current = false;
+          });
         }
       }
     })();

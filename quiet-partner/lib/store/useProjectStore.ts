@@ -193,7 +193,7 @@ export const useProjectStore = create<ProjectStore>()(
       weeklySnapshots: [],
       retentionReminder: {},
       projectProfile: {
-        name: "Пилотный проект",
+        name: "Проект МТС (Exolve — антифрод)",
         deliveryApproach: "hybrid",
         phase: "build",
         locale: "ru",
@@ -542,6 +542,26 @@ export const useProjectStore = create<ProjectStore>()(
     }),
     {
       name: PROJECT_PERSIST_KEY,
+      version: 2,
+      migrate: (persisted, version) => {
+        const state = (persisted ?? {}) as {
+          projectProfile?: { name?: string };
+        };
+        if (
+          version < 2 &&
+          (!state.projectProfile?.name ||
+            state.projectProfile.name === "Пилотный проект")
+        ) {
+          return {
+            ...state,
+            projectProfile: {
+              ...(state.projectProfile ?? {}),
+              name: "Проект МТС (Exolve — антифрод)",
+            },
+          };
+        }
+        return persisted as typeof state;
+      },
       partialize: (state) => ({
         domains: state.domains,
         projectProfile: state.projectProfile,
