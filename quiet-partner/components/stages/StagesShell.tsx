@@ -692,28 +692,6 @@ export function StagesShell() {
               если новая оценка хуже текущей, спросим подтверждение.
             </span>
           </p>
-          {isMtsLoaded ? (
-            <aside
-              className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-3 text-sm text-foreground"
-              aria-label="Что ещё нужно для Проекта МТС"
-            >
-              <p className="font-medium text-amber-950 dark:text-amber-100">
-                Что ещё нужно — проект и собес
-              </p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-foreground/90">
-                {MTS_NEXT_HIGHLIGHTS.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-              <p className="mt-2 text-xs text-muted-foreground">
-                Полный чеклист в репо:{" "}
-                <code className="rounded bg-background/60 px-1">
-                  docs/mts-exolve-next-checklist.md
-                </code>
-                . После загрузки нажми «Подтянуть в напарника».
-              </p>
-            </aside>
-          ) : null}
           <div className="flex flex-wrap gap-2">
             {CHEATSHEETS.map((c) => (
               <Link
@@ -1011,6 +989,29 @@ export function StagesShell() {
             </>
           )}
         </section>
+
+        {isMtsLoaded ? (
+          <aside
+            className="mt-6 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-3 text-sm text-foreground"
+            aria-label="Что ещё нужно для Проекта МТС"
+          >
+            <p className="font-medium text-amber-950 dark:text-amber-100">
+              Что ещё нужно — проект и собес
+            </p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed text-foreground/90">
+              {MTS_NEXT_HIGHLIGHTS.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Полный чеклист в репо:{" "}
+              <code className="rounded bg-background/60 px-1">
+                docs/mts-exolve-next-checklist.md
+              </code>
+              . После загрузки нажми «Подтянуть в напарника».
+            </p>
+          </aside>
+        ) : null}
 
         <footer className="mt-8 text-center text-xs text-muted-foreground">
           Co-pilot, не сертификация PMBOK. Полный локальный контур с записью на
