@@ -31,7 +31,13 @@ npm run db:push
 ## Tables (T-034 / T-051)
 
 Auth.js core: `users`, `accounts`, `sessions`, `verification_tokens`  
-App: `projects`, `domain_scores`, `audit_log`, `commentary_feedback`, `waitlist_signups`  
+App: `projects`, `domain_scores`, `audit_log`, `commentary_feedback`, `waitlist_signups`, `stages_projects`  
 Ops: `token_usage_daily` (optional audit)
 
 Waitlist hot path (T-051) uses `waitlist_signups` only — full schema pushed for future AUTH activation.
+
+### Пульт этапов (MTS-012)
+
+- Локально по умолчанию: `STAGES_BACKEND=file` → `.data/stages-projects.json` (автосохранение, без Neon).
+- На Vercel / общем контуре: `STAGES_BACKEND=postgres` + `DATABASE_URL` + `npm run db:push` (таблица `stages_projects`).
+- API: `GET/PUT /api/stages/projects/[id]`, сид МТС `mts-exolve`.

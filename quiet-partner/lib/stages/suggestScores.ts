@@ -1,7 +1,10 @@
 import type { DomainId } from "@/lib/domains";
 import type { RegisterRow } from "@/lib/stages/registers";
 
-/** Pure mapping: pulpit registers → suggested domain scores (T-105). */
+/**
+ * Pure mapping: pulpit registers → suggested domain scores (T-105 / T-115).
+ * Principle: recording risks/unknowns is healthy; punish unmanaged exposure, reward hygiene.
+ */
 export function suggestScoresFromRegisters(
   cache: Record<string, RegisterRow[]>,
   stageId: number,
@@ -23,33 +26,65 @@ export function suggestScoresFromRegisters(
   const byudzhet = nonEmptyRows(cache.byudzhet);
   const vekhi = nonEmptyRows(cache.vekhi);
   const resheniya = nonEmptyRows(cache.resheniya);
+  const artefakty = nonEmptyRows(cache.artefakty);
 
   if (storony.length === 0) scores.D1 -= 25;
   else if (storony.length <= 2) scores.D1 -= 12;
   else if (storony.length >= 4) scores.D1 += 5;
 
+  // Risks first — silence hit on D8 softens when risk hygiene is already good.
+  const openRisks = riski.filter((r) => isOpenStatus(r.status));
+  const managedRisks = riski.filter((r) => isManagedRiskStatus(r.status));
+  const openHigh = openRisks.filter((r) => isHighImpact(r.impact));
+
   let silenceHits = 0;
+  const silenceD8PerHit = managedRisks.length >= 3 ? 2 : 5;
   for (const row of storony) {
     if (/высок/i.test(row.silence ?? "")) {
       silenceHits += 1;
       if (silenceHits <= 3) {
         scores.D1 -= 8;
-        scores.D8 -= 5;
+        scores.D8 -= silenceD8PerHit;
       }
     }
   }
 
-  const openRisks = riski.filter((r) => /открыт/i.test(r.status ?? ""));
-  const openHigh = openRisks.filter((r) => /^в$/i.test((r.impact ?? "").trim()));
-  for (const _ of openHigh) {
-    scores.D5 -= 8;
-    scores.D8 -= 10;
-    scores.D4 -= 5;
-  }
-  scores.D8 -= Math.min(24, openRisks.length * 4);
+  // Risks: only unmanaged «открыт» hurts; снижен/закрыт/принят are hygiene bonuses.
 
-  const unknownHits = Math.min(4, neznaem.length);
-  scores.D8 -= unknownHits * 7;
+  for (const row of openHigh) {
+    if (hasText(row.mitigation)) {
+      // Working the risk — light hit, not a punish-for-recording
+      scores.D8 -= 3;
+      scores.D5 -= 3;
+      scores.D4 -= 2;
+    } else {
+      scores.D8 -= 10;
+      scores.D5 -= 8;
+      scores.D4 -= 5;
+    }
+  }
+
+  const openOtherUnmanaged = openRisks.filter(
+    (r) => !isHighImpact(r.impact) && !hasText(r.mitigation),
+  );
+  scores.D8 -= Math.min(12, openOtherUnmanaged.length * 3);
+
+  // Reward active risk hygiene (cap so greenwashing is limited)
+  scores.D8 += Math.min(15, managedRisks.length * 3);
+  scores.D5 += Math.min(9, managedRisks.length * 2);
+
+  // Anti-Goodhart: empty risk register late = hidden risk, not «healthy»
+  if (riski.length === 0 && stageId >= 4) {
+    scores.D8 -= 15;
+  } else if (riski.length === 0 && stageId >= 2) {
+    scores.D8 -= 8;
+  }
+
+  // «Не знаем»: only open rows penalize; closed/устарел do not (and give small credit)
+  const openUnknowns = neznaem.filter((r) => isOpenUnknown(r.status));
+  const closedUnknowns = neznaem.filter((r) => isClosedUnknown(r.status));
+  scores.D8 -= Math.min(28, openUnknowns.length * 7);
+  scores.D8 += Math.min(10, closedUnknowns.length * 2);
 
   for (const row of byudzhet) {
     const delta = (row.delta ?? "").trim();
@@ -70,16 +105,29 @@ export function suggestScoresFromRegisters(
   const accepted = resheniya.filter((r) => /принят/i.test(r.status ?? ""));
   if (accepted.length >= 3) scores.D3 += 6;
 
+  // Артефакты: список есть — планирование живое; пусто на этапе ≥2 — дыра в поставке
+  if (artefakty.length === 0 && stageId >= 2) {
+    scores.D4 -= 6;
+    scores.D6 -= 4;
+  } else if (artefakty.length >= 5) {
+    scores.D4 += 4;
+    const ready = artefakty.filter((r) =>
+      /готов|черновик|в работе/i.test(r.status ?? ""),
+    );
+    scores.D6 += Math.min(6, ready.length);
+  }
+
   if (stageId <= 1) {
     scores.D3 += 4;
     scores.D4 -= 8;
   }
 
   if (stageId >= 4 && stageId <= 5) {
-    if (openHigh.length === 0 && openRisks.length <= 2) {
+    const unmanagedHigh = openHigh.filter((r) => !hasText(r.mitigation));
+    if (unmanagedHigh.length === 0 && openRisks.length <= 2) {
       scores.D5 += 5;
       scores.D6 += 4;
-    } else if (openHigh.length >= 2) {
+    } else if (unmanagedHigh.length >= 2) {
       scores.D5 -= 10;
       scores.D6 -= 8;
     }
@@ -99,6 +147,36 @@ function nonEmptyRows(rows: RegisterRow[] | undefined): RegisterRow[] {
   return (rows ?? []).filter((row) =>
     Object.values(row).some((v) => String(v ?? "").trim().length > 0),
   );
+}
+
+function hasText(value: string | undefined): boolean {
+  return String(value ?? "").trim().length > 0;
+}
+
+function isOpenStatus(status: string | undefined): boolean {
+  return /открыт/i.test(status ?? "");
+}
+
+function isManagedRiskStatus(status: string | undefined): boolean {
+  const s = (status ?? "").trim();
+  return /снижен|закрыт|принят/i.test(s);
+}
+
+function isHighImpact(impact: string | undefined): boolean {
+  const n = (impact ?? "").trim();
+  if (/^(в|b)$/i.test(n) || /^высок/i.test(n)) return true;
+  return false;
+}
+
+/** Empty status treated as still open (legacy / incomplete rows). */
+function isOpenUnknown(status: string | undefined): boolean {
+  const s = (status ?? "").trim();
+  if (!s) return true;
+  return /открыт/i.test(s);
+}
+
+function isClosedUnknown(status: string | undefined): boolean {
+  return /закрыт|устарел/i.test((status ?? "").trim());
 }
 
 function DOMAIN_CLAMP(
