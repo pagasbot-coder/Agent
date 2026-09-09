@@ -94,6 +94,15 @@ function averageSuggested(scores: Record<string, number>): number {
   return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
 }
 
+/** A closed unknown must carry evidence, otherwise it is not actually resolved. */
+function countClosedUnknownsWithoutEvidence(cache: Cache): number {
+  return (cache.neznaem ?? []).filter(
+    (row) =>
+      /^закрыт$/i.test((row.status ?? "").trim()) &&
+      !(row.closed ?? "").trim(),
+  ).length;
+}
+
 /** Ask before wiping a better radar with a weaker pulpit snapshot. */
 function confirmScoreDowngrade(
   currentOverall: number,
@@ -115,6 +124,7 @@ export function StagesShell() {
     (s) => s.needsStagesOverwriteConfirm,
   );
   const getOverallHealth = useProjectStore((s) => s.getOverallHealth);
+  const currentD8 = useProjectStore((s) => s.domains.D8.value);
   const [stageId, setStageId] = useState(readStage);
   const [projectName, setProjectName] = useState(readName);
   const [cache, setCache] = useState<Cache>(readCache);
@@ -346,6 +356,11 @@ export function StagesShell() {
       }).suggestedScores,
     [projectName, stageId, cache],
   );
+  const incompleteClosedUnknowns = useMemo(
+    () => countClosedUnknownsWithoutEvidence(cache),
+    [cache],
+  );
+  const d8Delta = previewScores.D8 - currentD8;
 
   const activeReg = useMemo(() => {
     const editors = stage.editors;
@@ -366,6 +381,17 @@ export function StagesShell() {
     (next: Cache) => {
       setCache(next);
       saveCache(next);
+      const incomplete = countClosedUnknownsWithoutEvidence(next);
+      if (incomplete > 0) {
+        if (saveTimer.current) {
+          clearTimeout(saveTimer.current);
+          saveTimer.current = null;
+        }
+        setStatus(
+          `Заполни «Закрыто чем» для закрытых вопросов: ${incomplete}. До этого сервер и радар не обновятся.`,
+        );
+        return;
+      }
       scheduleSave(projectKey, projectName, stageId, next);
     },
     [projectKey, projectName, stageId, scheduleSave],
@@ -565,6 +591,17 @@ export function StagesShell() {
 
   /** Explicit commit: persist the current registers first, then update radar. */
   const saveAndPullToRadar = async () => {
+    if (incompleteClosedUnknowns > 0) {
+      const unknownsStage =
+        STAGES.find((item) => item.editors.includes("neznaem"))?.id ?? 0;
+      setStageId(unknownsStage);
+      localStorage.setItem(LS_STAGE, String(unknownsStage));
+      setActiveRegOverride("neznaem");
+      setStatus(
+        `Нельзя закрыть вопрос без основания. Заполни «Закрыто чем»: ${incompleteClosedUnknowns}.`,
+      );
+      return;
+    }
     const key = ensureStagesProjectKey(projectKey);
     localStorage.setItem(LS_PROJECT_KEY, key);
     const snapshot = buildStagesSnapshot({
@@ -699,9 +736,13 @@ export function StagesShell() {
             <p className="pb-1.5 text-xs text-muted-foreground">{status}</p>
           </div>
           <p className="rounded-lg border border-border/70 bg-muted/40 px-3 py-2 text-xs text-foreground">
-            Оценка из пульта сейчас:{" "}
+            Неопределённость: на радаре {currentD8} → после сохранения{" "}
             <span className="font-medium">
-              Неопределённость {previewScores.D8}
+              {previewScores.D8}
+            </span>
+            {" "}
+            <span className="text-muted-foreground">
+              ({d8Delta === 0 ? "без изменений" : `${d8Delta > 0 ? "+" : ""}${d8Delta}`})
             </span>
             {" · "}
             Работа проекта {previewScores.D5}
@@ -815,6 +856,16 @@ export function StagesShell() {
                   disabled={!hydrated || isSaving}
                   className="mt-4 disabled:opacity-70"
                 >
+                  {activeReg === "neznaem" &&
+                    incompleteClosedUnknowns > 0 && (
+                      <p
+                        className="mb-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-foreground"
+                        role="alert"
+                      >
+                        Для статуса «закрыт» заполни «Закрыто чем». Несохранённых
+                        строк: {incompleteClosedUnknowns}.
+                      </p>
+                    )}
                   <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <h3 className="text-base font-semibold">
                       {REGISTERS[activeReg].title}
@@ -896,7 +947,25 @@ export function StagesShell() {
                                     updateCell(ri, c.key, e.target.value)
                                   }
                                   rows={c.key === "name" ? 2 : 3}
-                                  className="min-h-[3rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
+                                  aria-required={
+                                    activeReg === "neznaem" &&
+                                    c.key === "closed" &&
+                                    /^закрыт$/i.test(row.status ?? "")
+                                  }
+                                  aria-invalid={
+                                    activeReg === "neznaem" &&
+                                    c.key === "closed" &&
+                                    /^закрыт$/i.test(row.status ?? "") &&
+                                    !(row.closed ?? "").trim()
+                                  }
+                                  className={cn(
+                                    "min-h-[3rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring",
+                                    activeReg === "neznaem" &&
+                                      c.key === "closed" &&
+                                      /^закрыт$/i.test(row.status ?? "") &&
+                                      !(row.closed ?? "").trim() &&
+                                      "border-amber-500 ring-1 ring-amber-500/30",
+                                  )}
                                 />
                               ) : (
                                 <input
@@ -974,7 +1043,25 @@ export function StagesShell() {
                                       updateCell(ri, c.key, e.target.value)
                                     }
                                     rows={c.key === "name" ? 2 : 3}
-                                    className="min-h-[3rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring"
+                                    aria-required={
+                                      activeReg === "neznaem" &&
+                                      c.key === "closed" &&
+                                      /^закрыт$/i.test(row.status ?? "")
+                                    }
+                                    aria-invalid={
+                                      activeReg === "neznaem" &&
+                                      c.key === "closed" &&
+                                      /^закрыт$/i.test(row.status ?? "") &&
+                                      !(row.closed ?? "").trim()
+                                    }
+                                    className={cn(
+                                      "min-h-[3rem] w-full resize-y rounded-md border border-input bg-background px-2 py-1.5 text-sm leading-snug whitespace-pre-wrap break-words outline-none focus:ring-1 focus:ring-ring",
+                                      activeReg === "neznaem" &&
+                                        c.key === "closed" &&
+                                        /^закрыт$/i.test(row.status ?? "") &&
+                                        !(row.closed ?? "").trim() &&
+                                        "border-amber-500 ring-1 ring-amber-500/30",
+                                    )}
                                   />
                                 ) : (
                                   <input
