@@ -328,7 +328,7 @@
 | T-112 | UI «Спросить в Cursor» + deeplink/copy/MD | Developer | DONE | P0 | — | `@components/AskInCursorCard.tsx` `@lib/cursorBridge.ts` | hub + radar; prompt ≤5500 |
 | T-113 | Cursor command + inbox docs | Developer | DONE | P0 | T-112 | `.cursor/commands/ask-quiet-partner.md` `docs/cursor-inbox/` | latest.md gitignored |
 | T-114 | QA smoke Cursor bridge | QA | READY | P1 | T-112 | `@docs/cursor-qp-bridge.md` | deeplink opens; MD download |
-| T-116 | Сохранить статус реестра и обновить радар одной кнопкой | Developer | DONE | P0 | T-107 | `@components/stages/StagesShell.tsx` `@lib/stages/stagesStore.ts` | CTA сохраняет PUT → применяет radar; prod auto PostgreSQL; lint/build/browser PASS |
+| T-116 | Сохранить статус реестра и обновить радар одной кнопкой | Developer + DevOps | BLOCKED | P0 | T-107 | `@components/stages/StagesShell.tsx` `@lib/stages/stagesStore.ts` | Код в `main` (`6728db0`), lint/build/browser PASS; Vercel deploy BLOCKED: team configuration |
 
 ### Детали задач моста
 
@@ -445,6 +445,7 @@
 | 2026-07-22 | **Мост ship:** T-104…T-109, T-111 DONE — CTA «Подтянуть в напарника», banner на `/radar`, демо→оба; next T-110 QA + deploy. |
 | 2026-07-22 | **T-112/T-113:** «Спросить в Cursor» (deeplink + MD inbox) на hub/radar; команда `/ask-quiet-partner`. |
 | 2026-09-09 | **T-116 DONE:** статус реестра сохраняется явным CTA до обновления радара; Vercel с `DATABASE_URL` выбирает PostgreSQL вместо временного file backend; lint/build/browser smoke PASS. |
+| 2026-09-09 | **T-116 deploy BLOCKED:** commit `6728db0` отправлен в `main`; Vercel deployment `dpl_7Z9giTyEfDUxuXMxopGQjnuhxvX6` остановлен платформой до build (`team configuration / project collaboration`). |
 
 ---
 
