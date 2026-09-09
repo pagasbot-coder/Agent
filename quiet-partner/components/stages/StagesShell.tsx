@@ -125,6 +125,7 @@ export function StagesShell() {
   const [storageBackend, setStorageBackend] = useState<string>("…");
   const [hydrated, setHydrated] = useState(false);
   const [projectKey, setProjectKey] = useState(() => MTS_PROJECT_ID);
+  const [isSaving, setIsSaving] = useState(false);
   /** Default off: demo must not silently overwrite a better radar. */
   const [demoAlsoRadar, setDemoAlsoRadar] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -208,11 +209,13 @@ export function StagesShell() {
           },
         );
         if (!res.ok) throw new Error(`save_${res.status}`);
-        setStatus("Сохранено на сервере. Радар — после «Подтянуть».");
+        setStatus("Сохранено на сервере.");
+        return true;
       } catch {
         setStatus(
           "Не удалось сохранить на сервер — данные пока только в браузере.",
         );
+        return false;
       }
     },
     [],
@@ -230,8 +233,14 @@ export function StagesShell() {
   );
 
   useEffect(() => {
-    applyUrlRegister();
-  }, [applyUrlRegister, searchParams]);
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) applyUrlRegister();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [applyUrlRegister]);
 
   useEffect(() => {
     let cancelled = false;
@@ -554,7 +563,8 @@ export function StagesShell() {
     projectName.trim() === MTS_PROJECT_NAME ||
     projectName.trim().startsWith("Проект МТС");
 
-  const pullToRadar = () => {
+  /** Explicit commit: persist the current registers first, then update radar. */
+  const saveAndPullToRadar = async () => {
     const key = ensureStagesProjectKey(projectKey);
     localStorage.setItem(LS_PROJECT_KEY, key);
     const snapshot = buildStagesSnapshot({
@@ -582,6 +592,16 @@ export function StagesShell() {
       setStatus("Подтягивание отменено — радар без изменений.");
       return;
     }
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+      saveTimer.current = null;
+    }
+    setIsSaving(true);
+    const saved = await saveToServer(key, projectName, stageId, cache);
+    if (!saved) {
+      setIsSaving(false);
+      return;
+    }
     applyStagesBridge(snapshot);
     capture("bridge_pull_to_radar", {
       stage_id: stageId,
@@ -594,8 +614,9 @@ export function StagesShell() {
     });
     const d8 = snapshot.suggestedScores.D8;
     setStatus(
-      `Оценка подтянута: Неопределённость ${d8}, Работа проекта ${snapshot.suggestedScores.D5}`,
+      `Сохранено и обновлено: Неопределённость ${d8}, Работа проекта ${snapshot.suggestedScores.D5}`,
     );
+    setIsSaving(false);
     router.push("/radar?from=stages");
   };
 
@@ -618,7 +639,7 @@ export function StagesShell() {
           <p className="max-w-2xl text-sm text-muted-foreground">
             Реестры сохраняются на сервер сами (хранилище:{" "}
             <span className="font-medium text-foreground">{storageBackend}</span>
-            ). Радар — только после «Подтянуть в напарника».
+            ). Кнопка ниже сохраняет правки и обновляет радар.
           </p>
           <div className="flex flex-wrap items-end gap-3">
             <label className="flex flex-col gap-1 text-xs text-muted-foreground">
@@ -658,9 +679,10 @@ export function StagesShell() {
               type="button"
               size="sm"
               className="mb-0.5"
-              onClick={pullToRadar}
+              disabled={!hydrated || isSaving}
+              onClick={() => void saveAndPullToRadar()}
             >
-              Подтянуть в напарника
+              {isSaving ? "Сохраняю…" : "Сохранить и обновить радар"}
             </Button>
             <label className="mb-0.5 flex max-w-xs cursor-pointer items-start gap-2 text-xs text-muted-foreground">
               <input
@@ -688,8 +710,8 @@ export function StagesShell() {
             {" · "}
             индекс ~{averageSuggested(previewScores)}
             <span className="mt-0.5 block text-muted-foreground">
-              Реестры пульта сохраняются сами. Радар — только по «Подтянуть»;
-              если новая оценка хуже текущей, спросим подтверждение.
+              Реестры сохраняются сами. Кнопка выше подтверждает запись и
+              переносит новую оценку в радар; снижение попросит подтвердить.
             </span>
           </p>
           <div className="flex flex-wrap gap-2">
@@ -789,7 +811,10 @@ export function StagesShell() {
               </div>
 
               {activeReg && (
-                <div className="mt-4">
+                <fieldset
+                  disabled={!hydrated || isSaving}
+                  className="mt-4 disabled:opacity-70"
+                >
                   <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <h3 className="text-base font-semibold">
                       {REGISTERS[activeReg].title}
@@ -984,7 +1009,7 @@ export function StagesShell() {
                       {REGISTERS[activeReg].path}
                     </code>
                   </p>
-                </div>
+                </fieldset>
               )}
             </>
           )}
@@ -1008,7 +1033,7 @@ export function StagesShell() {
               <code className="rounded bg-background/60 px-1">
                 docs/mts-exolve-next-checklist.md
               </code>
-              . После загрузки нажми «Подтянуть в напарника».
+              . После загрузки нажми «Сохранить и обновить радар».
             </p>
           </aside>
         ) : null}

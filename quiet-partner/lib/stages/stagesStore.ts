@@ -41,7 +41,7 @@ const DEFAULT_FILE_PATH = ".data/stages-projects.json";
 
 type FileStore = Record<string, Omit<StagesProjectRecord, "cache"> & { cache: StagesCache }>;
 
-/** file по умолчанию — локально не теряем реестры; postgres при флаге + DATABASE_URL. */
+/** PostgreSQL по умолчанию в окружении с БД; file остаётся локальным fallback. */
 export function getStagesBackend(): StagesBackend {
   const raw = process.env.STAGES_BACKEND?.trim().toLowerCase();
   if (raw === "noop") return "noop";
@@ -49,7 +49,7 @@ export function getStagesBackend(): StagesBackend {
     return isDatabaseConfigured() ? "postgres" : "file";
   }
   if (raw === "file") return "file";
-  return "file";
+  return isDatabaseConfigured() ? "postgres" : "file";
 }
 
 function resolveFilePath(): string {
