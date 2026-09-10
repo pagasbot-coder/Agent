@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   BarChart3,
   Briefcase,
@@ -33,6 +33,69 @@ import {
 } from "@/lib/domains";
 import { DOMAIN_GLOSSARY } from "@/lib/onboarding";
 import { useProjectStore, type DomainHealth } from "@/lib/store/useProjectStore";
+
+/** Narrow phones: leave more ring for axis labels (Неопределённость, Измерение). */
+function useNarrowRadar(maxWidth = 440) {
+  const [narrow, setNarrow] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia(`(max-width: ${maxWidth}px)`).matches
+      : true,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${maxWidth}px)`);
+    const sync = () => setNarrow(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [maxWidth]);
+  return narrow;
+}
+
+/** Soft-wrap the longest RU axis label; others stay one line with room from smaller radius. */
+function wrapRadarLabel(label: string): string[] {
+  if (label === "Неопределённость") return ["Неопределён", "ность"];
+  return [label];
+}
+
+type AngleTickProps = {
+  x?: number;
+  y?: number;
+  payload?: { value?: string };
+  textAnchor?: string;
+  fill?: string;
+  fontSize?: number;
+};
+
+/** Custom polar tick: multi-line + no SVG clip of long domain names. */
+function RadarAngleTick({
+  x = 0,
+  y = 0,
+  payload,
+  textAnchor = "middle",
+  fill = "oklch(0.45 0.02 250)",
+  fontSize = 11,
+}: AngleTickProps) {
+  const lines = wrapRadarLabel(String(payload?.value ?? ""));
+  const lineHeight = fontSize + 2;
+  const startDy = -((lines.length - 1) * lineHeight) / 2;
+
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={textAnchor as "start" | "middle" | "end"}
+      fill={fill}
+      fontSize={fontSize}
+      className="select-none"
+    >
+      {lines.map((line, i) => (
+        <tspan key={`${line}-${i}`} x={x} dy={i === 0 ? startDy : lineHeight}>
+          {line}
+        </tspan>
+      ))}
+    </text>
+  );
+}
 
 const DOMAIN_ICONS: Record<DomainId, LucideIcon> = {
   D1: Users,
@@ -67,8 +130,10 @@ function StatusPill({
       title={`${domain.name}: ${domain.value} — ${DOMAIN_GLOSSARY[domain.id]}`}
     >
       <Icon className="size-3.5" aria-hidden />
-      <span className="hidden sm:inline">{domain.name}</span>
-      <span className="sm:hidden">{DOMAIN_DEFINITIONS.find((d) => d.id === domain.id)?.shortLabel}</span>
+      <span>
+        {DOMAIN_DEFINITIONS.find((d) => d.id === domain.id)?.shortLabel ??
+          domain.name}
+      </span>
       <span className="tabular-nums opacity-80">{domain.value}</span>
     </div>
   );
@@ -82,6 +147,7 @@ function overallLabel(score: number): string {
 
 /** Radar chart for 8 PMBOK performance domains. */
 export function DomainRadar() {
+  const narrow = useNarrowRadar();
   const domainsRecord = useProjectStore((s) => s.domains);
   const domains = useMemo(
     () => DOMAIN_IDS.map((id) => domainsRecord[id]),
@@ -106,6 +172,13 @@ export function DomainRadar() {
       [...redDomains].sort((a, b) => a.value - b.value)[0]!.id
     : null;
 
+  const chartHeight = narrow ? 360 : 320;
+  const outerRadius = narrow ? "50%" : "62%";
+  const tickFontSize = narrow ? 10 : 11;
+  const chartMargin = narrow
+    ? { top: 36, right: 40, bottom: 36, left: 40 }
+    : { top: 24, right: 28, bottom: 24, left: 28 };
+
   return (
     <section
       aria-labelledby="domain-radar-heading"
@@ -126,13 +199,20 @@ export function DomainRadar() {
         </div>
       </div>
 
-      <div className="relative mx-auto w-full max-w-md">
-        <ResponsiveContainer width="100%" height={320} minWidth={280}>
-          <RadarChart cx="50%" cy="50%" outerRadius="72%" data={chartData}>
+      <div className="relative mx-auto w-full max-w-md overflow-visible [&_.recharts-surface]:overflow-visible">
+        <ResponsiveContainer width="100%" height={chartHeight} minWidth={260}>
+          <RadarChart
+            cx="50%"
+            cy="50%"
+            outerRadius={outerRadius}
+            data={chartData}
+            margin={chartMargin}
+          >
             <PolarGrid stroke="oklch(0.88 0.01 250)" />
             <PolarAngleAxis
               dataKey="domain"
-              tick={{ fill: "oklch(0.45 0.02 250)", fontSize: 11 }}
+              tick={<RadarAngleTick fontSize={tickFontSize} />}
+              tickLine={false}
             />
             <PolarRadiusAxis
               angle={90}
