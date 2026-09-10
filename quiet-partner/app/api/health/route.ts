@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getCostGuardSnapshot } from "@/lib/advisor/costGuardrails";
 import { getRateLimitBackend } from "@/lib/advisor/redisRateLimit";
+import { getBillingSnapshot } from "@/lib/billing";
 import { getWaitlistBackend } from "@/lib/waitlist/store";
 
 /**
@@ -29,6 +30,7 @@ export async function GET() {
         ...getCostGuardSnapshot(),
         rate_limit_backend: getRateLimitBackend(),
       },
+      billing: getBillingSnapshot(),
     },
   });
 }

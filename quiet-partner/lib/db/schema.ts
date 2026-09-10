@@ -175,11 +175,71 @@ export const tokenUsageDaily = pgTable(
   (table) => [primaryKey({ columns: [table.userId, table.usageDate] })],
 );
 
+/** One row per user — freemium / Pro (ADR-005). */
+export const subscriptions = pgTable(
+  "subscriptions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    tier: text("tier").notNull().default("free"),
+    status: text("status").notNull().default("inactive"),
+    provider: text("provider"),
+    providerSubscriptionId: text("provider_subscription_id"),
+    currentPeriodEnd: timestamp("current_period_end", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    unique().on(table.userId),
+    index("idx_subscriptions_user_id").on(table.userId),
+  ],
+);
+
+/** Payment ledger — idempotent on provider + provider_payment_id. */
+export const payments = pgTable(
+  "payments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+    subscriptionId: uuid("subscription_id").references(() => subscriptions.id, {
+      onDelete: "set null",
+    }),
+    provider: text("provider").notNull(),
+    providerPaymentId: text("provider_payment_id").notNull(),
+    amountRub: integer("amount_rub").notNull(),
+    currency: text("currency").notNull().default("RUB"),
+    status: text("status").notNull().default("pending"),
+    tier: text("tier"),
+    metadata: text("metadata"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    unique().on(table.provider, table.providerPaymentId),
+    index("idx_payments_user_id").on(table.userId),
+  ],
+);
+
 export const authSchema = {
   users,
   accounts,
   sessions,
   verificationTokens,
+};
+
+export const billingSchema = {
+  subscriptions,
+  payments,
 };
 
 export const appSchema = {
@@ -190,6 +250,7 @@ export const appSchema = {
   waitlistSignups,
   stagesProjects,
   tokenUsageDaily,
+  ...billingSchema,
 };
 
 export const schema = { ...authSchema, ...appSchema };

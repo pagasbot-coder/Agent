@@ -246,6 +246,24 @@ export default function WaitlistPage() {
           ))}
         </ul>
 
+        <section
+          className="mt-10 rounded-xl border border-border/80 bg-muted/20 p-4"
+          aria-label="Тарифы beta"
+        >
+          <h2 className="text-sm font-semibold">Тарифы (после открытия beta)</h2>
+          <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+            <li>
+              <span className="font-medium text-foreground">Бесплатно</span> —
+              DomainRadar и ограниченный AI (достаточно для 2–3 проектов в неделю).
+            </li>
+            <li>
+              <span className="font-medium text-foreground">Pro</span> — от 990 ₽/мес:
+              больше HealthCommentary, экспорт снимка проекта. Оплата картой РФ
+              (YooKassa).
+            </li>
+          </ul>
+        </section>
+
         <footer className="mt-12 rounded-lg border border-dashed bg-muted/30 px-4 py-3 text-xs text-muted-foreground">
           Не сертификация PMBOK · не замена PMO · не подготовка к PMP. Co-pilot
           для мышления о здоровье проекта, не официальный PMI alignment.

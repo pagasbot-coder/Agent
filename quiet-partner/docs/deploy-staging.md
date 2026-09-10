@@ -228,3 +228,4 @@ Invoke-RestMethod -Uri "$base/api/advisor/health-commentary" -Method POST -Body 
 | 2026-05-30 | DevOps | `npm run build` PASS; `vercel --yes` → alias `quiet-partner.vercel.app`; S1–S3 smoke PASS (fallback BFF) |
 | 2026-05-30 | DevOps | T-025: `vercel --prod --yes` → `/waitlist` live; GET https://quiet-partner.vercel.app/waitlist **200** |
 | 2026-05-30 | Developer | T-031…T-032: `584cfe8` push + `vercel --prod --yes`; smoke `/`, `/onboarding`, `/waitlist`, `/api/health` **PASS** |
+| 2026-06-07 | Developer | T-051: `8214c10` push + `vercel --prod --yes`; health `waitlist_backend: noop`, `database_configured: false`; POST waitlist noop **PASS** |

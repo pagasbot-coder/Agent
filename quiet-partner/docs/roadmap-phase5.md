@@ -1,95 +1,123 @@
-# Roadmap Phase 5 — Auth, persistence, billing
+# Roadmap Phase 5 — Auth, persistence, billing (RU)
 
-**Версия:** 1.0  
-**Дата:** 2026-05-30  
+**Версия:** 2.0  
+**Дата:** 2026-06-08  
 **Владелец:** PM + IT-Architect  
-**Статус:** **Prep active** — ADR-003 **Accepted**; T-033…T-035 spike DONE; live DB / AUTH on prod — Human MUST
+**Статус:** **Active** — Human Go 2026-06-08 («пошли дальше»); billing RU scaffold **DONE**; **activation Deferred by Human** (2026-06-08: «пока не подключать»)
 
-> Scaffold only: `AUTH_ENABLED=false` default. **Не включать** `DATABASE_URL` / billing без Human (Pavel).
+> Scaffold: `AUTH_ENABLED=false`, `BILLING_ENABLED=false`. Postgres waitlist **ACTIVATED**. **Billing path:** scaffold + ADR + runbook готовы; live merchant / webhook / checkout — **paused** до решения Human (не tech blocker).
 
 ---
 
 ## TL;DR
 
-| Область | Phase 4 (сейчас) | Phase 5 (после sign-off) |
-|---------|------------------|---------------------------|
-| Persistence | Zustand + `localStorage` | PostgreSQL (ADR TBD) |
-| Identity | Anonymous / IP rate limit | Auth (NextAuth или ADR) |
-| Billing | — | Out of MVP; waitlist demo only |
-| Deploy | Vercel staging | VPS prod + DB — TBD с Architect |
-| Analytics | PostHog OFF / self-host optional | PostHog + per-user budgets |
+| Область | Phase 4 (закрыто) | Phase 5 (сейчас) |
+|---------|-------------------|------------------|
+| Persistence | Zustand + `localStorage` + waitlist Postgres | PostgreSQL projects (schema draft) |
+| Identity | Anonymous / IP rate limit | Auth.js scaffold OFF → activation |
+| **Billing** | Waitlist demo | **YooKassa RU** — lib + API stub OFF |
+| Deploy | Vercel staging | Vercel + Neon |
+| Analytics | PostHog OFF | PostHog optional |
 
 ---
 
 ## Gate G4→5 (критерии входа)
 
-- [ ] **M0 Go** подписан в [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md)
-- [ ] Phase 4: cost guardrails + analytics ADR исполнены (T-029, T-030 **DONE**)
-- [ ] ≥3 useful dogfood (G2→3) или documented waiver Human
-- [ ] Human approves **Phase 5 scope** (таблица ниже) — одна строка в queue «Журнал»
+- [x] **M0 Go** — Human directive «пошли дальше» (Pavel, 2026-06-08) → [`m0-go-no-go-memo.md`](./m0-go-no-go-memo.md)
+- [x] Phase 4: cost guardrails + analytics ADR (T-029, T-030 **DONE**)
+- [x] ≥3 useful dogfood **или waiver** — waiver на roundtable 2026-06-07
+- [x] Human approves Phase 5 scope — **implicit Go** + RU payments path
 
 ---
 
-## Scope Phase 5 (черновик — Human sign-off)
+## Scope Phase 5
 
-### In scope (кандидаты, не committed)
+### In scope (committed)
 
-| Пакет | Описание | Зависимости |
-|-------|----------|-------------|
-| **Auth** | Email magic link или OAuth (1 provider); session в BFF | ADR auth (новый) |
-| **PostgreSQL** | `projects`, `domain_scores`, `feedback` — миграция с localStorage | Neon/Supabase ADR |
-| **Rate limits** | Redis / Upstash вместо in-memory per instance | Auth user id |
-| **Waitlist backend** | Listmonk или Postgres table + API | M0 Go + Growth |
+| Пакет | Описание | Статус |
+|-------|----------|--------|
+| **Auth** | Auth.js v5 + PostgreSQL adapter | Scaffold DONE (T-035); activation Human |
+| **PostgreSQL** | Drizzle schema + waitlist live | T-051 **ACTIVATED** |
+| **Billing RU** | YooKassa, freemium + Pro | ADR + scaffold **DONE** (T-064, T-065); **activation Deferred by Human** |
+| **Rate limits** | Redis / Upstash | Scaffold DONE (T-036) |
+| **Waitlist backend** | Postgres table + API | **DONE** (T-051) |
 
 ### Out of scope (до отдельного решения)
 
 | Пакет | Причина |
 |-------|---------|
-| Multi-tenant / org billing | brief Out; R6 scope creep |
+| Multi-tenant / org billing | brief Out |
+| **Stripe primary** | RU merchant — см. ADR-005 |
 | Jira / MS Project sync | ТЗ §8 DEP |
 | PMI certification positioning | anti-persona |
-| Full payment / Stripe | Human MUST budget |
 
 ---
 
-## Архитектурные решения (TBD — Architect)
+## Архитектурные решения
 
 | ID | Вопрос | Статус |
 |----|--------|--------|
-| P5-ADR-1 | Auth provider (NextAuth v5 vs Clerk OSS vs custom) | **Accepted** — [`adr-003-auth-phase5.md`](../knowledge-base/adr-003-auth-phase5.md) T-033 **DONE** |
-| P5-ADR-2 | DB host (Neon vs Supabase vs self-host Postgres) | **Draft** — [`adr-004-db-host-phase5.md`](../knowledge-base/adr-004-db-host-phase5.md); Drizzle spike T-034 **DONE** |
-| P5-ADR-3 | Migrate localStorage → server on login | **Design** — [`localstorage-migrate-phase5.md`](./localstorage-migrate-phase5.md) T-045; `MIGRATE_LOCALSTORAGE_ON_LOGIN=false` |
-| P5-ADR-4 | Redis for rate limit + token budget per user | **Scaffold DONE** (T-036); activation Human MUST |
-
-Связь: [`architecture.md`](../knowledge-base/architecture.md) · [`adr-001-llm-bff.md`](../knowledge-base/adr-001-llm-bff.md) (Redis note).
+| P5-ADR-1 | Auth (Auth.js v5) | **Accepted** — [`adr-003-auth-phase5.md`](../knowledge-base/adr-003-auth-phase5.md) |
+| P5-ADR-2 | DB host (Neon lean) | **Draft** — [`adr-004-db-host-phase5.md`](../knowledge-base/adr-004-db-host-phase5.md) |
+| P5-ADR-3 | Migrate localStorage → server | **Design** — [`localstorage-migrate-phase5.md`](./localstorage-migrate-phase5.md) |
+| P5-ADR-4 | Redis rate limit | **Scaffold DONE** (T-036) |
+| **P5-ADR-5** | **Payments Russia (YooKassa)** | **Accepted** — [`adr-003-payments-russia.md`](../knowledge-base/adr-003-payments-russia.md) |
 
 ---
 
-## Очередь после sign-off (placeholder)
+## Russia payment path
 
-PM заведёт `T-03x+` после M0 Go:
+```
+/waitlist (RU pricing copy)
+    → beta invite + AUTH on
+    → POST /api/billing/create-payment → YooKassa redirect
+    → POST /api/billing/webhook → subscriptions + payments (Drizzle)
+    → Pro tier unlocks AI cap / export
+```
 
-| ID (draft) | Задача | Роль | Блокер |
-|------------|--------|------|--------|
-| T-033 | ADR auth + env contract | Architect | ✅ **DONE** |
-| T-034 | PostgreSQL schema + migrate spike | Developer | ✅ **DONE** (Drizzle draft; no migrate) |
-| T-035 | Auth UI + session middleware | Developer | ✅ **DONE** (scaffold; AUTH off) |
-| T-036 | BFF rate limit → Redis | Developer + DevOps | ✅ **DONE** (scaffold) |
+| Компонент | Путь |
+|-----------|------|
+| Provider interface | `lib/billing/` |
+| Checkout BFF | `app/api/billing/create-payment/route.ts` |
+| Webhook BFF | `app/api/billing/webhook/route.ts` |
+| Schema | `subscriptions`, `payments` в `lib/db/schema.ts` |
+| Human runbook | [`billing-russia-runbook.md`](./billing-russia-runbook.md) |
+| Env | `BILLING_ENABLED=false` default |
 
-**Activation** (`AUTH_ENABLED=true`, `DATABASE_URL`) — Human MUST.
+**Цена (гипотеза):** Pro от **990 ₽/мес** — `BILLING_PRO_PRICE_RUB`.
+
+---
+
+## Очередь Phase 5
+
+| ID | Задача | Роль | Статус |
+|----|--------|------|--------|
+| T-033…T-036 | Auth / DB / Redis scaffold | — | **DONE** |
+| T-051 | Drizzle + waitlist postgres | Developer | **DONE** |
+| T-064 | ADR payments Russia | Architect | **DONE** |
+| T-065 | Billing lib + schema + API stub | Developer | **DONE** |
+| T-066 | Billing Russia runbook | PM | **DONE** |
+| T-067 | M0 Human Go + pm-status v4.1 | PM | **DONE** |
+| T-068 | Waitlist RU pricing copy | Developer | **DONE** |
+| T-069 | Webhook persist + IP verify | Developer | **BACKLOG** — Human: «пока не подключать» |
+| T-070 | AUTH activation + checkout UI | Developer | **BACKLOG** |
+| T-071 | YooKassa recurring Pro | Developer | **BACKLOG** |
+
+> **Billing activation** заблокирована **решением Human**, не техническим долгом. Код scaffold (`lib/billing/`, API routes, schema, ADR-005, runbook) **сохранён** — включение по запросу.
+
+**Activation checklist (Human — когда будет готов):**
+
+1. Явное «можно подключать оплату» в чат / journal
+2. YooKassa merchant + test keys — [`billing-russia-runbook.md`](./billing-russia-runbook.md)
+3. `AUTH_ENABLED=true` + `AUTH_SECRET` (для checkout)
+4. `npm run db:push` (subscriptions/payments)
+5. `BILLING_ENABLED=true` на Preview → smoke webhook
 
 ---
 
 ## Трассировка
 
 - [`technical-specification.md`](./technical-specification.md) §8 DEP-7, DEP-8
-- [`implementation-plan.md`](./implementation-plan.md) Phase 5 (post calendar week N14+)
-- [`roadmap.md`](./roadmap.md) — текущий статус Phase 0–4
-
----
-
-## Human — одно решение (когда готовы)
-
-> **Подтвердите scope Phase 5:** Auth + PostgreSQL + waitlist backend **да/нет/отложить** — после M0 Go.
-
-До ответа: все Phase 5 app tasks остаются **BLOCKED** в `orchestration-queue.md`.
+- [`implementation-plan.md`](./implementation-plan.md) Phase 5
+- [`roadmap.md`](./roadmap.md)
+- [`cpo-report-m0.md`](./cpo-report-m0.md) §6 monetization

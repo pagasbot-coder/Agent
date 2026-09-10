@@ -110,8 +110,14 @@ PM открывает один экран, видит баланс 8 домен�
 
 ## Dogfood (Human OPTIONAL)
 
+- Пошаговые гайды #1–#3: [`docs/dogfood-session-guides.md`](../docs/dogfood-session-guides.md)
 - Протокол: [`knowledge-base/dogfood-protocol.md`](./dogfood-protocol.md)
 - Лог сессий #1–5: [`docs/dogfood-log-template.md`](../docs/dogfood-log-template.md)
+
+## Competitive positioning
+
+- Scan (M0): [`docs/competitive-scan-1pager.md`](../docs/competitive-scan-1pager.md) — wedge «второй пилот РП», не exam prep
+- Wedge vs anti-persona: DomainRadar + 1–3 вопроса AI; **не** Jira-клон, **не** PMI certification tool
 
 ---
 
