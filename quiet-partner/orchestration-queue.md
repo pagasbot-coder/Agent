@@ -328,7 +328,7 @@
 | T-112 | UI «Спросить в Cursor» + deeplink/copy/MD | Developer | DONE | P0 | — | `@components/AskInCursorCard.tsx` `@lib/cursorBridge.ts` | hub + radar; prompt ≤5500 |
 | T-113 | Cursor command + inbox docs | Developer | DONE | P0 | T-112 | `.cursor/commands/ask-quiet-partner.md` `docs/cursor-inbox/` | latest.md gitignored |
 | T-114 | QA smoke Cursor bridge | QA | READY | P1 | T-112 | `@docs/cursor-qp-bridge.md` | deeplink opens; MD download |
-| T-116 | Сохранить статус реестра и обновить радар одной кнопкой | Developer + DevOps | IN_PROGRESS | P0 | T-107 | `@components/stages/StagesShell.tsx` `@lib/stages/stagesStore.ts` | Код в `main`; deploy retry с author email владельца Vercel |
+| T-116 | Сохранить статус реестра и обновить радар одной кнопкой | Developer + DevOps | IN_PROGRESS | P0 | T-107 | `@components/stages/StagesShell.tsx` `@lib/stages/stagesStore.ts` | Deploy прошёл; добавлена idempotent-инициализация таблицы `stages_projects`; нужен prod smoke |
 | T-117 | Валидировать закрытие «Не знаем» + показать изменение D8 | Developer | DONE | P0 | T-116 | `@components/stages/StagesShell.tsx` | «Закрыто чем» обязательно; D8 current→next; lint/build/browser PASS |
 
 ### Детали задач моста
@@ -449,6 +449,7 @@
 | 2026-09-09 | **T-116 deploy BLOCKED:** commit `6728db0` отправлен в `main`; Vercel deployment `dpl_7Z9giTyEfDUxuXMxopGQjnuhxvX6` остановлен платформой до build (`team configuration / project collaboration`). |
 | 2026-09-09 | **T-117 DONE:** закрытый вопрос без основания не уходит на сервер/радар; поле помечается invalid; пульт показывает текущий → новый D8; lint/build/browser smoke PASS. |
 | 2026-09-10 | **T-116 deploy retry:** причина найдена — Hobby collaboration проверяет commit author; новый deploy-коммит подписывается email владельца Vercel `pagasbot@gmail.com`. |
+| 2026-09-10 | **T-116 DB fix:** первый успешный deploy выявил отсутствие `stages_projects`; добавлена безопасная `CREATE TABLE IF NOT EXISTS` при первом PostgreSQL-запросе; lint/build PASS. |
 
 ---
 

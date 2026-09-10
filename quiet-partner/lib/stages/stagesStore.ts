@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { getDb, isDatabaseConfigured } from "@/lib/db";
 import { stagesProjects } from "@/lib/db/schema";
@@ -40,6 +40,35 @@ export type StagesProjectSummary = {
 const DEFAULT_FILE_PATH = ".data/stages-projects.json";
 
 type FileStore = Record<string, Omit<StagesProjectRecord, "cache"> & { cache: StagesCache }>;
+
+let stagesTableReady: Promise<void> | null = null;
+
+/** Создаёт таблицу Пульта при первом обращении в окружении с PostgreSQL. */
+async function getReadyStagesDb() {
+  const db = getDb();
+  if (!db) {
+    throw new Error("database_unavailable");
+  }
+  if (!stagesTableReady) {
+    stagesTableReady = db
+      .execute(sql`
+        CREATE TABLE IF NOT EXISTS stages_projects (
+          id text PRIMARY KEY,
+          name text NOT NULL,
+          stage_id integer NOT NULL DEFAULT 0,
+          cache_json text NOT NULL,
+          updated_at timestamptz NOT NULL DEFAULT now()
+        )
+      `)
+      .then(() => undefined)
+      .catch((error: unknown) => {
+        stagesTableReady = null;
+        throw error;
+      });
+  }
+  await stagesTableReady;
+  return db;
+}
 
 /** PostgreSQL по умолчанию в окружении с БД; file остаётся локальным fallback. */
 export function getStagesBackend(): StagesBackend {
@@ -180,10 +209,7 @@ export async function listStagesProjects(): Promise<{
   await ensureMtsProjectSeeded();
 
   if (backend === "postgres") {
-    const db = getDb();
-    if (!db) {
-      return { backend: "file", projects: [] };
-    }
+    const db = await getReadyStagesDb();
     const rows = await db.select().from(stagesProjects);
     return {
       backend,
@@ -218,8 +244,7 @@ export async function getStagesProject(
   }
 
   if (backend === "postgres") {
-    const db = getDb();
-    if (!db) return null;
+    const db = await getReadyStagesDb();
     const rows = await db
       .select()
       .from(stagesProjects)
@@ -256,10 +281,7 @@ export async function saveStagesProject(
   }
 
   if (backend === "postgres") {
-    const db = getDb();
-    if (!db) {
-      throw new Error("database_unavailable");
-    }
+    const db = await getReadyStagesDb();
     const cacheJson = JSON.stringify(record.cache);
     const updated = new Date(record.updatedAt);
     await db
